@@ -26,24 +26,38 @@ class ScraperScheduler:
     def start(self):
         if self.scheduler.running:
             return
-        if self.scheduler.get_job("daily_scrape"):
+        if self.scheduler.get_job("scrape_job"):
             return
-        self.scheduler.add_job(
-            self.run_pipeline,
-            CronTrigger(
-                hour=settings.scheduler_hour,
-                minute=settings.scheduler_minute,
-                timezone=settings.scheduler_timezone,
-            ),
-            id='daily_scrape'
-        )
+            
+        interval_minutes = int(os.getenv("SCRAPE_INTERVAL_MINUTES", "15"))
+        
+        if interval_minutes > 0:
+            # Mode Ultra-Rapide / Haute Fréquence (ex: toutes les 15 minutes)
+            self.scheduler.add_job(
+                self.run_pipeline,
+                'interval',
+                minutes=interval_minutes,
+                id='scrape_job'
+            )
+            logger.info("Scheduler démarré. Scraping automatique réglé toutes les %d minutes.", interval_minutes)
+        else:
+            # Mode Quotidien Cron classique
+            self.scheduler.add_job(
+                self.run_pipeline,
+                CronTrigger(
+                    hour=settings.scheduler_hour,
+                    minute=settings.scheduler_minute,
+                    timezone=settings.scheduler_timezone,
+                ),
+                id='scrape_job'
+            )
+            logger.info(
+                "Scheduler démarré. Scraping quotidien programmé à %02d:%02d (%s)",
+                settings.scheduler_hour,
+                settings.scheduler_minute,
+                settings.scheduler_timezone,
+            )
         self.scheduler.start()
-        logger.info(
-            "Scheduler started. Daily scrape at %02d:%02d (%s)",
-            settings.scheduler_hour,
-            settings.scheduler_minute,
-            settings.scheduler_timezone,
-        )
 
     async def run_pipeline(self):
         if self.status["state"] == "running":

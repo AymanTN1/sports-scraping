@@ -1030,6 +1030,7 @@
       <header class="topbar">
         <div class="brand-wordmark">Market<span class="hi">Pulse</span></div>
         <div class="status-chip"><div class="pulse-dot"></div>Live</div>
+        <button class="btn-primary" style="padding:0.35rem 0.8rem;font-size:0.72rem;margin-left:0.5rem;" onclick="triggerLiveScrape()" id="btnScrapeNow">🔄 Actualiser les sources</button>
 
         <div class="ticker-strip">
           <div class="ticker-track" id="tickerTrack">
@@ -1218,12 +1219,32 @@
       tickClock();
       setInterval(tickClock, 1000);
       loadData();
+      // Auto-rafraîchissement des données toutes les 60 secondes
+      setInterval(loadData, 60000);
 
       // Live filter on search input
       document.getElementById('fSearch').addEventListener('keyup', e => {
         if (e.key === 'Enter') applyFilters();
       });
     });
+
+    async function triggerLiveScrape() {
+      const btn = document.getElementById('btnScrapeNow');
+      btn.disabled = true;
+      btn.textContent = '⏳ Scraping en cours...';
+      try {
+        await fetch('/api/v1/articles/trigger-pipeline', { method: 'POST' });
+        setTimeout(async () => {
+          await loadData();
+          btn.disabled = false;
+          btn.textContent = '🔄 Actualiser les sources';
+        }, 5000);
+      } catch (err) {
+        console.error('Erreur lancement pipeline:', err);
+        btn.disabled = false;
+        btn.textContent = '🔄 Actualiser les sources';
+      }
+    }
 
     function tickClock() {
       const now = new Date();

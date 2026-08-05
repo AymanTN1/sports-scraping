@@ -58,6 +58,14 @@ def import_csv(db: Session = Depends(get_db)):
     return ingestion.import_csv(csv_path)
 
 
+@router.post("/trigger-pipeline")
+async def trigger_pipeline():
+    from src.scheduler import scheduler_instance
+    import asyncio
+    asyncio.create_task(scheduler_instance.run_pipeline())
+    return {"message": "Pipeline de scraping instantané lancé avec succès en arrière-plan."}
+
+
 @router.get("/{article_id}", response_model=ArticleItem)
 def get_article(article_id: int, service: ArticleService = Depends(get_article_service)):
     article = service.get_article(article_id)
