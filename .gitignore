@@ -1,7 +1,28 @@
+# Python
 .venv/
 __pycache__/
 *.py[cod]
-run/
-data/isic.db
-docs/reports/
+*.egg-info/
+dist/
+build/
+
+# Environment
 .env
+.env.local
+
+# Data & DB
+data/*.db
+data/output/
+run/
+temp/
+
+# IDE
+.vscode/
+.idea/
+
+# Docs builds
+docs/reports/
+
+# OS
+Thumbs.db
+.DS_Store
