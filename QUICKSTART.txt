@@ -1,0 +1,288 @@
+#!/usr/bin/env python3
+"""
+Quick start commands for SportPulse backend
+Copy-paste ready commands
+"""
+
+import os
+
+commands = {
+    "🐍 Python Setup": [
+        "cd c:\\Users\\ayman\\sportpulse",
+        "python -m venv venv",
+        "venv\\Scripts\\activate",
+        "pip install -r requirements.txt",
+    ],
+    
+    "🗄️ Database Setup": [
+        "# For SQLite (default)",
+        "set DATABASE_URL=sqlite:///./sportpulse.db",
+        "",
+        "# For PostgreSQL",
+        "set DATABASE_URL=postgresql://user:pass@localhost:5432/sportpulse",
+    ],
+    
+    "🚀 Run Backend": [
+        "cd c:\\Users\\ayman\\sportpulse\\backend",
+        "uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+        "",
+        "# Then visit: http://localhost:8000/api/docs",
+    ],
+    
+    "✅ Verify Migration": [
+        "cd c:\\Users\\ayman\\sportpulse",
+        "python verify_migration.py",
+    ],
+    
+    "🧪 Run Tests": [
+        "cd c:\\Users\\ayman\\sportpulse",
+        "pytest backend/tests -v",
+    ],
+    
+    "📰 Test Scraper": [
+        "python",
+        ">>> from backend.services.scraper_service import ScraperService",
+        ">>> service = ScraperService()",
+        ">>> articles = service.scrape_articles()[:3]",
+        ">>> print(articles)",
+    ],
+    
+    "🧹 Test NLP": [
+        "python",
+        ">>> from backend.services.nlp_service import NLPService",
+        ">>> nlp = NLPService()",
+        ">>> text = 'Messi a marqué un but spectaculaire!'",
+        ">>> keywords = nlp.extract_keywords(text, language='fr')",
+        ">>> print(keywords)",
+    ],
+    
+    "✅ Test Credibility": [
+        "python",
+        ">>> from backend.services.credibility_service import CredibilityService",
+        ">>> service = CredibilityService()",
+        ">>> score = service.get_source_credibility('BBC Sport')",
+        ">>> print(f'BBC Sport: {score}')",
+    ],
+    
+    "📊 Test Pipeline": [
+        "python",
+        ">>> from backend.ai_agent.pipeline import AIPipeline",
+        ">>> from backend.services.scraper_service import ScraperService",
+        ">>> from backend.services.nlp_service import NLPService",
+        ">>> from backend.services.credibility_service import CredibilityService",
+        ">>> from backend.services.ranking_service import RankingService",
+        ">>> ",
+        ">>> scraper = ScraperService()",
+        ">>> nlp = NLPService()",
+        ">>> cred = CredibilityService()",
+        ">>> rank = RankingService()",
+        ">>> ",
+        ">>> pipeline = AIPipeline(scraper, nlp, cred, rank)",
+        ">>> result = pipeline.process_pipeline()",
+        ">>> print(result)",
+    ],
+    
+    "📁 Project Structure Check": [
+        "cd c:\\Users\\ayman\\sportpulse\\backend",
+        "tree /F",
+    ],
+    
+    "🔧 Development": [
+        "# Install dev dependencies",
+        "pip install pytest pytest-cov black flake8 mypy",
+        "",
+        "# Format code",
+        "black backend/",
+        "",
+        "# Lint",
+        "flake8 backend/ --max-line-length=100",
+        "",
+        "# Type check",
+        "mypy backend/",
+    ]
+}
+
+def print_commands():
+    """Print all commands"""
+    print("\n" + "="*80)
+    print("🚀 SportPulse Backend - Quick Start Commands")
+    print("="*80 + "\n")
+    
+    for section, cmds in commands.items():
+        print(f"\n{section}")
+        print("-" * 80)
+        for cmd in cmds:
+            if cmd.startswith("#"):
+                print(f"  {cmd}")
+            else:
+                print(f"  $ {cmd}")
+    
+    print("\n" + "="*80)
+    print("✅ Ready to start! Copy-paste any command above.")
+    print("="*80 + "\n")
+
+if __name__ == "__main__":
+    print_commands()
+
+
+"""
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        ✨ QUICKSTART GUIDE ✨                             ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+1️⃣  SETUP (First time only)
+─────────────────────────────────────────────────────────────────────────────
+cd c:\Users\ayman\sportpulse
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+set DATABASE_URL=sqlite:///./sportpulse.db
+
+2️⃣  START BACKEND
+─────────────────────────────────────────────────────────────────────────────
+cd c:\Users\ayman\sportpulse\backend
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+3️⃣  OPEN API DOCS
+─────────────────────────────────────────────────────────────────────────────
+Visit: http://localhost:8000/api/docs
+       http://localhost:8000/api/redoc (Alternative UI)
+
+4️⃣  TEST ENDPOINTS
+─────────────────────────────────────────────────────────────────────────────
+GET http://localhost:8000/api/v1/articles
+GET http://localhost:8000/api/v1/articles/recent
+GET http://localhost:8000/api/v1/articles/credible
+GET http://localhost:8000/api/v1/sources
+GET http://localhost:8000/health
+
+5️⃣  TEST PIPELINE IN PYTHON
+─────────────────────────────────────────────────────────────────────────────
+python
+>>> from backend.ai_agent.pipeline import AIPipeline
+>>> from backend.services.scraper_service import ScraperService
+>>> from backend.services.nlp_service import NLPService
+>>> from backend.services.credibility_service import CredibilityService
+>>> from backend.services.ranking_service import RankingService
+>>> 
+>>> pipeline = AIPipeline(
+...     ScraperService(),
+...     NLPService(), 
+...     CredibilityService(),
+...     RankingService()
+... )
+>>> result = pipeline.process_pipeline()
+>>> print(result)
+
+6️⃣  VERIFY MIGRATION
+─────────────────────────────────────────────────────────────────────────────
+cd c:\Users\ayman\sportpulse
+python verify_migration.py
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      📊 STRUCTURE OVERVIEW                                ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+HTTP Request
+    ↓
+View (articles.py, sources.py, reviews.py)
+    ↓ (Request → Response)
+Controller (ai_controller.py, etc.)
+    ↓ (Business Logic)
+Services (scraper, nlp, credibility, ranking)
+    ↓ (Data Processing)
+Repository (DAO Pattern)
+    ↓ (SQL Queries)
+Database (ORM Models)
+    ↓
+SQLite / PostgreSQL
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      🎯 WHAT'S INTEGRATED                                 ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+✅ Scraper (scraper_service.py)
+   • 15+ multilingual sports sources
+   • HTML parsing with BeautifulSoup
+   • Real-time article collection
+
+✅ NLP (nlp_service.py)
+   • Text cleaning and normalization
+   • Wikipedia image fetching
+   • Keyword extraction + sentiment analysis
+
+✅ Credibility (credibility_service.py)
+   • Source trustworthiness scoring
+   • Article credibility calculation
+   • Spam detection
+
+✅ Ranking (ranking_service.py)
+   • Multi-factor intelligent ranking
+   • Advanced filtering capabilities
+   • Recency scoring
+
+✅ Pipeline (ai_agent/pipeline.py)
+   • 5-stage processing pipeline
+   • Complete orchestration
+   • Error handling & logging
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      ❓ TROUBLESHOOTING                                    ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Problem: ModuleNotFoundError
+Solution: 
+  pip install -r requirements.txt
+  Make sure venv is activated
+
+Problem: Database connection error
+Solution:
+  set DATABASE_URL=sqlite:///./sportpulse.db
+  or
+  set DATABASE_URL=postgresql://user:pass@localhost/sportpulse
+
+Problem: Port 8000 already in use
+Solution:
+  uvicorn main:app --reload --port 8001
+
+Problem: Imports not working
+Solution:
+  Make sure you're in the sportpulse/ root directory
+  Add to PYTHONPATH if needed
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      📚 DOCUMENTATION                                      ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Main Files:
+  • README_BACKEND.md      - Full backend guide
+  • MIGRATION_SUMMARY.md   - Detailed migration info
+  • verify_migration.py    - Verify structure
+  • requirements.txt       - Python dependencies
+
+Backend Code:
+  • backend/main.py                    - FastAPI app
+  • backend/services/                  - Business logic
+  • backend/ai_agent/pipeline.py       - Main pipeline
+  • backend/controllers/               - HTTP handlers
+  • backend/views/                     - REST routes
+  • backend/repositories/              - Data access
+  • backend/database/                  - ORM models
+  • backend/schemas/                   - Validation
+
+
+💡 Tips:
+  1. Always activate venv before working
+  2. Keep backend running in one terminal
+  3. Use another terminal for testing/development
+  4. Check logs for debugging
+  5. Use pytest for unit testing
+  6. Run black for code formatting
+
+"""
+

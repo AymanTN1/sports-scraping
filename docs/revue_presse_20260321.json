@@ -1,0 +1,18 @@
+{
+  "date": "21/03/2026",
+  "summary": {
+    "total_articles": 177,
+    "categories": 8,
+    "sources": 13
+  },
+  "articles_by_category": {
+    "Autre": 93,
+    "Football": 53,
+    "Cyclisme": 2,
+    "Golf": 6,
+    "Tennis": 13,
+    "Rugby": 1,
+    "Natation": 2,
+    "Basketball": 7
+  }
+}

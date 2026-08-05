@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revue de Presse Sportive - 21/03/2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .summary-box {
+            background: white;
+            border-left: 4px solid #1e40af;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .summary-box h2 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat {
+            background: #f0f4f8;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e40af;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #1e40af;
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-top: 3px solid #3b82f6;
+        }
+        
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .article-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1e233c;
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .article-summary {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
+            margin: 0.75rem 0;
+            padding: 0.75rem;
+            background: #f9f9f9;
+            border-left: 3px solid #e0e0e0;
+            border-radius: 4px;
+        }
+        
+        .article-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .article-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+        
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-category {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .badge-source {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .badge-credibility {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .top-stories {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef08a 100%);
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .sources-list {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .sources-list h3 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .source-item {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .source-item:last-child {
+            border-bottom: none;
+        }
+        
+        .source-name {
+            font-weight: 600;
+        }
+        
+        .source-count {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            border-radius: 8px;
+        }
+        
+        .footer p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .article-header {
+                flex-direction: column;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📰 Revue de Presse Sportive</h1>
+        <p>Synthèse des principales actualités sportives - 21/03/2026</p>
+    </div>
+    
+    <div class="container">
+        <!-- Résumé -->
+        <div class="summary-box">
+            <h2>📊 Résumé du jour</h2>
+            <div class="stats">
+
+                <div class="stat">
+                    <div class="stat-value">177</div>
+                    <div class="stat-label">Articles</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Disciplines</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">13</div>
+                    <div class="stat-label">Sources</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Articles en vedette (les plus nombreux par catégorie) -->
+        <div class="section">
+            <h2 class="section-title">🔥 Actualités Majeures</h2>
+<h3 style="color: #3b82f6; margin-top: 1rem; margin-bottom: 0.5rem;">📌 Autre</h3>
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">كارلسكرونا10:4521-03Osters IF</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/%d9%83%d8%a7%d8%b1%d9%84%d8%b3%d9%83%d8%b1%d9%88%d9%86%d8%a7-vs-osters-if-10023851" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">أوديفولد11:0021-03Utsikten</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/%d8%a3%d9%88%d8%af%d9%8a%d9%81%d9%88%d9%84%d8%af-vs-utsikten-10022963" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+<h3 style="color: #3b82f6; margin-top: 1rem; margin-bottom: 0.5rem;">📌 Football</h3>
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">YallaGoal - يلاجول</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">أخبار دوري أبطال أوروبا</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+<h3 style="color: #3b82f6; margin-top: 1rem; margin-bottom: 0.5rem;">📌 Cyclisme</h3>
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">Cyclisme,Milan-San RemoPogacar-Van der Poel, une affiche de rêve pour le premier Monument</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Cyclisme</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Cyclisme-sur-route/Article/Le-defi-de-pogacar-face-a-un-van-der-poel-intouchable-une-affiche-de-reve-pour-le-premier-choc-de-la-saison/1661182" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">CyclismeNos favoris pour  Milan-San Remo</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Cyclisme</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Cyclisme-sur-route/Article/Un-duel-mathieu-van-der-poel-tadej-pogacar-sur-le-premier-monument-de-la-saison-nos-favoris-pour-milan-san-remo-2026/1661181" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+<h3 style="color: #3b82f6; margin-top: 1rem; margin-bottom: 0.5rem;">📌 Golf</h3>
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">Cinéma,EntretienCillian Murphy : «Je ne suis pas un gaillard, je dois faire semblant»11 minutesma listeCinéma,EntretienL'acteur, oscarisé en 2024 pour Oppenheimer de Christopher Nolan, revient dans le film Peaky Blinders, suite de la série à succès qui narre le quotidien d'un gang de Birmingham. L'Irlandais en bandit viril et bagarreur, un rôle qui a participé à faire de lui une icône.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Golf</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Tous-sports/Article/Grand-recit-cillian-murphy-revient-dans-le-film-peaky-blinders-je-ne-suis-pas-un-gaillard-je-dois-faire-semblant/1660055" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">Cinéma,DisparitionChuck Norris, adversaire de Bruce Lee et icône d'une certaine Amérique</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Golf</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Karate/Article/Chuck-norris-champion-de-karate-adversaire-de-bruce-lee-et-icone-d-une-certaine-amerique/1661193" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+<h3 style="color: #3b82f6; margin-top: 1rem; margin-bottom: 0.5rem;">📌 Tennis</h3>
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">direct,TennisMasters 1000 de Miami, 2e tour (H) : Alcaraz - FonsecaLe n°1 mondial affronte le champion brésilien pour la première fois.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/tv/videos/live/eurosport-360-1?s=0" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">direct,TennisMasters 1000 de Miami, 2e tour (H) : Tsitsipas - De MinaurDirection le Hard Rock Stadium pour le Miami Open.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/tv/videos/live/eurosport-360-2?s=0" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+<h3 style="color: #3b82f6; margin-top: 1rem; margin-bottom: 0.5rem;">📌 Rugby</h3>
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">Who makes BBC pundits' Six Nations team of the tournament? Video, 00:11:45Who makes BBC pundits' Six Nations team of the tournament?</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Rugby</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/rugby-union/videos/c62dyp0vyv1o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+<h3 style="color: #3b82f6; margin-top: 1rem; margin-bottom: 0.5rem;">📌 Natation</h3>
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">Liverpool 'disgusted' by racist abuse towards Konate</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Natation</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/articles/ce8j1j444r3o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">FavoritesManage Favorites</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Natation</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/#" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+<h3 style="color: #3b82f6; margin-top: 1rem; margin-bottom: 0.5rem;">📌 Basketball</h3>
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">📍Watch on ESPNSubscribe NowLive: NCAA Women's Basketball (First Round)Live: NCAA Women's Frozen Four (Semifinals)Live: NHL Power PlayLive: MLB.TVSportsCenter For You</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Basketball</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/watch/offers?om-navmethod=button:subscribe" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article top-stories">
+                <div class="article-header">
+                    <div class="article-title">Quick LinksMen's Tournament ChallengeWomen's Tournament ChallengeMen's NCAA BracketWomen's NCAA BracketNCAA Baseball & SoftballFantasy Women's BasketballFantasy Baseball: Sign UpWhere To WatchToday's Top OddsESPN Radio: Listen Live</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Basketball</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://fantasy.espn.com/games/tournament-challenge-bracket-2026/?addata=tcmens2026_ncaam_web_quicklinks_ncaam" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+        </div>
+        
+        <!-- Tous les articles -->
+        <div class="section">
+            <h2 class="section-title">📋 Tous les articles</h2>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">كارلسكرونا10:4521-03Osters IF</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/%d9%83%d8%a7%d8%b1%d9%84%d8%b3%d9%83%d8%b1%d9%88%d9%86%d8%a7-vs-osters-if-10023851" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">أوديفولد11:0021-03Utsikten</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/%d8%a3%d9%88%d8%af%d9%8a%d9%81%d9%88%d9%84%d8%af-vs-utsikten-10022963" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">IK brage11:0021-03gefle IF</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/ik-brage-vs-gefle-if-10024405" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">AC Oulu11:0021-03SJK Akatemia</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/ac-oulu-vs-sjk-akatemia-10026944" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">HJK helsinki11:0021-03سيناجوكي</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/hjk-helsinki-vs-%d8%b3%d9%8a%d9%86%d8%a7%d8%ac%d9%88%d9%83%d9%8a-10026946" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">أوسانه11:3021-03hodd</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/%d8%a3%d9%88%d8%b3%d8%a7%d9%86%d9%87-vs-hodd-10023850" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">هلسنبورج12:0021-03trelleborgs FF</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/%d9%87%d9%84%d8%b3%d9%86%d8%a8%d9%88%d8%b1%d8%ac-vs-trelleborgs-ff-10022961" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">سوندال12:0021-03راوفوس</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/%d8%b3%d9%88%d9%86%d8%af%d8%a7%d9%84-vs-%d8%b1%d8%a7%d9%88%d9%81%d9%88%d8%b3-10022964" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Varbergs BoIS FC12:0021-03يونكوبينجز</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/varbergs-bois-fc-vs-%d9%8a%d9%88%d9%86%d9%83%d9%88%d8%a8%d9%8a%d9%86%d8%ac%d8%b2-10022965" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Tvååker12:0021-03Torslanda</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/tvaaker-vs-torslanda-10022966" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Olympic12:0021-03Lindome</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/olympic-vs-lindome-10022967" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Laholm12:0021-03Torns</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/laholm-vs-torns-10022968" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">IFK Trelleborg12:0021-03Rosengård</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/ifk-trelleborg-vs-rosengard-10022969" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Ariana12:0021-03Åstorp</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/ariana-vs-astorp-10022970" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Kooteepee12:0021-03يوفاسكولا</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/kooteepee-vs-%d9%8a%d9%88%d9%81%d8%a7%d8%b3%d9%83%d9%88%d9%84%d8%a7-10023129" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">IF Elfsborg12:0021-03Mjallby AIF</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/if-elfsborg-vs-mjallby-aif-10024065" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Eskilsminne12:0021-03كريستيان ستادس</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/eskilsminne-vs-%d9%83%d8%b1%d9%8a%d8%b3%d8%aa%d9%8a%d8%a7%d9%86-%d8%b3%d8%aa%d8%a7%d8%af%d8%b3-10024406" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">IF Karlstad12:0021-03شخوفدى أيك</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/if-karlstad-vs-%d8%b4%d8%ae%d9%88%d9%81%d8%af%d9%89-%d8%a3%d9%8a%d9%83-10024407" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">لوندس12:0021-03Angelholms FF</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/%d9%84%d9%88%d9%86%d8%af%d8%b3-vs-angelholms-ff-10024408" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">غنيستان12:0021-03PK-35</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Hesport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="https://www.hesport.com/sports/match/%d8%ba%d9%86%d9%8a%d8%b3%d8%aa%d8%a7%d9%86-vs-pk-35-10026945" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Les articles populaires</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Le360 Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">آخر الأخبار</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">الأكثر رواجًا</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">YallaGoal - يلاجول</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">أخبار دوري أبطال أوروبا</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">أخبار السعودية</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">أخبار الدوري الإنجليزي</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">أخبار الدوري الإسباني</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">أخبار المغرب</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">تقارير ومقالات</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Kooora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">استطلاع يلاكورة</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">من يتأهل لنصف نهائي دوري أبطال أفريقيا؟</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">ريلز يلاكورة</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.yallakora.com/reels-listing/%d8%b1%d9%8a%d9%84%d8%b2-%d9%8a%d9%84%d8%a7%d9%83%d9%88%d8%b1%d8%a9" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">إحصائيات دوري أبطال أفريقيا</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.yallakora.com/tour/87/%d8%af%d9%88%d8%b1%d9%8a-%d8%a3%d8%a8%d8%b7%d8%a7%d9%84-%d8%a3%d9%81%d8%b1%d9%8a%d9%82%d9%8a%d8%a7#HPStatsClipScorers" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">قائمة صانعي الأهداف</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">المباريات القادمة</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">أزمات لا تنتهي.. أسباب إيقاف قيد الزمالك في 13 قضية</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.yallakora.com/egyptian-league/2977/news/544964/-%d8%a3%d8%b2%d9%85%d8%a7%d8%aa-%d9%84%d8%a7-%d8%aa%d9%86%d8%aa%d9%87%d9%8a-%d8%a3%d8%b3%d8%a8%d8%a7%d8%a8-%d8%a5%d9%8a%d9%82%d8%a7%d9%81-%d9%82%d9%8a%d8%af-%d8%a7%d9%84%d8%b2%d9%85%d8%a7%d9%84%d9%83-%d9%81%d9%8a-13-%d9%82%d8%b6%d9%8a%d8%a9#HP_Reports" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">في ميزان 3 أندية.. التعادل يطغى على مسيرة توروب مع الأهلي (أرقام)</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.yallakora.com/african-champions-league/2965/news/544869/%d9%81%d9%8a-%d9%85%d9%8a%d8%b2%d8%a7%d9%86-3-%d8%a3%d9%86%d8%af%d9%8a%d8%a9-%d8%a7%d9%84%d8%aa%d8%b9%d8%a7%d8%af%d9%84-%d9%8a%d8%b7%d8%ba%d9%89-%d8%b9%d9%84%d9%89-%d9%85%d8%b3%d9%8a%d8%b1%d8%a9-%d8%aa%d9%88%d8%b1%d9%88%d8%a8-%d9%85%d8%b9-%d8%a7%d9%84%d8%a3%d9%87%d9%84%d9%8a-%d8%a3%d8%b1%d9%82%d8%a7%d9%85-#HP_Reports" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">بنشرقي وزيزو وبن رمضان.. نجوم يبحثون عن الهدف الأفريقي الأول مع الأهلي</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.yallakora.com/african-champions-league/2965/news/544851/-%d8%a8%d9%86%d8%b4%d8%b1%d9%82%d9%8a-%d9%88%d8%b2%d9%8a%d8%b2%d9%88-%d9%88%d8%a8%d9%86-%d8%b1%d9%85%d8%b6%d8%a7%d9%86-%d9%86%d8%ac%d9%88%d9%85-%d9%8a%d8%a8%d8%ad%d8%ab%d9%88%d9%86-%d8%b9%d9%86-%d8%a7%d9%84%d9%87%d8%af%d9%81-%d8%a7%d9%84%d8%a3%d9%81%d8%b1%d9%8a%d9%82%d9%8a-%d8%a7%d9%84%d8%a3%d9%88%d9%84-%d9%85%d8%b9-%d8%a7%d9%84%d8%a3%d9%87%d9%84%d9%8a#HP_Reports" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">صدام صلاح ونهائي أرسنال.. ماذا ينتظر مرموش مع مان سيتي بعد وداع الأبطال؟</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.yallakora.com/epl/2968/news/544867/-%d8%b5%d8%af%d8%a7%d9%85-%d8%b5%d9%84%d8%a7%d8%ad-%d9%88%d9%86%d9%87%d8%a7%d8%a6%d9%8a-%d8%a3%d8%b1%d8%b3%d9%86%d8%a7%d9%84-%d9%85%d8%a7%d8%b0%d8%a7-%d9%8a%d9%86%d8%aa%d8%b8%d8%b1-%d9%85%d8%b1%d9%85%d9%88%d8%b4-%d9%85%d8%b9-%d9%85%d8%a7%d9%86-%d8%b3%d9%8a%d8%aa%d9%8a-%d8%a8%d8%b9%d8%af-%d9%88%d8%af%d8%a7%d8%b9-%d8%a7%d9%84%d8%a3%d8%a8%d8%b7%d8%a7%d9%84-#HP_Reports" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">"لن تسير وحدك أبدًا".. الأرقام القياسية لا تترك محمد صلاح</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Yalla Kora</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.yallakora.com/epl/2968/news/544838/-%d9%84%d9%86-%d8%aa%d8%b3%d9%8a%d8%b1-%d9%88%d8%ad%d8%af%d9%83-%d8%a3%d8%a8%d8%af-%d8%a7-%d8%a7%d9%84%d8%a3%d8%b1%d9%82%d8%a7%d9%85-%d8%a7%d9%84%d9%82%d9%8a%d8%a7%d8%b3%d9%8a%d8%a9-%d9%84%d8%a7-%d8%aa%d8%aa%d8%b1%d9%83-%d9%85%d8%ad%d9%85%d8%af-%d8%b5%d9%84%d8%a7%d8%ad#HP_Reports" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Soutien à Christophe GleizesDétenu en Algérie pour y avoir exercé son métier</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Medias/Actualites/L-edito-de-l-equipe-christophe-gleizes-a-plus-que-jamais-besoin-de-soutien-et-d-un-geste-d-humanite/1617521" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">DocumentaireDenoueix, le jeu avant le je</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/explore/video/l-equipe-explore-documentaire-denoueix-le-jeu-avant-le-je/20227780" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Quiz sportÊtes-vous un vrai fan de sport ?</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/jeux/dix-sur-dix" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Foot,Ligue 1,27e journéeLa fête à la maisonLensAngers51—La 27e journée—Le classement</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Football/Actualites/Lens-fait-le-spectacle-contre-angers-grace-a-ses-tauliers-et-reprend-provisoirement-la-tete-de-la-ligue-1/1661279" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">—La 27e journée</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Football/ligue-1/page-calendrier-resultats" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">—Le classement</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Football/ligue-1/page-classement-equipes/general" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Foot,Ligue 1Pourquoi l'éventuel report de Lens-PSG est un casse-tête—Sage : «De base, on n'est pas d'accord»</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Football/Actualites/Le-casse-tete-du-report-de-lens-psg-coince-entre-les-deux-manches-des-quarts-de-finale-de-la-ligue-des-champions/1661209" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">—Sage : «De base, on n'est pas d'accord»</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Football/Actualites/L-entraineur-lensois-pierre-sage-sur-un-eventuel-report-de-lens-psg-nous-de-base-on-n-est-pas-d-accord/1661302" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Foot,MonacoPogba, les deux semaines qui peuvent tout changer</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Football/Article/La-treve-internationale-comme-juge-de-paix-paul-pogba-les-deux-semaines-qui-peuvent-tout-changer/1661269" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Biathlon,Coupe du monde (H)«Aller chercher ça, c'est indescriptible» : Perrot, le prix de la régularité et de l'exigence</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Biathlon/Actualites/Comme-une-evidence-eric-perrot-regulier-et-exigeant-toute-la-saison-a-remporte-le-gros-globe-assez-dur-de-realiser-que-j-ecris-ma-petite-histoire/1661258" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Biathlon,Coupe du mondeLa France 4e pays à réussir le doublé grâce à Perrot et Jeanmonnot</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Biathlon/Actualites/Avec-les-gros-globes-d-eric-perrot-et-lou-jeanmonnot-la-france-devient-le-4e-pays-a-reussir-le-double-en-coupe-du-monde/1661154" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Cyclisme,Milan-San RemoPogacar-Van der Poel, une affiche de rêve pour le premier Monument</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Cyclisme</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Cyclisme-sur-route/Article/Le-defi-de-pogacar-face-a-un-van-der-poel-intouchable-une-affiche-de-reve-pour-le-premier-choc-de-la-saison/1661182" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Cinéma,EntretienCillian Murphy : «Je ne suis pas un gaillard, je dois faire semblant»11 minutesma listeCinéma,EntretienL'acteur, oscarisé en 2024 pour Oppenheimer de Christopher Nolan, revient dans le film Peaky Blinders, suite de la série à succès qui narre le quotidien d'un gang de Birmingham. L'Irlandais en bandit viril et bagarreur, un rôle qui a participé à faire de lui une icône.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Golf</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Tous-sports/Article/Grand-recit-cillian-murphy-revient-dans-le-film-peaky-blinders-je-ne-suis-pas-un-gaillard-je-dois-faire-semblant/1660055" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Cinéma,DisparitionChuck Norris, adversaire de Bruce Lee et icône d'une certaine Amérique</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Golf</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Karate/Article/Chuck-norris-champion-de-karate-adversaire-de-bruce-lee-et-icone-d-une-certaine-amerique/1661193" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Municipales 2026,LyonLe Tour s'invite dans le match Aulas-Doucet</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Cyclisme-sur-route/Article/A-lyon-le-tour-de-france-s-invite-dans-le-match-jean-michel-aulas-gregory-doucet-pour-les-elections-municipales-2026/1661185" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">MédiasLa télé est-elle interdite aux femmes de plus de 50 ans ?</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Medias/Article/-bien-sur-on-a-une-date-de-peremption-la-tele-est-elle-interdite-aux-femmes-de-plus-de-50-ans/1661171" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">CyclismeNos favoris pour  Milan-San Remo</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Cyclisme</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Cyclisme-sur-route/Article/Un-duel-mathieu-van-der-poel-tadej-pogacar-sur-le-premier-monument-de-la-saison-nos-favoris-pour-milan-san-remo-2026/1661181" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Esport,EntretienSavelli : «Falcons n'est pas un club d'Etat»</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Golf</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/Esport/Actualites/-falcons-n-est-pas-un-club-d-etat-la-gestion-du-club-saoudien-racontee-par-son-directeur-sportif/1660041" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">direct,TennisMasters 1000 de Miami, 2e tour (H) : Alcaraz - FonsecaLe n°1 mondial affronte le champion brésilien pour la première fois.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/tv/videos/live/eurosport-360-1?s=0" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">direct,TennisMasters 1000 de Miami, 2e tour (H) : Tsitsipas - De MinaurDirection le Hard Rock Stadium pour le Miami Open.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 L'Équipe</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.lequipe.fr/tv/videos/live/eurosport-360-2?s=0" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Live terminéLigue 1 McDonald'sLens-Angers: carton plein pour les Lensois, qui virent en tête de Ligue 1 et mettent la pression sur le PSG</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 RMC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://rmcsport.bfmtv.com/football/ligue-1/direct-lens-angers-suivez-le-match-de-la-27e-journee-de-ligue-1-en-live_LS-202603200689.html" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">After Foot</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 RMC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://rmcsport.bfmtv.com/replay-emissions/after-foot/" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Ligue 1 McDonald's</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 RMC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://rmcsport.bfmtv.com/football/ligue-1/" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Coupe du monde 2026</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 RMC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://rmcsport.bfmtv.com/football/coupe-du-monde/" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">RMC Sport Combat</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 RMC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://rmcsport.bfmtv.com/sports-de-combat/" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">La tête et les épaules</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/football/ligue-1/2025-2026/la-tete-et-les-epaules-le-psg-est-prevenu-lens-ne-compte-se-laisser-distancer-de-sitot-dans-la-course-au-titre-en-ligue-1_sto23283051/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">"Pourquoi tout le monde veut me virer ?" : Guardiola et le déclin de l’empire mancunien</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/football/premier-league/2025-2026/manchester-city-pourquoi-tout-le-monde-veut-me-virer-guardiola-et-le-declin-de-lempire-mancunien_sto23282917/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Le cristal est plus discret que l'or, mais il vaut encore plus cher</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/biathlon/oslo/2025-2026/coupe-du-monde-lou-jeanmonnot-et-eric-perrot-sacres-le-cristal-est-plus-discret-que-lor-mais-il-vaut-encore-plus-cher_sto23282911/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Un solide 1er tour pour Atmane, Royer tombe les armes à la main</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/tennis/atp-miami/2026/masters-miami-1er-tour-terence-atmane-domine-daniel-altmaier-et-donne-rendez-vous-a-arthur-rinderknech_sto23282979/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Ruud et Draper sortis dès leur entrée en lice</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/tennis/atp-miami/2026/masters-1000-de-miami-i-casper-ruud-et-jack-draper-sortis-des-leur-entree-en-lice_sto23283049/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Manchester United se relâche</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/football/premier-league/2025-2026/premier-league-31e-journee-manchester-united-se-relache-a-bournemouth-2-2_sto23283043/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">"Paris - Liverpool, c'est 65-35 en faveur du PSG"</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Golf</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/football/ligue-des-champions/2025-2026/ligue-des-champions-paris-liverpool-cest-65-35-en-faveur-du-psg_vid60064300/video.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Sola, un intello à l'UFC : "On peut structurer et préparer" la "baston"</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Golf</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/mixed-martial-arts/ufc/2026/ufc-londres-axel-sola-le-combattant-francais-aux-allures-dintello-et-amoureux-de-baston-evoque-son-rapport-au-mma_sto23282162/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Thauvin flambe et Lens remet la pression sur le PSG</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/football/ligue-1/2025-2026/ligue-1-27e-journee-lens-fait-exploser-angers-5-1-et-reprend-la-tete-devant-le-psg_sto23283041/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Perrot, le sacre d'un ambitieux qui ne s'est jamais excusé de l'être</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/biathlon/oslo/2025-2026/coupe-du-monde-eric-perrot-le-sacre-dun-ambitieux-qui-ne-sest-jamais-excuse-de-letre_sto23282974/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">AUTRES INFOS PRINCIPALES</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Le Mans garde la cadence, le Red Star confirme</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/football/ligue-2/2025-2026/ligue-2-i-le-mans-garde-la-cadence-le-red-star-confirme_sto23283042/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">"C'était facile pour moi" : Anthony, un sacre pour une comète</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/athletisme/mondiaux-en-salle/2026/cetait-facile-pour-moi-anthony-un-sacre-sur-60-mpour-la-comete-americaine_sto23283044/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Taupe, bouts de papiers et crispations : "Linkedin Liam" en plein tourbillon</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/football/premier-league/2025-2026/taupe-bouts-de-papiers-et-crispations-linkedin-liam-rosenior-en-plein-tourbillon-avec-chelsea-apres-la-defaite-cuisante-face-au-psg_sto23283002/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Une septième défaite de suite à domicile pour l'Asvel</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/basketball/euroleague/2025-2026/euroligue-lasvel-concede-contre-le-maccabi-tel-aviv-une-septieme-defaite-de-suite-a-domicile_sto23283045/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">"Le biathlon est bien pour ça, si tu es trop sûr de toi, une course va te ramener sur terre"</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/biathlon/oslo/2025-2026/interview-de-siegfried-mazet-le-biathlon-est-bien-pour-ca-si-tu-es-trop-sur-de-toi-une-course-va-te-ramener-sur-terre_sto23282826/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Le Napoli prend provisoirement la place de dauphin, De Bruyne a retrouvé le onze titulaire</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 Eurosport FR</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.eurosport.fr/football/serie-a/2025-2026/serie-a-i-le-napoli-simpose-a-cagliari-1-0-et-prend-provisoirement-la-place-de-dauphin_sto23283005/story.shtml" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballTransfertsLe Real Madrid met l’une de ses stars françaises en vente !Eduardo Camavinga, prodige français du Real Madrid, n’est plus intouchable. Selon Marca,…Stéphane Roy21/03/2026 02:30</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballTransfertsCe n’est pas du bluff, Benatia est vraiment sur le coup pour Goretzka !Ciblé par Arsenal et l’Atlético Madrid, l’international allemand fait aussi rêver la…Hugo Bernabeu21/03/2026 02:00</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballTransfertsDes offres potentiellement énormes commencent à arriver pour KvaratskheliaGrand artisan du sacre parisien en LDC, le Géorgien a toujours la…Hugo Bernabeu21/03/2026 01:30</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballTransfertsManchester City a déniché une doublure pour Erling HaalandPour concurrencer son cyborg la saison prochaine, Manchester City a pensé à…Hugo Bernabeu21/03/2026 01:00</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballTransfertsDeux cibles à 150 M€ pour le Real MadridPour relancer la machine cet été, le géant espagnol n’hésitera pas à…Hugo Bernabeu21/03/2026 00:30</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballTransfertsLe défenseur le plus convoité d’Europe ne jure que par le Paris Saint-Germain !Paris veut frapper fort dans le mercato estival. Le Paris Saint-Germain accélère…Stéphane Roy21/03/2026 00:00</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballTransfertsManchester United : un Bruno peut en cacher un autre !Pour prendre la relève de Casemiro cet été, le club mancunien a…Hugo Bernabeu20/03/2026 23:30</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballTransfertsLe Paris Saint-Germain ne laissera pas Mayulu rejoindre MarseilleL’OM, comme beaucoup de clubs, rêve de rafler un tel talent, mais…Stéphane Roy20/03/2026 23:30</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballRésultatsPremier League : Bournemouth – Manchester United : 2-2Bournemouth a freiné Manchester United dans sa quête de podium. Accès au…La Rédaction20/03/2026 23:00</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FootballTransfertsLe Barça ne lui promet rien ? Lewandowski s’en ficheL’attaquant polonais, pilier offensif du FC Barcelone depuis 2022, refuse pour l’instant…Stéphane Roy20/03/2026 23:00</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Sport.fr</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.sport.fr/./football" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Man Utd fury at 'astonishing' and 'baffling' penalty decisions</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/articles/cwyd7rklyeyo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">No contact, no World Cup place? What went wrong for Alexander-Arnold?</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/articles/c75knk1gzvgo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">GB's Azu fourth at World Indoors in 'one of best 60m races of all time'</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/athletics/articles/c5yw8z3dz5ko" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">One final experiment? Unpicking Tuchel's latest England squad</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/articles/clyrnrgp6k6o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Coroner 'not satisfied' Hatton intended to take his own life</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/news/articles/cede1z1q946o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Draper exits Miami Open but Boulter through</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/tennis/articles/cede135vvy3o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Bournemouth equalise twice in draw with Man Utd as Maguire sees red</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/live/c9wn9j281q1t" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Alisson out of Brazil squad and will miss Brighton</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/articles/crm1wr44vxvo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Would WSL meet Fifa's new female coach rules?</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/articles/c5yxke8mjgpo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">O'Sullivan makes highest-ever break with historic 153</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/snooker/articles/cn4391l3lvxo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Rahm drops Tour appeal but refuses to pay fines</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/golf/articles/cr71rd4393jo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Cult or culture? McCullum comes full circle following Ashes review</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/cricket/articles/cy01r187gk5o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">How clubs are developing football stars of the future. Video, 00:09:14How clubs are developing football stars of the future</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/videos/c87wg8nnwrjo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">'I'd love her to be here' - Fernandez on Putellas friendship and London City. Video, 00:04:19'I'd love her to be here' - Fernandez on Putellas friendship and London City</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/videos/c5yw88dn1yyo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">'Being in Manchester has made me love nature so much more' Video, 00:02:15'Being in Manchester has made me love nature so much more'</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/videos/cx242l1wr0ko" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Who makes BBC pundits' Six Nations team of the tournament? Video, 00:11:45Who makes BBC pundits' Six Nations team of the tournament?</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Rugby</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/rugby-union/videos/c62dyp0vyv1o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Cross or shot? Brighton's Minteh reacts to win at Sunderland  Video, 00:04:21Cross or shot? Brighton's Minteh reacts to win at Sunderland</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/videos/cg4g71g4ww1o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">More sports news</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Newcastle eye Delap - Saturday's gossip</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/articles/cvg0x4w37x3o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Wheatley leaves Audi amid Aston Martin link</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/formula1/articles/ckg05py1zneo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Connacht secure bonus-point win over Ulster</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/rugby-union/articles/c75knp472w6o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Liverpool 'disgusted' by racist abuse towards Konate</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Natation</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/articles/ce8j1j444r3o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Van Steenis ends Edwards' title dream again</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/mixed-martial-arts/articles/c208lve3e32o" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Man City's Trafford to start final but Arteta opts not to name Arsenal keeper</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 BBC Sport</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.bbc.com/sport/sport/football/articles/cz0e7j5kj5vo" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports GolfLive Ladies European Tour Golf</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Golf</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/watch/sky-sports-golf" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports TennisLive: ATP/WTA Miami</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/watch/sky-sports-tennis" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+M. Arnaldi v A. Shevchenko</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/5190898912723980112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+C. McNally v Wang Xinyu</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/7420951995039199112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+C. Ugo Carabelli v S. Korda</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/4841006846479455112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+K. Rakhimova v M. Kostyuk</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/7069048771934259112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+A. Sabalenka v A. Li</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/6183354436494041112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+C. Alcaraz v J. Fonseca</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/5123254432405887112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+R. Collignon v F. Cobolli</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/9071361493238728112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+S. Tsitsipas v A. de Minaur</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/8503804736087780112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+M. Kouame v J. Lehecka</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/6682860252829562112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+E. Rybakina v Y. Putintseva</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/4691764862294541112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+L. Darderi v M. Landaluce</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/7680312826914574112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports+P. Stearns v J. Cristian</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/tennis/watch/6274852277281573112/miami-open-presented-by-itau-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LiveShowing on Sky Sports RacingStateside Live</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 Sky Sports</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.skysports.com/watch/sky-sports-racing" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Humiliation for Harry Maguire as Man Utd throw it away</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/man-utd-player-ratings-vs-bournemouth-harry-maguire-bruno-fernandes/blt7eb25df67083a35c" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">GOALWinners & LosersEnglandFoden is a lucky boy - but Trent still can't win over TuchelThomas Tuchel has unveiled his England squad for this month's friendlies at home to Uruguay and Japan. These fixtures will be the final two chances for the German to examine his squad in detail before the end of the club season, and he's gone a bit rogue in how he's decided on his roster, naming an expanded 35-player selection but effectively splitting the team in two.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/phil-foden-winners-losers-thomas-tuchel-man-city-england-squad-trent-alexander-arnold/blta4e5a9914a8e0f3f" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty/GOALAnalysisM. ArtetaHow Arteta turned sizzling Arsenal-City rivalry on its headThe last time Manchester City and Arsenal faced each other in the League Cup final, Pep Guardiola and Mikel Arteta sat side by side in the Wembley dugout as head coach and assistant before celebrating as their City team destroyed the Gunners 3-0 and claimed the first of piece of silverware of the former's time in England. The rampant win only crystalized the widening gap between the two clubs.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/how-mikel-arteta-leaving-man-city-turned-arsenal-rivalry/blt67711746de678f99" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty/GOALNXGNRomaRoma's €25m teen who is earning Osimhen comparisonsRoma's acquisition of Robinio Vaz from Marseille on January 14 was considered quite the coup for the Serie A side. The Frenchman was still only at 18 at the time of the €25 million (£21.5m/$29m) transfer from Stade Velodrome to Stadio Olimpico, with Lamine Yamal the only player younger than Vaz to have scored at least four goals in Europe's 'Big Five' leagues this season to that point.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/robinio-vaz-roma-25-million-teenager-compared-victor-osimhen/blt76071ee2f52f9ad7" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">GOALCULTUREBrazilWhy Nike x Jordan's Brazil collab is a seismic momentWe already knew Nike had built something special through their Jordan Brand and Paris Saint-Germain collaboration, with the 'Jumpman' logo replacing the 'Swoosh' on the French giants’ shirts for the past eight years - but they've entered another stratosphere after linking up with the Brazilian federation.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/brazil-nike-selecao-jordan-collaboration-seismic-world-cup/blt4113d845b1af1b4b" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty/GOALAnalysisChelsea FC WomenMeet Lexi Potter: Chelsea's Stanway-esque teen starWhen Emma Hayes' time at Chelsea was coming to a well-publicised end in the final few months of the 2023-24 season, ahead of her move to the United States to take over its iconic national team, the revered manager took a moment in one of her final press conferences to ponder what the Blues' team might look like in the future, given the progress being made in the women's youth set-up and the work being done to try bridge the gap between the academy and the first team.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/lexi-potter-chelsea-england-teenager/blt8c9b8981e424f969" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty/GOALPower rankingsChampions LeagueUCL Power Rankings: Arsenal back on top ahead of QFsDespite the painfully protracted league phase running through the first five months of the season and the play-off round providing some drama, for many the Champions League doesn't truly begin until the last 16 gets underway. If you are one of those fans, then you likely loved the past week or so of European action.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/champions-league-2025-26-power-rankings/blt04f1d035afcafe91" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty/GOALOpinionManchester UnitedMan Utd MUST upgrade full-backs to go to next levelMichael Carrick instantly solved one of Manchester United's biggest problems from the Ruben Amorim era by simply playing Luke Shaw and Diogo Dalot in their natural positions. The full-backs have started all nine games under the former Red Devils midfielder, playing their part in the coach's astonishing run of seven victories, one draw and one defeat thus far.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/man-utd-upgrade-full-backs-summer-replacing-diogo-dalot-luke-shaw-take-red-devils-next-level/blt732aafa749b6813c" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty/GOALPlayer ratingsLiverpoolSalah goes from zero to hero while Szoboszlai stars againLiverpool cruised into the quarter-finals of the Champions League on Wednesday with a 4-0 win over Galatasaray at Anfield. Arne Slot's side made up for last week's 1-0 defeat in Turkey with a dominant showing in front of their own supporters. Dominik Szoboszlai was once again in inspirational form for the Reds, while Mohamed Salah also played a starring role despite missing a penalty in the first half.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/liverpool-player-ratings-vs-galatasaray-mohamed-salah-dominik-szoboszlai/bltf36691d2302c4e1d" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty/GOALIconsWorld CupICONS: Why Germany wore red in 7-1 Brazil thrashingIn the summer of 2014, Germany didn’t just win the World Cup on Brazilian soil - they left behind one of the most powerful and unexpected symbols of unity football has ever seen. Beyond the unforgettable 7–1 semi-final victory over the hosts, a match that shocked the world, a red and black jersey came to represent something deeper than victory or defeat: respect, empathy, and an unlikely bond between two footballing nations. This is Icons, a GOAL feature and podcast series that revisits the last 10 World Cups through the moments, characters, and controversies that defined them, bringing the spirit of each tournament back to life.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/icons-germany-red-black-7-1-thrashing-brazil-2014-world-cup/bltf6e5bc0a8d7e61ad" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty Images SportArsenalD. RayaRaya reveals he could've joined major European club before ArsenalArsenal goalkeeper David Raya has revealed that he could have joined Bayern Munich instead of the Gunners, before developing into a likely Premier League title winner in north London. The Spain international has become one of the best stoppers in Europe under Mikel Arteta's tutelage but it nearly didn't come to pass at all, given the interest from the Bundesliga giants.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/david-raya-major-european-club-transfer-before-arsenal/blt5ae8b929b1618450" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Calciomercato/Getty ImagesJuventusManchester CityBernardo Silva to Juventus? Tacchinardi: "Spalletti only pushes hard for signings like this"</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/tacchinardi-on-bernardo-silva-joining-juventus-he-s-a-top-class-player-spalletti-only-insists-on-signings-like-this/blt609ec5d40f2a86b6" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty ImagesJuventusJuventus has purchased the land and the JHotel: a €23 million deal</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/juventus-has-purchased-the-land-and-the-jhotel-a-eur23-million-deal-a-transaction-that-does-not-affect-future-investments/blt307178e61768f8c4" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Getty Images SportManchester UnitedB. GuimaraesHowe slams 'disrespectful' Guimaraes to Man Utd talkNewcastle United head coach Eddie Howe has vehemently dismissed reports claiming that Bruno Guimaraes is in "advanced talks" to join Manchester United. Howe expressed visible frustration over the timing of these rumors, as the ninth-placed Magpies fight to secure a European spot for next season.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/lists/eddie-howe-fumes-bruno-guimaraes-man-utd-transfer-rumours/blt658c0eba6a1773f4" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Manchester CityArsenal'Not here to give advice to Arteta!' - Guardiola snaps back at reporterA nonplussed Pep Guardiola dismissed a question from a reporter that related to Mikel Arteta chasing his first Premier League title as a manager, insisting that he had not attended his pre-match press conference to offer advice to the Arsenal boss. Manchester City face Leeds on Saturday evening as they look to close the gap at the top of the table to two points, with the Gunners not in action until Sunday, when they host Chelsea.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/team/manchester-city/a3nyxabgsqlnqfkeg41m6tnpp" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">GOALCULTURE🎥 | Are these the transfers that would SAVE football?!From Marcus Rashford rocking up at Chelsea to Enzo Fernandez making the switch to Liverpool - watch as GOAL's Front Three debate some highly controversial transfer moves and whether the players involved would be good enough to break into the starting XIs of their new teams.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/news/video-bruno-fernandes-psg-harry-kane-real-madrid-front-three-transfers-save-football/blt2c79156a129cffd0" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">GOALD. GayleNewcastle United🎥 | Dwight Gayle on Arsenal rejection, idolising CR7 & moreFormer Crystal Palace and Newcastle United striker Dwight Gayle is the latest guest on the Beast Mode On Podcast, where he discusses his journey from non-league to the Premier League after being let go by Arsenal as a youngster. Now 36, Gayle looks back at idolising David Beckham and Cristiano Ronaldo, why it never clicked with Tony Pulis and much more.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/news/video-dwight-gayle-arsenal-cristiano-ronaldo-beast-mode-on-podcast/blte9e250f67c817af6" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">GOALCULTURE🎥 | Front Three do battle with FILTHYFELLAS in quiz showdownRepresenting GOAL's Front Three, Juwon, Big Yarns and DSK take on Jad, Stevo and Menace from FILTHYFELLAS in a quiz showdown of epic proportions. Who will come out on top after four rounds that will put their football knowledge to the test? Find out by watching the video above!</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/news/video-front-three-filthyfellas-football-knowledge-quiz/bltb995e9f1f5d09967" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">GOALWest HamC. Cole🎥 | Cole talks Kane respect, life advice from 50 Cent & moreThe latest episode of the Beast Mode On Podcast sees former West Ham and England striker Carlton Cole join Adebayo Akinfenwa to chat about life at Chelsea and his decision to leave the Blues, how he angered Jose Mourinho with his nightclub visits, receiving life advice from 50 Cent and much more.</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/news/video-west-ham-legend-carlton-cole-chelsea-harry-kane-50-cent-beast-mode-on-podcast/bltc3a99a762d64a5c1" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">TV Guide & StreamingBrighton vs LiverpoolBrighton vs Liverpool: Stream, TV channels & where to watchHow to watch the  Premier League match between Brighton and Liverpool, as well as kick-off time and team news</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 Goal.com</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.goal.com/en/en/news/how-to-watch-brighton-liverpool-21032026/bltb135b6736493004f" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">All of ESPN.All In One Place.Sign Up NowWatch Now</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://plus.espn.com/?ex_cid=ESPN-ESPN-Web-Left_Rail-Evergreen-Brand-espncom-desktop-leftrail-dtc-promo-US-EN" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">📍Watch on ESPNSubscribe NowLive: NCAA Women's Basketball (First Round)Live: NCAA Women's Frozen Four (Semifinals)Live: NHL Power PlayLive: MLB.TVSportsCenter For You</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Basketball</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/watch/offers?om-navmethod=button:subscribe" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Quick LinksMen's Tournament ChallengeWomen's Tournament ChallengeMen's NCAA BracketWomen's NCAA BracketNCAA Baseball & SoftballFantasy Women's BasketballFantasy Baseball: Sign UpWhere To WatchToday's Top OddsESPN Radio: Listen Live</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Basketball</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://fantasy.espn.com/games/tournament-challenge-bracket-2026/?addata=tcmens2026_ncaam_web_quicklinks_ncaam" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FavoritesManage Favorites</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Natation</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/#" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Customize ESPNCreate AccountLog In</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="nan" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">FantasyFootballBaseballHockeyMen's BasketballWomen's Basketball</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Basketball</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="http://www.espn.com/fantasy/football/" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">ESPN SitesESPN DeportesAndscapeespnWESPNFCX GamesSEC Network</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://espndeportes.espn.com" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">ESPN AppsESPNESPN FantasyTournament Challenge</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="http://www.espn.com/espn/apps/download?app=espn" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Follow ESPNFacebookX/TwitterInstagramSnapchatTikTokYouTubeGoogle News</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.facebook.com/ESPN" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">NCAA Women's Basketball Championship - Regional 4 in Sacramento - 1st RoundInés Sotelo hits the bucket vs. Colorado State RamsInés Sotelo hits the bucket vs. Colorado State Rams2m0:15Emma Shumate hustles in for Michigan State and-1Emma Shumate hustles in for Michigan State and-18m0:17Kloe Froebe muscles in for tough and-1 bucketKloe Froebe gets inside and the basket and foul for Colorado State.9m0:18Brooke Carlson drills a triple for Colorado StateBrooke Carlson hits a 3-pointer for Colorado State against Michigan State.10m0:16Kennedy Blair fights through contact for and-1 bucketKennedy Blair fights through contact for and-1 bucket7m0:14🏆 Check your bracketsWomen's March Madness live tracker ➡️</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Basketball</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://fantasy.espn.com/games/tournament-challenge-bracket-women-2026/" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">WOMEN'S NCAA TOURNAMENT📅 Complete scoreboard🏆 Check your brackets</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/womens-college-basketball/scoreboard" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">MEN'S FIRST-ROUND REACTIONMen's March Madness live tracker: Updates from Friday's first roundESPN reporters are on-site across the country with real-time updates from the 2026 NCAA tournament.5hESPNJamie Squire/Getty ImagesMen's March Madness Friday takeaways: How Utah State, Kentucky, more teams wonWe're tracking how every first-round game is won -- and keys to each winner's chances of advancing again.2hESPN🏆 Check your brackets✍️ Bracket busted? Try a Second Chance Bracket!</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/mens-college-basketball/story/_/id/48258261/march-madness-live-tracker-updates-first-round-friday-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">MEN'S NCAA TOURNAMENT📅 Complete scoreboard🏆 Check your brackets</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/mens-college-basketball/scoreboard" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">TOP HEADLINESMiami (OH)'s run ends in blowout loss to VolsNCAA sues DraftKings for trademark infringementWNBA, union officially sign new CBA term sheetSources: 49ers pass on Williams option, eye dealPurdue's Smith leaps Hurley as NCAA assists kingUCLA's Close hails Betts' mental health 'courage'OKC won't make White House visit, cites 'timing'Iowa St.'s Jefferson sprains ankle; X-rays negative📸 Men's NCAA tourney first-round superlatives</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Basketball</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/mens-college-basketball/story/_/id/48262632/tennessee-ends-miami-ohio-season-men-ncaa-tournament-first-round" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">WOMEN'S FIRST-ROUND REACTIONWomen's March Madness live tracker: Updates from Friday's first roundWe're following all the action from 16 games throughout Day 1 of the women's NCAA tournament.10hESPNRon Jenkins/Getty ImagesWomen's March Madness Day 1 takeaways: Scores, analysis, recapsWe're breaking down all 16 games Friday and how each winner can advance to the Sweet 16.58mESPN🏆 Check your brackets✍️ Bracket busted? Try a Second Chance Bracket!</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/womens-college-basketball/story/_/id/48258567/womens-march-madness-live-tracker-updates-ncaa-tournament-first-round-friday-2026" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">An ownership subplot is complicating Giannis trade watch in Milwaukee14hRamona Shelburne</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/nba/story/_/id/48225217/how-unique-milwaukee-bucks-ownership-structure-impacts-giannis-antetokounmpo-trade-wes-edens-jimmy-haslam-marc-lasry" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">NBA SCOREBOARD📅 Complete scoreboard⬆⬇ Standings</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Basketball</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/nba/scoreboard" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">MEN'S TOURNAMENT TAKEAWAYSChase Johnston's first 2-pointer, no subs for Siena and more men's NCAA first-round superlativesWhat were the coolest, weirdest and most notable things to happen in the men's NCAA tournament's first round? We've got some of the best right here.3hKalan HooksJacob Kupferman/Getty ImagesLooking back at Day 1 of men's March MadnessOur reporters detail how each game was won Thursday and look ahead to the matchups created for Saturday.21hESPN🏆 Bracket already busted? Get a second chance!📅 Tournament schedule</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Tennis</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/mens-college-basketball/story/_/id/48262044/2026-mens-march-madness-first-round-tournament-superlatives" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">LIU'S MARCH ENDS WITH SOME MAGICLIU's 'fins up' chant has turned a near-empty gym into March magicA few college basketball fanatics were looking for a local team to root for in 2023. They landed on the LIU Sharks.14hJ.J. Post</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Basketball</span>
+                    <span class="badge badge-source">📍 ESPN</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐⭐</span>
+                </div>
+<a href="https://www.espn.com/mens-college-basketball/story/_/id/48240515/long-island-university-sharks-fins-up" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Sports Illustrated FC</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 90min</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://si.com/soccer" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">Sports Illustrated Fútbol</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Football</span>
+                    <span class="badge badge-source">📍 90min</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://si.com/es-us/futbol" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">90min France</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 90min</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://90min.com/fr" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">90min Deutschland</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 90min</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://90min.de" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">90min Brasil</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 90min</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://90min.com/pt-br" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="article-title">90min Italia</div>
+                </div>
+                <div class="article-meta">
+                    <span class="badge badge-category">Autre</span>
+                    <span class="badge badge-source">📍 90min</span>
+                    <span class="badge badge-credibility">⭐⭐⭐⭐</span>
+                </div>
+<a href="https://90min.com/it" target="_blank" rel="noopener noreferrer" class="article-link">🔗 Lire l'article</a>
+            </div>
+
+        </div>
+        
+        <!-- Vue d'ensemble des sources -->
+        <div class="sources-list">
+            <h3>🔗 Sources utilisées</h3>
+
+            <div class="source-item">
+                <span class="source-name">BBC Sport</span>
+                <span class="source-count">24 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">Hesport</span>
+                <span class="source-count">20 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">L'Équipe</span>
+                <span class="source-count">20 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">Goal.com</span>
+                <span class="source-count">20 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">ESPN</span>
+                <span class="source-count">19 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">Eurosport FR</span>
+                <span class="source-count">17 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">Sky Sports</span>
+                <span class="source-count">15 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">Yalla Kora</span>
+                <span class="source-count">11 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">Sport.fr</span>
+                <span class="source-count">10 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">Kooora</span>
+                <span class="source-count">9 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">90min</span>
+                <span class="source-count">6 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">RMC Sport</span>
+                <span class="source-count">5 articles</span>
+            </div>
+
+            <div class="source-item">
+                <span class="source-name">Le360 Sport</span>
+                <span class="source-count">1 article</span>
+            </div>
+
+        </div>
+        
+        <!-- Pied de page -->
+        <div class="footer">
+            <p>📰 Revue de presse automatisée - Agent IA de veille sportive</p>
+            <p>SportPulse — Agrégateur Intelligent de Presse Sportive</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">Mise à jour automatique quotidienne</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,163 @@
+#!/usr/bin/env python3
+"""
+MÉTHODES DE WEB SCRAPING - ALTERNATIVES À BeautifulSoup
+"""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MÉTHODE 1: SELENIUM (avec JavaScript rendering)
+# ═══════════════════════════════════════════════════════════════════════════
+"""
+✅ Avantages:
+  - Exécute JavaScript (sites dynamiques)
+  - Simule un navigateur réel
+  - Supporte interactions (clics, scroll)
+  
+❌ Inconvénients:
+  - Très lent (lance un navigateur complet)
+  - Consomme beaucoup de ressources
+  - Difficile à configurer
+
+📦 Installation: pip install selenium webdriver-manager
+
+Exemple:
+    from selenium import webdriver
+    driver = webdriver.Chrome()
+    driver.get(url)
+    articles = driver.find_elements("css selector", "article")
+"""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MÉTHODE 2: PLAYWRIGHT (moderne et rapide)
+# ═══════════════════════════════════════════════════════════════════════════
+"""
+✅ Avantages:
+  - JavaScript rendering (Chrome/Firefox/Safari)
+  - Plus rapide que Selenium
+  - Supporte waiters (attendre éléments)
+  - Headless par défaut (plus rapide)
+  
+❌ Inconvénients:
+  - Encore plus lent que BeautifulSoup
+  - Plus lourd en ressources
+
+📦 Installation: pip install playwright
+
+Exemple:
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto(url)
+        articles = page.query_selector_all("article")
+        browser.close()
+"""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MÉTHODE 3: LXML (parsing XML/HTML très rapide)
+# ═══════════════════════════════════════════════════════════════════════════
+"""
+✅ Avantages:
+  - ⚡ TRÈS RAPIDE (C, pas Python pur)
+  - Utilise XPath ou CSS selectors
+  - Léger en ressources
+  - Support XPath avancé
+  
+❌ Inconvénients:
+  - Pas de JavaScript rendering
+  - Courbe d'apprentissage XPath
+
+📦 Installation: pip install lxml
+
+Exemple:
+    from lxml import html
+    doc = html.fromstring(response.text)
+    articles = doc.xpath("//article")
+    for article in articles:
+        title = article.xpath(".//h2/text()")[0]
+"""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MÉTHODE 4: REQUESTS-HTML (BeautifulSoup amélioré)
+# ═══════════════════════════════════════════════════════════════════════════
+"""
+✅ Avantages:
+  - Plus simple que BeautifulSoup
+  - JavaScript rendering optionnel
+  - Syntaxe CSS/XPath combinée
+  - Parfait pour scraping rapide
+  
+❌ Inconvénients:
+  - JavaScript rendering plus lent
+  - Moins de contrôle qu'avec Selenium
+
+📦 Installation: pip install requests-html
+
+Exemple:
+    from requests_html import HTMLSession
+    session = HTMLSession()
+    r = session.get(url)
+    articles = r.html.find("article")
+    for article in articles:
+        title = article.find("h2", first=True).text
+"""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MÉTHODE 5: API DIRECTE (quand disponible)
+# ═══════════════════════════════════════════════════════════════════════════
+"""
+✅ Avantages:
+  - ⚡ PLUS RAPIDE (données structurées)
+  - Pas de parsing HTML compliqué
+  - Données officielles
+  - Plus fiable
+  
+❌ Inconvénients:
+  - API pas toujours disponible
+  - Rate limiting
+  - Authentification requise
+
+📦 Installation: pip install requests
+
+Exemple:
+    import requests
+    resp = requests.get("https://api.example.com/articles")
+    articles = resp.json()["data"]
+"""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MÉTHODE 6: SCRAPY (framework complet)
+# ═══════════════════════════════════════════════════════════════════════════
+"""
+✅ Avantages:
+  - Framework complet et robuste
+  - Gestion des requêtes parallèles
+  - Middleware intégré
+  - Excellent pour projets larges
+  
+❌ Inconvénients:
+  - Courbe d'apprentissage importante
+  - Overkill pour petits projets
+
+📦 Installation: pip install scrapy
+"""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# COMPARAISON RAPIDE
+# ═══════════════════════════════════════════════════════════════════════════
+"""
+┌─────────────────────┬──────────┬────────────┬──────────┬──────────────┐
+│ Méthode             │ Rapidité │ JS Support │ CPU/RAM  │ Facilité     │
+├─────────────────────┼──────────┼────────────┼──────────┼──────────────┤
+│ BeautifulSoup (+Re) │ ⭐⭐⭐⭐⭐  │ ❌         │ ⭐⭐     │ ⭐⭐⭐⭐⭐   │
+│ LXML                │ ⭐⭐⭐⭐⭐  │ ❌         │ ⭐⭐     │ ⭐⭐⭐⭐    │
+│ Requests-HTML       │ ⭐⭐⭐⭐   │ ✅ (lent)  │ ⭐⭐⭐   │ ⭐⭐⭐⭐    │
+│ Playwright          │ ⭐⭐     │ ✅         │ ⭐⭐⭐⭐⭐ │ ⭐⭐⭐     │
+│ Selenium            │ ⭐       │ ✅         │ ⭐⭐⭐⭐⭐ │ ⭐⭐⭐     │
+│ Scrapy              │ ⭐⭐⭐⭐   │ ❌ (+ JS)  │ ⭐⭐⭐⭐ │ ⭐⭐       │
+└─────────────────────┴──────────┴────────────┴──────────┴──────────────┘
+
+💡 RECOMMANDATION POUR VOTRE CAS:
+   ➡️  LXML: Si vous voulez juste plus de RAPIDITÉ
+   ➡️  Requests-HTML: Si besoin JS rendering OCCASIONNEL
+   ➡️  Playwright: Si TOUS les sites ont JavaScript
+"""

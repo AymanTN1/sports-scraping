@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MarketPulse · Terminal Financier & Market Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #06090E;
+      --bg-secondary: #0D131F;
+      --panel: rgba(15, 23, 42, 0.75);
+      --panel-hover: rgba(26, 37, 60, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-bright: rgba(255, 255, 255, 0.18);
+      
+      --bullish: #00F5A0;
+      --bullish-bg: rgba(0, 245, 160, 0.12);
+      --bullish-border: rgba(0, 245, 160, 0.35);
+      
+      --bearish: #FF2E63;
+      --bearish-bg: rgba(255, 46, 99, 0.12);
+      --bearish-border: rgba(255, 46, 99, 0.35);
+      
+      --neutral: #94A3B8;
+      --neutral-bg: rgba(148, 163, 184, 0.12);
+      --neutral-border: rgba(148, 163, 184, 0.3);
+
+      --accent: #00D2FF;
+      --accent-glow: rgba(0, 210, 255, 0.25);
+      --gold: #FFB800;
+
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+
+      --font-ui: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Syne', sans-serif;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-ui);
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 210, 255, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(0, 245, 160, 0.04) 0%, transparent 40%);
+    }
+
+    /* Layout */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 76px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 0;
+      gap: 2rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 100;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--bullish), var(--accent));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: #06090E;
+      box-shadow: var(--accent-glow);
+    }
+
+    .nav-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      padding: 0 0.8rem;
+    }
+
+    .nav-btn {
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    .nav-btn.active {
+      background: var(--panel);
+      color: var(--bullish);
+      border-color: var(--bullish-border);
+      box-shadow: 0 0 15px rgba(0, 245, 160, 0.15);
+    }
+
+    .nav-btn.active::before {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: 10px;
+      bottom: 10px;
+      width: 4px;
+      background: var(--bullish);
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Main Area */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    /* Top Bar */
+    .topbar {
+      height: 64px;
+      background: rgba(6, 9, 14, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .brand-title .highlight {
+      background: linear-gradient(90deg, var(--bullish), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .live-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 20px;
+      background: rgba(0, 245, 160, 0.15);
+      color: var(--bullish);
+      border: 1px solid var(--bullish-border);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--bullish);
+      box-shadow: 0 0 8px var(--bullish);
+      animation: pulseDot 1.5s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Financial Ticker Bar */
+    .ticker-bar {
+      flex: 1;
+      height: 36px;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-content {
+      display: flex;
+      gap: 2rem;
+      white-space: nowrap;
+      animation: tickerScroll 40s linear infinite;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ticker-item .val-up { color: var(--bullish); font-weight: 600; }
+    .ticker-item .val-down { color: var(--bearish); font-weight: 600; }
+
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .topbar-time {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    /* Page Content */
+    .main-content {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* Tabs Bar */
+    .view-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.7rem 1.4rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      background: var(--panel);
+      color: var(--bullish);
+      border-color: var(--border-bright);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* KPI Summary Cards Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .kpi-card {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-bright);
+    }
+
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--bullish));
+      opacity: 0.6;
+    }
+
+    .kpi-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .kpi-value.green { color: var(--bullish); }
+    .kpi-value.gold { color: var(--gold); }
+    .kpi-value.blue { color: var(--accent); }
+
+    .kpi-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Filter Bar Component */
+    .filter-bar {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      flex: 1;
+      min-width: 170px;
+    }
+
+    .filter-group label {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filter-select,
+    .filter-input {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 0.65rem 1rem;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .filter-select:focus,
+    .filter-input:focus {
+      border-color: var(--bullish);
+      box-shadow: 0 0 10px var(--bullish-bg);
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, var(--bullish), #00C853);
+      color: #06090E;
+      border: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.7rem 1.6rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-action:hover {
+      box-shadow: 0 0 20px rgba(0, 245, 160, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--panel-hover);
+      color: var(--text-main);
+      border: 1px solid var(--border-bright);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: none;
+    }
+
+    /* Category Quick Filter Pills Bar */
+    .pills-container {
+      display: flex;
+      gap: 0.6rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pill-btn {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.45rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .pill-btn:hover,
+    .pill-btn.active {
+      background: var(--bullish-bg);
+      color: var(--bullish);
+      border-color: var(--bullish-border);
+    }
+
+    /* Articles Grid & Cards */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .article-card {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .article-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-bright);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+      background: var(--panel-hover);
+    }
+
+    /* Card Header / Image Container */
+    .card-header-box {
+      height: 190px;
+      position: relative;
+      background: var(--bg-secondary);
+      overflow: hidden;
+    }
+
+    .card-header-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .article-card:hover .card-header-box img {
+      transform: scale(1.04);
+    }
+
+    .card-gradient-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, transparent 70%);
+    }
+
+    /* Badges Bar inside Card (FLUID FLEX - NO OVERLAP) */
+    .card-badges-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.6rem;
+    }
+
+    .badge-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .badge-bullish {
+      background: var(--bullish-bg);
+      color: var(--bullish);
+      border: 1px solid var(--bullish-border);
+    }
+
+    .badge-bearish {
+      background: var(--bearish-bg);
+      color: var(--bearish);
+      border: 1px solid var(--bearish-border);
+    }
+
+    .badge-neutre {
+      background: var(--neutral-bg);
+      color: var(--neutral);
+      border: 1px solid var(--neutral-border);
+    }
+
+    .badge-category {
+      background: rgba(0, 210, 255, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(0, 210, 255, 0.3);
+    }
+
+    .card-content {
+      padding: 1.4rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .card-headline {
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--text-main);
+    }
+
+    .card-excerpt {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-meta-footer {
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .source-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .cred-stars {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* Analytics Dashboard Grid */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .chart-card {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .chart-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    /* Briefing Area */
+    .briefing-box {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 2rem;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-dim);
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .app-container { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; flex-direction: row; justify-content: space-between; padding: 0.8rem 1.5rem; border-right: none; border-bottom: 1px solid var(--border); }
+      .nav-items { flex-direction: row; width: auto; }
+      .topbar { padding: 0 1rem; }
+      .ticker-bar { display: none; }
+      .main-content { padding: 1rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand-logo">MP</div>
+      <div class="nav-items">
+        <button class="nav-btn active" data-tab="articles" title="Terminal Boursier" onclick="switchTab('articles')">📈</button>
+        <button class="nav-btn" data-tab="analytics" title="Analytics & Sentiment" onclick="switchTab('analytics')">📊</button>
+        <button class="nav-btn" data-tab="briefing" title="Morning Briefing IA" onclick="switchTab('briefing')">🤖</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="brand-title">
+          Market<span class="highlight">Pulse</span>
+          <div class="live-badge"><div class="live-dot"></div> Live Terminal</div>
+        </div>
+
+        <!-- Scrolling Ticker Bar -->
+        <div class="ticker-bar">
+          <div class="ticker-content" id="tickerContent">
+            <div class="ticker-item"><b>BTC/USD</b> $94,250 <span class="val-up">+4.2%</span></div>
+            <div class="ticker-item"><b>S&P 500</b> 5,890 <span class="val-up">+0.6%</span></div>
+            <div class="ticker-item"><b>NASDAQ</b> 18,520 <span class="val-up">+0.9%</span></div>
+            <div class="ticker-item"><b>CAC 40</b> 7,650 <span class="val-up">+0.3%</span></div>
+            <div class="ticker-item"><b>EUR/USD</b> 1.085</div>
+            <div class="ticker-item"><b>GOLD</b> $2,740 <span class="val-up">+0.5%</span></div>
+          </div>
+        </div>
+
+        <div class="topbar-time" id="topbarTime"></div>
+      </header>
+
+      <!-- Main Body Content -->
+      <main class="main-content">
+        <!-- View Navigation Tabs -->
+        <div class="view-tabs">
+          <button class="tab-btn active" id="tab-articles" onclick="switchTab('articles')">📈 Actualités Marchés & Signaux</button>
+          <button class="tab-btn" id="tab-analytics" onclick="switchTab('analytics')">📊 Analytics & Sentiment Global</button>
+          <button class="tab-btn" id="tab-briefing" onclick="switchTab('briefing')">🤖 Morning Briefing IA</button>
+        </div>
+
+        <!-- TAB 1: TERMINAL BOURSIER (ARTICLES) -->
+        <div class="tab-panel active" id="panel-articles">
+          <!-- Summary KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Articles Traités</div>
+              <div class="kpi-value green" id="kpiArticles">—</div>
+              <div class="kpi-sub">⚡ Mises à jour en direct</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Secteurs Financiers</div>
+              <div class="kpi-value blue" id="kpiSecteurs">—</div>
+              <div class="kpi-sub">📁 Couverture globale</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Sources Analystes</div>
+              <div class="kpi-value gold" id="kpiSources">—</div>
+              <div class="kpi-sub">🌐 Wall Street, CAC40 & Crypto</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Indice de Crédibilité</div>
+              <div class="kpi-value green" id="kpiCredibility">—</div>
+              <div class="kpi-sub">⭐ Audit automatisé 1-5 étoiles</div>
+            </div>
+          </div>
+
+          <!-- Filters Bar Component -->
+          <div class="filter-bar">
+            <div class="filter-group">
+              <label>Secteur Financier</label>
+              <select class="filter-select" id="filterCategory">
+                <option value="">Tous les secteurs</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>Sentiment Marché</label>
+              <select class="filter-select" id="filterSentiment">
+                <option value="">Tous les sentiments</option>
+                <option value="Bullish">🟢 Bullish (Hausse)</option>
+                <option value="Bearish">🔴 Bearish (Baisse)</option>
+                <option value="Neutre">⚪ Neutre</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>Source Média</label>
+              <select class="filter-select" id="filterSource">
+                <option value="">Toutes les sources</option>
+              </select>
+            </div>
+            <div class="filter-group" style="flex:1.5">
+              <label>Recherche Rapide</label>
+              <input type="text" class="filter-input" id="filterSearch" placeholder="Rechercher une entreprise, ticker, mot-clé ($BTC, Nvidia)...">
+            </div>
+            <button class="btn-action" onclick="applyFilterLogic()">⚡ Filtrer</button>
+            <button class="btn-action btn-secondary" onclick="exportDataCsv()">📥 Export CSV</button>
+          </div>
+
+          <!-- Category Quick Filter Pills -->
+          <div class="pills-container" id="pillsBar"></div>
+
+          <!-- Articles Cards Grid -->
+          <div class="articles-grid" id="articlesGrid"></div>
+        </div>
+
+        <!-- TAB 2: ANALYTICS & SENTIMENT -->
+        <div class="tab-panel" id="panel-analytics">
+          <div class="analytics-grid">
+            <div class="chart-card">
+              <h3>📊 Répartition du Sentiment des Marchés</h3>
+              <canvas id="chartSentiment" height="260"></canvas>
+            </div>
+            <div class="chart-card">
+              <h3>📁 Volume par Secteur Financier</h3>
+              <canvas id="chartSecteurs" height="260"></canvas>
+            </div>
+            <div class="chart-card" style="grid-column: 1 / -1;">
+              <h3>⭐ Volume et Crédibilité par Source Média</h3>
+              <canvas id="chartSources" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: BRIEFING IA -->
+        <div class="tab-panel" id="panel-briefing">
+          <div class="briefing-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+              <h2 style="font-family:var(--font-display); font-size:1.4rem; color:var(--text-main);">🤖 Morning Briefing Financier — Synthèse IA</h2>
+              <button class="btn-action" onclick="alert('Briefing quotidien régénéré avec succès !')">▶ Régénérer Synthèse</button>
+            </div>
+            <div id="briefingContent" style="color:var(--text-muted); line-height:1.7;">
+              Chargement de la synthèse quotidienne...
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const API_ARTICLES = '/api/v1/articles?page=1&page_size=5000';
+    let rawArticles = [];
+    let filteredArticles = [];
+    let charts = {};
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateClock();
+      setInterval(updateClock, 1000);
+      loadArticlesData();
+    });
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('topbarTime').textContent = now.toLocaleDateString('fr-FR', {
+        weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+      }) + ' ' + now.toLocaleTimeString('fr-FR');
+    }
+
+    async function loadArticlesData() {
+      try {
+        const res = await fetch(API_ARTICLES);
+        const data = await res.json();
+        rawArticles = (data.items || []).map(item => ({
+          ...item,
+          category: item.category || 'Macroéconomie',
+          sentiment: item.sentiment || 'Neutre',
+          summary: item.summary || item.title,
+          image_url: item.image_url || ''
+        }));
+        populateFilters();
+        applyFilterLogic();
+      } catch (err) {
+        console.error('Erreur chargement API:', err);
+      }
+    }
+
+    function populateFilters() {
+      const catSelect = document.getElementById('filterCategory');
+      const srcSelect = document.getElementById('filterSource');
+      const pillsBar = document.getElementById('pillsBar');
+
+      const categories = Array.from(new Set(rawArticles.map(a => a.category))).sort();
+      const sources = Array.from(new Set(rawArticles.map(a => a.source))).sort();
+
+      catSelect.innerHTML = '<option value="">Tous les secteurs</option>';
+      categories.forEach(c => catSelect.add(new Option(c, c)));
+
+      srcSelect.innerHTML = '<option value="">Toutes les sources</option>';
+      sources.forEach(s => srcSelect.add(new Option(s, s)));
+
+      // Quick Filter Pills
+      pillsBar.innerHTML = `<button class="pill-btn active" onclick="selectPill('')">Tous</button>` +
+        categories.map(c => `<button class="pill-btn" onclick="selectPill('${c}')">${c}</button>`).join('');
+    }
+
+    function selectPill(cat) {
+      document.getElementById('filterCategory').value = cat;
+      document.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent === (cat || 'Tous'));
+      });
+      applyFilterLogic();
+    }
+
+    function applyFilterLogic() {
+      const cat = document.getElementById('filterCategory').value;
+      const sent = document.getElementById('filterSentiment').value;
+      const src = document.getElementById('filterSource').value;
+      const q = document.getElementById('filterSearch').value.toLowerCase();
+
+      filteredArticles = rawArticles.filter(a => {
+        const matchCat = !cat || a.category === cat;
+        const matchSent = !sent || a.sentiment === sent;
+        const matchSrc = !src || a.source === src;
+        const matchQ = !q || (a.title + ' ' + a.summary + ' ' + a.source + ' ' + a.category).toLowerCase().includes(q);
+        return matchCat && matchSent && matchSrc && matchQ;
+      });
+
+      renderKpiCards();
+      renderArticlesGrid();
+      renderAnalyticsCharts();
+      renderBriefingSection();
+    }
+
+    function renderKpiCards() {
+      document.getElementById('kpiArticles').textContent = filteredArticles.length;
+      document.getElementById('kpiSecteurs').textContent = new Set(filteredArticles.map(a => a.category)).size;
+      document.getElementById('kpiSources').textContent = new Set(filteredArticles.map(a => a.source)).size;
+      const avg = filteredArticles.length 
+        ? (filteredArticles.reduce((acc, a) => acc + (a.credibility || 0), 0) / filteredArticles.length).toFixed(1)
+        : '—';
+      document.getElementById('kpiCredibility').textContent = `${avg}/5`;
+    }
+
+    function renderArticlesGrid() {
+      const grid = document.getElementById('articlesGrid');
+      if (!filteredArticles.length) {
+        grid.innerHTML = '<div class="empty-message">Aucune actualité financière ne correspond aux filtres sélectionnés.</div>';
+        return;
+      }
+
+      grid.innerHTML = filteredArticles.map(a => createCardMarkup(a)).join('');
+    }
+
+    function createCardMarkup(article) {
+      const sentClass = article.sentiment === 'Bullish' ? 'badge-bullish' : article.sentiment === 'Bearish' ? 'badge-bearish' : 'badge-neutre';
+      const sentIcon = article.sentiment === 'Bullish' ? '🟢 Bullish' : article.sentiment === 'Bearish' ? '🔴 Bearish' : '⚪ Neutre';
+
+      const imgSection = article.image_url 
+        ? `<div class="card-header-box">
+             <img src="${escapeAttr(article.image_url)}" alt="${escapeAttr(article.title)}" onerror="this.parentElement.style.display='none'">
+             <div class="card-gradient-overlay"></div>
+           </div>` 
+        : '';
+
+      return `
+        <article class="article-card" onclick="${article.url ? `window.open('${escapeAttr(article.url)}','_blank')` : ''}">
+          ${imgSection}
+          <div class="card-content">
+            <!-- Badges Flex Row (NO OVERLAP) -->
+            <div class="card-badges-row">
+              <span class="badge-pill badge-category">${escapeHtml(article.category)}</span>
+              <span class="badge-pill ${sentClass}">${sentIcon}</span>
+            </div>
+
+            <h3 class="card-headline">${escapeHtml(article.title)}</h3>
+            <p class="card-excerpt">${escapeHtml(article.summary)}</p>
+
+            <div class="card-meta-footer">
+              <div class="source-info">
+                <span>🌐 ${escapeHtml(article.source)}</span>
+              </div>
+              <div class="cred-stars">⭐ ${article.credibility}/5</div>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    function renderAnalyticsCharts() {
+      // 1. Sentiment Chart
+      const sentiments = { Bullish: 0, Bearish: 0, Neutre: 0 };
+      filteredArticles.forEach(a => sentiments[a.sentiment] = (sentiments[a.sentiment] || 0) + 1);
+
+      if (charts.sentiment) charts.sentiment.destroy();
+      charts.sentiment = new Chart(document.getElementById('chartSentiment'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Bullish (Hausse)', 'Bearish (Baisse)', 'Neutre'],
+          datasets: [{
+            data: [sentiments.Bullish, sentiments.Bearish, sentiments.Neutre],
+            backgroundColor: ['#00F5A0', '#FF2E63', '#94A3B8'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { labels: { color: '#94A3B8', font: { family: 'Plus Jakarta Sans' } } } }
+        }
+      });
+
+      // 2. Secteurs Chart
+      const sectors = {};
+      filteredArticles.forEach(a => sectors[a.category] = (sectors[a.category] || 0) + 1);
+
+      if (charts.secteurs) charts.secteurs.destroy();
+      charts.secteurs = new Chart(document.getElementById('chartSecteurs'), {
+        type: 'bar',
+        data: {
+          labels: Object.keys(sectors),
+          datasets: [{
+            label: 'Nombre d\'articles',
+            data: Object.values(sectors),
+            backgroundColor: '#00D2FF',
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: { ticks: { color: '#94A3B8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+            y: { ticks: { color: '#94A3B8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      // 3. Sources Chart
+      const sourcesMap = {};
+      filteredArticles.forEach(a => sourcesMap[a.source] = (sourcesMap[a.source] || 0) + 1);
+
+      if (charts.sources) charts.sources.destroy();
+      charts.sources = new Chart(document.getElementById('chartSources'), {
+        type: 'bar',
+        data: {
+          labels: Object.keys(sourcesMap),
+          datasets: [{
+            label: 'Volume par Source',
+            data: Object.values(sourcesMap),
+            backgroundColor: '#FFB800',
+            borderRadius: 8
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          scales: {
+            x: { ticks: { color: '#94A3B8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+            y: { ticks: { color: '#94A3B8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    function renderBriefingSection() {
+      const box = document.getElementById('briefingContent');
+      if (!filteredArticles.length) {
+        box.innerHTML = 'Aucun article disponible pour la génération de synthèse.';
+        return;
+      }
+
+      const bullishCount = filteredArticles.filter(a => a.sentiment === 'Bullish').length;
+      const bearishCount = filteredArticles.filter(a => a.sentiment === 'Bearish').length;
+
+      box.innerHTML = `
+        <div style="background:var(--bg-secondary); padding:1.5rem; border-radius:12px; border:1px solid var(--border); margin-bottom:1rem;">
+          <h4 style="color:var(--bullish); margin-bottom:0.5rem;">📊 Tendance Globale du Marché</h4>
+          <p>Sur <b>${filteredArticles.length} actualités analysées</b>, le sentiment est majoritairement <b>${bullishCount >= bearishCount ? '🟢 Bullish (Optimiste)' : '🔴 Bearish (Prudent)'}</b> avec <b>${bullishCount} signaux positifs</b> vs <b>${bearishCount} signaux négatifs</b>.</p>
+        </div>
+
+        <h4 style="color:var(--text-main); margin-bottom:0.8rem;">🔥 Principaux Temps Forts Financiers :</h4>
+        <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.6rem;">
+          ${filteredArticles.slice(0, 5).map(a => `<li><b>[${a.category}]</b> ${escapeHtml(a.title)} — <i>${escapeHtml(a.source)}</i></li>`).join('')}
+        </ul>
+      `;
+    }
+
+    function exportDataCsv() {
+      let csv = 'title,source,category,sentiment,credibility,url\n';
+      filteredArticles.forEach(a => {
+        csv += `"${a.title.replace(/"/g, '""')}","${a.source}","${a.category}","${a.sentiment}",${a.credibility},"${a.url}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'marketpulse_export.csv';
+      link.click();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.id === 'tab-' + tabId));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.toggle('active', panel.id === 'panel-' + tabId));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function escapeAttr(str) {
+      return String(str || '').replace(/"/g, '&quot;').replace(/'/g, "\\'");
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,622 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{tocloft}
+
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+\onehalfspacing
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    pdftitle={Rapport de Projet de Fin d'Etudes},
+    pdfauthor={Med Ennesraoui}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\titleformat{\chapter}[display]
+  {\bfseries\Huge}
+  {\chaptername\ \thechapter}
+  {0.5em}
+  {\Huge}
+
+\titleformat{\section}
+  {\bfseries\Large}
+  {\thesection}
+  {0.75em}
+  {}
+
+\titleformat{\subsection}
+  {\bfseries\large}
+  {\thesubsection}
+  {0.75em}
+  {}
+
+\newcommand{\placeholderfigure}[2]{
+\begin{figure}[H]
+\centering
+\fbox{
+\begin{minipage}[c][6cm][c]{0.85\textwidth}
+\centering
+\textbf{Emplacement de la figure}\\[0.5em]
+#2
+\end{minipage}
+}
+\caption{#1}
+\end{figure}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+
+{\Large Royaume du Maroc\par}
+{\Large [Nom de l'etablissement]\par}
+\vspace{1cm}
+{\large Filiere / Departement : [A completer]\par}
+\vspace{2cm}
+
+{\Huge \textbf{Rapport de Projet de Fin d'Etudes}\par}
+\vspace{1cm}
+{\LARGE \textbf{Conception et realisation d'une plateforme intelligente de veille sportive multilingue basee sur l'IA}\par}
+\vspace{2cm}
+
+\begin{tabular}{>{\bfseries}p{4cm}p{8cm}}
+Realise par : & Med Ennesraoui \\
+Encadrant : & [A completer] \\
+Organisme d'accueil : & [A completer] \\
+Annee universitaire : & 2025-2026 \\
+\end{tabular}
+
+\vfill
+
+{\large Date : 04/05/2026\par}
+
+\end{titlepage}
+
+\cleardoublepage
+\thispagestyle{empty}
+\mbox{}
+\cleardoublepage
+
+\chapter*{Dedicace}
+\addcontentsline{toc}{chapter}{Dedicace}
+Je dedie ce travail a mes parents, a ma famille, a mes amis ainsi qu'a toutes les personnes qui m'ont soutenu tout au long de mon parcours universitaire. Leur confiance, leurs encouragements et leur patience ont constitue une source permanente de motivation.
+
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+Je tiens a exprimer ma profonde gratitude a mon encadrant pour son accompagnement, ses conseils, sa disponibilite et la qualite de son suivi tout au long de ce projet de fin d'etudes. Je remercie egalement l'ensemble de mes enseignants pour la formation recue, ainsi que toutes les personnes ayant contribue de pres ou de loin a la realisation de ce travail.
+
+\chapter*{Resume}
+\addcontentsline{toc}{chapter}{Resume}
+Dans un contexte marque par la surabondance de l'information numerique, en particulier dans le domaine sportif, il devient difficile pour un utilisateur, un journaliste ou un analyste de suivre l'actualite de maniere structuree, rapide et fiable. Le present projet a pour objectif de concevoir et de developper une plateforme intelligente de veille sportive multilingue capable de collecter automatiquement des articles depuis plusieurs sources web, de les nettoyer, de les classifier, de les enrichir, d'evaluer leur credibilite et de produire une revue de presse exploitable.
+
+La solution proposee s'appuie sur un pipeline automatise de traitement de donnees, un backend de services, un frontend web de visualisation et un ensemble de diagrammes d'analyse et de conception permettant de formaliser les interactions entre les acteurs et le systeme. Le projet integre plusieurs cas d'utilisation couvrant l'authentification, la consultation de la revue, le filtrage par sport, la publication, l'export et les traitements IA internes tels que la collecte, la verification, la classification, le calcul d'importance et la generation d'une synthese quotidienne.
+
+Les resultats obtenus montrent qu'il est possible de produire automatiquement une revue de presse sportive structuree sous plusieurs formats, tout en proposant une interface lisible et une architecture evolutive. Ce projet constitue une contribution concrete dans le domaine de la veille informationnelle et ouvre la voie a des ameliorations futures, notamment en intelligence artificielle, en evaluation de la fiabilite des sources et en personnalisation de l'experience utilisateur.
+
+\textbf{Mots-cles :} Veille sportive, intelligence artificielle, scraping web, classification automatique, revue de presse, UML, FastAPI, interface web.
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+In a context characterized by information overload, especially in the sports domain, it becomes difficult for users, journalists and analysts to monitor news in a structured, fast and reliable way. This project aims to design and develop an intelligent multilingual sports monitoring platform capable of automatically collecting articles from multiple web sources, cleaning them, classifying them, enriching them, evaluating their credibility and producing an exploitable press review.
+
+The proposed solution relies on an automated data-processing pipeline, a service-oriented backend, a visualization frontend and a set of analysis and design diagrams used to formalize interactions between actors and the system. The project integrates several use cases covering authentication, review consultation, sport filtering, publication, export and internal AI processes such as article collection, resource verification, classification, importance calculation and daily summary generation.
+
+The obtained results show that it is possible to automatically generate a structured sports press review in multiple formats while providing a readable interface and an extensible architecture.
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter*{Liste des abreviations}
+\addcontentsline{toc}{chapter}{Liste des abreviations}
+\begin{itemize}[leftmargin=2cm]
+\item IA : Intelligence Artificielle
+\item UML : Unified Modeling Language
+\item API : Application Programming Interface
+\item NLP : Natural Language Processing
+\item UI : User Interface
+\item CSV : Comma-Separated Values
+\item HTML : HyperText Markup Language
+\item CSS : Cascading Style Sheets
+\item JSON : JavaScript Object Notation
+\item PFE : Projet de Fin d'Etudes
+\end{itemize}
+
+\chapter*{Introduction generale}
+\addcontentsline{toc}{chapter}{Introduction generale}
+L'evolution des technologies numeriques a transforme en profondeur les modes de production, de diffusion et de consommation de l'information. Dans le domaine sportif, cette transformation est encore plus visible en raison du caractere immediat et dynamique des actualites, des resultats, des analyses et des reactions qui circulent en continu sur les plateformes web. Cette abondance d'information constitue une richesse, mais elle pose egalement un probleme majeur de surcharge informationnelle.
+
+Dans ce contexte, la veille automatisee devient une necessite pour toute organisation ou tout utilisateur souhaitant suivre les contenus pertinents sans consacrer un temps excessif a une recherche manuelle. Le present projet propose la conception et la realisation d'une plateforme intelligente de veille sportive multilingue capable de collecter automatiquement des articles, de les organiser, de les enrichir, de les filtrer et de les presenter sous la forme d'une revue de presse exploitable.
+
+L'originalite de cette solution repose sur l'integration conjointe de plusieurs dimensions : collecte web, traitement intelligent, evaluation de la credibilite, structuration des donnees, visualisation web et modelisation UML. Le systeme vise ainsi a repondre a une problematique reelle : comment automatiser efficacement la surveillance de l'actualite sportive tout en garantissant une presentation claire, un tri pertinent et une architecture logicielle maintenable.
+
+Ce rapport s'articule autour de quatre chapitres. Le premier chapitre expose le contexte general, la problematique, les objectifs et la planification du projet. Le deuxieme chapitre detaille l'analyse et la conception fonctionnelle et technique. Le troisieme chapitre decrit la realisation technique de la plateforme. Enfin, le quatrieme chapitre presente les tests, les limites, les apports du projet et les perspectives d'amelioration.
+
+\chapter{Contexte general et cadrage du projet}
+
+\section{Contexte general du projet}
+L'information sportive se distingue par son rythme rapide, son volume important et la diversite de ses sources. Les utilisateurs interesses par le sport consultent generalement plusieurs sites, blogs, journaux et plateformes sociales afin d'obtenir une vision complete des evenements. Cette demarche est couteuse en temps et ne garantit pas toujours une organisation satisfaisante des contenus.
+
+Dans le cadre de ce projet, il a ete identifie un besoin concret : concevoir une plateforme capable d'automatiser cette veille informationnelle en centralisant les articles issus de plusieurs sources sportives, en les classant par discipline, en evaluant leur importance et en produisant une synthese quotidienne.
+
+\section{Problematique}
+La problematique principale de ce projet peut etre formulee comme suit :
+
+\textit{Comment concevoir une plateforme intelligente capable de collecter, traiter, organiser et diffuser automatiquement l'information sportive issue de sources heterogenes, tout en garantissant la pertinence, la lisibilite et l'evolutivite de la solution ?}
+
+Cette problematique se decline en plusieurs sous-questions :
+\begin{itemize}
+\item comment automatiser la collecte des articles sportifs depuis plusieurs sources web ;
+\item comment classifier les contenus selon leurs disciplines sportives ;
+\item comment reduire le bruit informationnel en identifiant les articles les plus importants ;
+\item comment proposer une consultation claire des donnees collectees ;
+\item comment modeliser les interactions du systeme de facon rigoureuse pour faciliter son implementation.
+\end{itemize}
+
+\section{Objectifs du projet}
+\subsection{Objectif general}
+L'objectif general est de concevoir et de realiser une plateforme de veille sportive intelligente capable de produire automatiquement une revue de presse sportive structuree a partir de plusieurs sources web.
+
+\subsection{Objectifs specifiques}
+\begin{itemize}
+\item collecter automatiquement des articles sportifs depuis plusieurs sites ;
+\item verifier la disponibilite et la qualite minimale des ressources collectees ;
+\item classifier les articles selon les sports traites ;
+\item detecter les informations redondantes ou proches ;
+\item calculer un score d'importance pour prioriser les actualites ;
+\item stocker les donnees dans une structure exploitable ;
+\item generer une synthese quotidienne ;
+\item publier une revue de presse dans une interface web ;
+\item permettre aux utilisateurs de consulter, filtrer, archiver et exporter les contenus ;
+\item permettre a l'administrateur de superviser le fonctionnement global du systeme.
+\end{itemize}
+
+\section{Acteurs du systeme}
+L'analyse des besoins a permis d'identifier les acteurs suivants :
+\begin{itemize}
+\item \textbf{Journaliste} : utilisateur principal de la plateforme ; il consulte les revues, filtre les actualites, accede aux archives, exporte des contenus et peut proposer des sources ;
+\item \textbf{Utilisateur} : acteur generique pour les fonctionnalites d'authentification ;
+\item \textbf{Agent IA} : composant central du traitement automatique ; il collecte, verifie, classe, calcule l'importance, stocke et genere les syntheses ;
+\item \textbf{Administrateur} : supervise le systeme, gere les utilisateurs, controle les sources et consulte les journaux d'activite.
+\end{itemize}
+
+\section{Planification du projet}
+\subsection{Diagramme de Gantt}
+Le diagramme de Gantt est un outil de planification qui represente les taches d'un projet en fonction du temps. Chaque tache est associee a une duree et a une position sur un calendrier, ce qui permet de visualiser l'enchainement des activites et leur chevauchement eventuel.
+
+Dans le cadre de ce projet, le diagramme de Gantt permet de suivre les grandes phases suivantes :
+\begin{itemize}
+\item analyse des besoins ;
+\item modelisation UML ;
+\item conception de l'architecture ;
+\item developpement du pipeline ;
+\item developpement du frontend ;
+\item integration et tests ;
+\item redaction du rapport.
+\end{itemize}
+
+\placeholderfigure{Diagramme de Gantt du projet}{Inserer ici la capture ou l'image du diagramme de Gantt.}
+
+\subsection{Diagramme PERT}
+Le diagramme PERT, pour Program Evaluation and Review Technique, est un outil de planification qui met l'accent sur l'enchainement logique des taches et leurs dependances. Il permet d'identifier le chemin critique du projet, c'est-a-dire la sequence d'activites dont tout retard impacte directement la date finale de livraison.
+
+Pour ce projet, le diagramme PERT permet d'illustrer la relation entre les activites majeures :
+\begin{itemize}
+\item cadrage du projet ;
+\item formalisation des besoins ;
+\item conception des diagrammes ;
+\item implementation des modules de traitement ;
+\item integration de l'interface ;
+\item tests et validation ;
+\item finalisation de la documentation.
+\end{itemize}
+
+\placeholderfigure{Diagramme PERT du projet}{Inserer ici la capture ou l'image du diagramme PERT.}
+
+\section{Conclusion du chapitre}
+Ce premier chapitre a permis de poser le cadre general du projet, de definir sa problematique, ses objectifs, ses acteurs et ses principes de planification. Il constitue la base conceptuelle du travail realise.
+
+\chapter{Analyse et conception}
+
+\section{Introduction}
+L'analyse et la conception permettent de transformer un besoin metier en specification exploitable, puis en architecture technique coherente. Dans ce projet, cette phase s'appuie principalement sur des cas d'utilisation et des diagrammes de sequence UML fournis dans le fichier \texttt{sequence.html}.
+
+\section{Vue d'ensemble des cas d'utilisation}
+Le fichier \texttt{sequence.html} contient \textbf{24 cas d'utilisation}, regroupes en quatre grandes familles fonctionnelles.
+
+\subsection{Authentification}
+\begin{itemize}
+\item UC-01 : S'inscrire
+\item UC-02 : Se connecter
+\end{itemize}
+
+\subsection{Consultation et publication}
+\begin{itemize}
+\item UC-03 : Gerer profil
+\item UC-04 : Consulter revue
+\item UC-05 : Filtrer par sport
+\item UC-06 : Acceder archives
+\item UC-07 : Poster une source
+\item UC-08 : Exporter PDF
+\item UC-09 : Voir statistiques
+\item UC-10 : Voir references
+\item UC-11 : Ajouter liens
+\end{itemize}
+
+\subsection{Traitement IA}
+\begin{itemize}
+\item UC-12 : Collecter articles
+\item UC-13 : Verifier ressources
+\item UC-14 : Classifier par sport
+\item UC-15 : Detecter meme info
+\item UC-16 : Compter nombre de journaux
+\item UC-17 : Calculer importance
+\item UC-18 : Stocker articles
+\item UC-19 : Generer resume quotidien
+\item UC-20 : Publier synthese quotidienne
+\end{itemize}
+
+\subsection{Administration}
+\begin{itemize}
+\item UC-21 : Gerer utilisateurs
+\item UC-22 : Gerer Agent IA
+\item UC-23 : Verifier sources
+\item UC-24 : Voir logs
+\end{itemize}
+
+\section{Analyse fonctionnelle}
+\subsection{Besoins fonctionnels}
+Le systeme doit permettre :
+\begin{itemize}
+\item l'authentification et la gestion du profil des utilisateurs ;
+\item la consultation des revues de presse et des archives ;
+\item le filtrage des contenus par sport ou critere de recherche ;
+\item la collecte automatisee des articles ;
+\item la verification des ressources et des sources ;
+\item la classification automatique des actualites ;
+\item le calcul d'un niveau d'importance ;
+\item la generation d'une synthese quotidienne ;
+\item la publication et l'export de la revue ;
+\item l'administration des utilisateurs et la supervision des traitements.
+\end{itemize}
+
+\subsection{Besoins non fonctionnels}
+\begin{itemize}
+\item \textbf{performance} : traitement d'un volume important d'articles en un temps raisonnable ;
+\item \textbf{lisibilite} : presentation claire des contenus dans l'interface ;
+\item \textbf{maintenabilite} : architecture modulaire ;
+\item \textbf{scalabilite} : possibilite d'ajouter de nouvelles sources ou de nouveaux modules ;
+\item \textbf{fiabilite} : reduction des erreurs dans la collecte et le classement ;
+\item \textbf{securite} : gestion des acces et des operations d'administration.
+\end{itemize}
+
+\section{Diagramme de cas d'utilisation general}
+Le diagramme de cas d'utilisation general synthetise les interactions entre les acteurs et le systeme.
+
+\placeholderfigure{Diagramme global de cas d'utilisation}{Inserer ici le diagramme de cas d'utilisation global.}
+
+\section{Specification de cas d'utilisation representatifs}
+
+\subsection{UC-04 Consulter revue}
+\textbf{Acteur principal :} Journaliste\\
+\textbf{Declencheur :} demande de consultation de la revue de presse\\
+\textbf{Precondition :} le systeme dispose d'articles ou d'une synthese publiee\\
+\textbf{Postcondition :} l'utilisateur visualise les actualites organisees
+
+\textbf{Scenario nominal}
+\begin{enumerate}
+\item Le journaliste accede a la page de revue.
+\item Le systeme recupere la synthese et les statistiques associees.
+\item Les articles sont regroupes et affiches.
+\item L'utilisateur consulte les contenus disponibles.
+\end{enumerate}
+
+\placeholderfigure{Diagramme de sequence UC-04 Consulter revue}{Inserer ici la capture du diagramme correspondant.}
+
+\subsection{UC-05 Filtrer par sport}
+\textbf{Acteur principal :} Journaliste\\
+\textbf{Declencheur :} selection d'un sport\\
+\textbf{Postcondition :} les articles affiches correspondent au filtre applique
+
+\placeholderfigure{Diagramme de sequence UC-05 Filtrer par sport}{Inserer ici la capture du diagramme correspondant.}
+
+\subsection{UC-12 Collecter articles}
+\textbf{Acteur principal :} Agent IA\\
+\textbf{Declencheur :} lancement du pipeline ou planification\\
+\textbf{Postcondition :} une liste d'articles bruts est recuperee
+
+\placeholderfigure{Diagramme de sequence UC-12 Collecter articles}{Inserer ici la capture du diagramme correspondant.}
+
+\subsection{UC-14 Classifier par sport}
+\textbf{Acteur principal :} Agent IA\\
+\textbf{Declencheur :} collecte terminee et contenu disponible\\
+\textbf{Postcondition :} chaque article recoit une categorie sportive
+
+\placeholderfigure{Diagramme de sequence UC-14 Classifier par sport}{Inserer ici la capture du diagramme correspondant.}
+
+\subsection{UC-17 Calculer importance}
+\textbf{Acteur principal :} Agent IA\\
+\textbf{Declencheur :} phase post-classification\\
+\textbf{Postcondition :} chaque article recoit un score d'importance
+
+\placeholderfigure{Diagramme de sequence UC-17 Calculer importance}{Inserer ici la capture du diagramme correspondant.}
+
+\subsection{UC-19 Generer resume quotidien}
+\textbf{Acteur principal :} Agent IA (scheduler)\\
+\textbf{Declencheur :} fin de journee ou execution planifiee\\
+\textbf{Postcondition :} une synthese quotidienne est produite
+
+\placeholderfigure{Diagramme de sequence UC-19 Generer resume quotidien}{Inserer ici la capture du diagramme correspondant.}
+
+\subsection{UC-23 Verifier sources}
+\textbf{Acteur principal :} Administrateur\\
+\textbf{Declencheur :} validation manuelle des sources\\
+\textbf{Postcondition :} la source est validee, rejetee ou mise a jour
+
+\placeholderfigure{Diagramme de sequence UC-23 Verifier sources}{Inserer ici la capture du diagramme correspondant.}
+
+\section{Conception technique}
+\subsection{Architecture generale}
+L'architecture retenue se base sur une separation claire entre :
+\begin{itemize}
+\item un frontend pour la consultation des revues ;
+\item un backend pour l'orchestration des services ;
+\item un pipeline de traitement pour la collecte et l'analyse des contenus ;
+\item un espace de stockage pour les donnees et les rapports generes.
+\end{itemize}
+
+\placeholderfigure{Schema general de l'architecture de la solution}{Inserer ici le schema d'architecture globale.}
+
+\section{Conclusion du chapitre}
+Ce chapitre a permis de formaliser les besoins du projet et de structurer sa conception. Les 24 cas d'utilisation identifies dans \texttt{sequence.html} constituent une base solide pour justifier les choix de realisation.
+
+\chapter{Realisation et mise en oeuvre}
+
+\section{Introduction}
+Apres la phase d'analyse et de conception, la realisation du projet a consiste a transformer les besoins formules en une solution logicielle fonctionnelle.
+
+\section{Technologies et outils utilises}
+Le projet a mobilise plusieurs technologies complementaires :
+\begin{itemize}
+\item Python
+\item FastAPI
+\item Pandas
+\item BeautifulSoup
+\item HTML / CSS / JavaScript
+\item JSON
+\item CSV
+\item PlantUML
+\item Git
+\end{itemize}
+
+\placeholderfigure{Logos des technologies utilisees}{Inserer ici une planche de logos ou des captures d'ecran des technologies.}
+
+\section{Organisation generale de la solution}
+La solution se compose de plusieurs espaces fonctionnels :
+\begin{itemize}
+\item \texttt{src/} pour les scripts de traitement ;
+\item \texttt{backend/} pour le service applicatif ;
+\item \texttt{frontend/} et \texttt{web/} pour l'interface de consultation ;
+\item \texttt{data/} pour les donnees d'entree, de sortie et les medias ;
+\item \texttt{docs/} pour les rapports generes ;
+\item \texttt{sequence.html} pour la documentation UML de reference.
+\end{itemize}
+
+\section{Description des principaux modules}
+\subsection{Module de collecte}
+Le module de collecte a pour role d'extraire les articles depuis plusieurs sources sportives.
+\placeholderfigure{Resultat de collecte ou exemple d'articles extraits}{Inserer ici la capture d'ecran.}
+
+\subsection{Module de classification et d'enrichissement}
+Une fois les articles collectes, ils sont soumis a un traitement de normalisation puis a une classification automatique.
+\placeholderfigure{Exemple d'article enrichi}{Inserer ici la capture d'ecran.}
+
+\subsection{Module de verification et de credibilite}
+Le systeme integre un mecanisme de verification des ressources et des sources.
+\placeholderfigure{Vue des scores ou indicateurs de credibilite}{Inserer ici la capture d'ecran.}
+
+\subsection{Module de generation de rapport}
+Le module de generation produit une revue de presse quotidienne sous plusieurs formats, notamment HTML, JSON et texte brut.
+\placeholderfigure{Exemple de revue de presse generee}{Inserer ici la capture d'ecran.}
+
+\subsection{Module de visualisation web}
+L'interface web permet de consulter les actualites, de filtrer les contenus, d'afficher des statistiques et d'acceder aux details des articles.
+\placeholderfigure{Interface d'accueil du systeme}{Inserer ici la capture d'ecran.}
+
+\section{Realisation des cas d'utilisation}
+\subsection{Authentification}
+La partie authentification couvre l'inscription, la connexion et la gestion de profil.
+\placeholderfigure{Page d'inscription}{Inserer ici la capture d'ecran.}
+\placeholderfigure{Page de connexion}{Inserer ici la capture d'ecran.}
+
+\subsection{Consultation de la revue}
+La consultation de la revue permet au journaliste de visualiser les actualites du jour.
+\placeholderfigure{Page de consultation de la revue}{Inserer ici la capture d'ecran.}
+
+\subsection{Filtrage par sport}
+Le filtrage par sport s'appuie sur les categories detectees lors du traitement.
+\placeholderfigure{Filtrage des articles par discipline}{Inserer ici la capture d'ecran.}
+
+\subsection{Statistiques et references}
+La plateforme fournit egalement des donnees de synthese telles que le nombre d'articles, la repartition par sport et la liste des sources utilisees.
+\placeholderfigure{Tableau ou graphique de statistiques}{Inserer ici la capture d'ecran.}
+
+\section{Choix techniques et justification}
+Les choix techniques retenus se justifient par plusieurs raisons :
+\begin{itemize}
+\item Python facilite l'automatisation et le traitement textuel ;
+\item FastAPI fournit une structure moderne pour les services ;
+\item le decoupage frontend/backend ameliore la modularite ;
+\item les formats HTML, JSON et TXT offrent plusieurs niveaux d'exploitation des resultats ;
+\item PlantUML permet une documentation claire et evolutive de la logique systeme.
+\end{itemize}
+
+\section{Conclusion du chapitre}
+Ce chapitre a presente la realisation technique de la plateforme de veille sportive. Il montre comment les besoins exprimes en amont ont ete traduits en composants concrets et en modules coherents.
+
+\chapter{Tests, discussion et perspectives}
+
+\section{Resultats obtenus}
+La plateforme developpee permet :
+\begin{itemize}
+\item la collecte automatisee d'articles sportifs depuis plusieurs sources ;
+\item la structuration et le classement des contenus ;
+\item la generation de revues de presse exploitables ;
+\item la visualisation des actualites dans une interface web ;
+\item la modelisation precise des interactions metier a l'aide de 24 cas d'utilisation.
+\end{itemize}
+
+\section{Strategie de test}
+Les tests realises portent sur plusieurs niveaux :
+\begin{itemize}
+\item tests de collecte ;
+\item tests de traitement ;
+\item tests d'affichage ;
+\item tests fonctionnels ;
+\item tests de sortie.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Exemple de synthese des tests effectues}
+\begin{tabular}{>{\bfseries}p{3.5cm}p{5cm}p{4cm}}
+\toprule
+Type de test & Objectif & Resultat attendu \\
+\midrule
+Collecte & Extraire correctement les articles & Articles recuperes sans erreur bloquante \\
+Classification & Attribuer une categorie sportive & Categorie pertinente affectee a l'article \\
+Generation de rapport & Produire HTML, JSON et TXT & Fichiers generes et lisibles \\
+Affichage & Visualiser les contenus dans l'interface & Consultation claire et fluide \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Apports du projet}
+Le projet apporte plusieurs contributions :
+\begin{itemize}
+\item automatisation d'une tache traditionnellement manuelle ;
+\item centralisation de l'information sportive ;
+\item structuration des contenus selon une logique metier claire ;
+\item valorisation d'une approche hybride combinant veille, analyse et publication ;
+\item disponibilite d'une documentation UML riche facilitant la communication autour du systeme.
+\end{itemize}
+
+\section{Limites du projet}
+Malgre ses apports, la solution presente certaines limites :
+\begin{itemize}
+\item dependance a la structure HTML des sites source ;
+\item variabilite de la qualite des contenus collectes ;
+\item possibilite de faux positifs ou faux negatifs dans la classification ;
+\item besoin d'une administration plus poussee des sources.
+\end{itemize}
+
+\section{Perspectives d'amelioration}
+Plusieurs pistes d'evolution peuvent etre envisagees :
+\begin{itemize}
+\item integration de modeles NLP plus avances ;
+\item systeme de recommandation personnalise ;
+\item tableau de bord analytique plus riche ;
+\item gestion avancee des utilisateurs et des droits ;
+\item publication automatique multicanal ;
+\item extension mobile ou Progressive Web App.
+\end{itemize}
+
+\section{Conclusion du chapitre}
+Les resultats obtenus valident la faisabilite du projet et demontrent son interet pratique.
+
+\chapter*{Conclusion generale}
+\addcontentsline{toc}{chapter}{Conclusion generale}
+Ce projet de fin d'etudes avait pour objectif de concevoir et de realiser une plateforme intelligente de veille sportive multilingue capable de collecter, traiter, organiser et publier automatiquement des informations issues de plusieurs sources web. A travers l'analyse des besoins, la modelisation UML, la realisation technique et la mise en place d'un pipeline de traitement, il a ete possible de proposer une solution fonctionnelle, coherente et evolutive.
+
+Le travail mene a permis d'atteindre les principaux objectifs fixes : automatisation de la collecte, classification des contenus, evaluation de leur importance, generation de rapports et visualisation des resultats. En outre, la documentation de conception, notamment les 24 diagrammes de sequence, constitue un support precieux pour la comprehension, la maintenance et l'amelioration future du systeme.
+
+Au-dela des resultats techniques, ce projet a permis de mobiliser et de consolider des competences en analyse, modelisation UML, developpement backend, integration frontend, traitement de donnees et structuration de rapport technique.
+
+\chapter*{Bibliographie}
+\addcontentsline{toc}{chapter}{Bibliographie}
+\begin{itemize}
+\item Guide\_PFE\_IDS.pptx, guide de recommandations pour la redaction du rapport et la soutenance.
+\item PFENASSRAOUIRAPPORT[1].docx, rapport source d'inspiration pour la structure academique.
+\item sequence.html, documentation des diagrammes de sequence UML du systeme.
+\item Documentation Python.
+\item Documentation FastAPI.
+\item Documentation Pandas.
+\item Documentation BeautifulSoup.
+\item Documentation PlantUML.
+\end{itemize}
+
+\chapter*{Annexes}
+\addcontentsline{toc}{chapter}{Annexes}
+
+\section*{Annexe 1 - Liste complete des cas d'utilisation issus de \texttt{sequence.html}}
+\addcontentsline{toc}{section}{Annexe 1 - Liste complete des cas d'utilisation}
+
+\begin{longtable}{>{\bfseries}p{2cm}p{7cm}p{4cm}}
+\toprule
+Code & Intitule & Groupe \\
+\midrule
+\endhead
+UC-01 & S'inscrire & Authentification \\
+UC-02 & Se connecter & Authentification \\
+UC-03 & Gerer profil & Consultation et publication \\
+UC-04 & Consulter revue & Consultation et publication \\
+UC-05 & Filtrer par sport & Consultation et publication \\
+UC-06 & Acceder archives & Consultation et publication \\
+UC-07 & Poster une source & Consultation et publication \\
+UC-08 & Exporter PDF & Consultation et publication \\
+UC-09 & Voir statistiques & Consultation et publication \\
+UC-10 & Voir references & Consultation et publication \\
+UC-11 & Ajouter liens & Consultation et publication \\
+UC-12 & Collecter articles & Traitement IA \\
+UC-13 & Verifier ressources & Traitement IA \\
+UC-14 & Classifier par sport & Traitement IA \\
+UC-15 & Detecter meme info & Traitement IA \\
+UC-16 & Compter nombre de journaux & Traitement IA \\
+UC-17 & Calculer importance & Traitement IA \\
+UC-18 & Stocker articles & Traitement IA \\
+UC-19 & Generer resume quotidien & Traitement IA \\
+UC-20 & Publier synthese quotidienne & Traitement IA \\
+UC-21 & Gerer utilisateurs & Administration \\
+UC-22 & Gerer Agent IA & Administration \\
+UC-23 & Verifier sources & Administration \\
+UC-24 & Voir logs & Administration \\
+\bottomrule
+\end{longtable}
+
+\section*{Annexe 2 - Notes pour insertion des captures}
+\addcontentsline{toc}{section}{Annexe 2 - Notes pour insertion des captures}
+Chaque emplacement de figure ou de capture d'ecran doit etre remplace par :
+\begin{itemize}
+\item une image nette ;
+\item une legende numerotee ;
+\item une reference dans le texte ;
+\item une explication concise de ce que montre la figure.
+\end{itemize}
+
+\end{document}
