@@ -1138,6 +1138,15 @@
 
       const hasImg = !!a.image_url;
 
+      // Smart URL: use article URL if available, otherwise generate Google News search
+      const articleUrl = a.url && a.url.startsWith('http')
+        ? a.url
+        : `https://news.google.com/search?q=${encodeURIComponent(a.player_name + ' ' + (a.from_club || '') + ' ' + (a.to_club || '') + ' transfert mercato')}&hl=fr`;
+
+      const isGoogleFallback = !a.url || !a.url.startsWith('http') || a.url.includes('news.google.com');
+      const linkLabel = isGoogleFallback ? '🔍 Rechercher sur Google News' : '🔗 Voir l\'article source';
+      const linkIcon = isGoogleFallback ? '🔍' : '🔗';
+
       const visual = hasImg ? `
         <div class="card-visual">
           <img src="${escA(a.image_url)}" alt="${escA(a.title)}" loading="lazy" onerror="this.closest('.card-visual').style.display='none';this.closest('.feed-card').classList.add('no-img')">
@@ -1150,7 +1159,7 @@
       </div>` : '';
 
       return `
-        <article class="feed-card${hasImg ? '' : ' no-img'}" onclick="${a.url ? `window.open('${escA(a.url)}','_blank')` : ''}">
+        <article class="feed-card${hasImg ? '' : ' no-img'}" style="cursor:pointer">
           ${visual}
           <div class="card-body">
             ${noImgBadge}
@@ -1170,10 +1179,17 @@
 
             <div class="card-footer">
               <div class="card-source">🌐 ${esc(a.source)}</div>
-              <div class="card-cred">⭐ ${a.credibility}/5</div>
+              <a href="${escA(articleUrl)}" target="_blank" rel="noopener noreferrer"
+                onclick="event.stopPropagation()"
+                style="font-size:0.72rem;font-weight:700;color:${isGoogleFallback ? 'var(--gold)' : 'var(--pitch-green)'};text-decoration:none;display:flex;align-items:center;gap:0.25rem;padding:0.25rem 0.6rem;border-radius:6px;border:1px solid ${isGoogleFallback ? 'rgba(255,215,0,0.3)' : 'rgba(0,255,135,0.3)'};background:${isGoogleFallback ? 'rgba(255,215,0,0.06)' : 'rgba(0,255,135,0.06)'};transition:all 0.2s" 
+                onmouseover="this.style.opacity='0.8'"
+                onmouseout="this.style.opacity='1'"
+              >${linkLabel}</a>
             </div>
           </div>
         </article>`;
+    }
+
     }
 
     function renderPagination() {
