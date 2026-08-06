@@ -78,6 +78,12 @@ class CsvIngestionService:
             article.language = row["language"]
             article.category = row["category"]
             article.sentiment = row["sentiment"]
+            article.player_name = row.get("player_name")
+            article.from_club = row.get("from_club")
+            article.to_club = row.get("to_club")
+            article.league = row.get("league") or row.get("category")
+            article.transfer_fee = row.get("transfer_fee")
+            article.status = row.get("status") or "RUMEUR 📰"
             article.summary = row["summary"]
             article.image_url = row["image_url"]
             article.image_caption = row["image_caption"]
@@ -93,7 +99,7 @@ class CsvIngestionService:
         )
 
     def _normalize_dataframe(self, df: pd.DataFrame) -> list[dict]:
-        from src.ai_organizer import analyze_sentiment
+        from src.ai_organizer import analyze_sentiment, extract_mercato_entities, classify_article
 
         frame = df.copy()
         frame.columns = [str(column).strip() for column in frame.columns]
@@ -109,18 +115,33 @@ class CsvIngestionService:
             raw_date = self._clean_value(self._first_non_empty(row, "date"))
             url = self._clean_value(self._first_non_empty(row, "url", "lien"))
             summary = self._polish_text(self._first_non_empty(row, "summary", "summary.1", "resume", "resume.1"))
-            category = self._polish_text(self._first_non_empty(row, "category", "categorie", "discipline")) or "Macroéconomie"
+            category = self._polish_text(self._first_non_empty(row, "category", "categorie", "discipline", "league")) or classify_article({"title": title, "summary": summary})
             language = self._clean_value(self._first_non_empty(row, "lang", "language"))
             sentiment = self._clean_value(self._first_non_empty(row, "sentiment"))
             image_url = self._normalize_image_url(self._first_non_empty(row, "image", "image_url", "image.1", "image_url.1"))
             image_caption = self._polish_text(self._first_non_empty(row, "image_caption", "caption"))
             credibility = self._parse_float(self._first_non_empty(row, "credibility", "credibilite"))
 
+            player_name = self._clean_value(self._first_non_empty(row, "player_name", "player"))
+            from_club = self._clean_value(self._first_non_empty(row, "from_club"))
+            to_club = self._clean_value(self._first_non_empty(row, "to_club"))
+            league = self._clean_value(self._first_non_empty(row, "league")) or category
+            transfer_fee = self._clean_value(self._first_non_empty(row, "transfer_fee", "fee"))
+            status = self._clean_value(self._first_non_empty(row, "status"))
+
             if not summary:
                 summary = self._shorten(title, 220)
 
             if not sentiment:
-                sentiment = analyze_sentiment({"title": title, "summary": summary})
+                sentiment = analyze_sentiment(title, summary)
+
+            if not player_name or not status:
+                extracted = extract_mercato_entities(title, summary)
+                player_name = player_name or extracted["player_name"]
+                from_club = from_club or extracted["from_club"]
+                to_club = to_club or extracted["to_club"]
+                transfer_fee = transfer_fee or extracted["transfer_fee"]
+                status = status or extracted["status"]
 
             external_key = self._build_external_key(source=source, title=title, raw_date=raw_date, url=url)
             if external_key in seen_keys:
@@ -138,6 +159,12 @@ class CsvIngestionService:
                     "summary": summary,
                     "category": category,
                     "sentiment": sentiment,
+                    "player_name": player_name,
+                    "from_club": from_club,
+                    "to_club": to_club,
+                    "league": league,
+                    "transfer_fee": transfer_fee,
+                    "status": status,
                     "language": language or None,
                     "image_url": image_url or None,
                     "image_caption": image_caption or None,

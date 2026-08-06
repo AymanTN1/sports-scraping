@@ -16,6 +16,9 @@ class ArticleService:
         page: int = 1,
         page_size: int = 100,
         category: str | None = None,
+        league: str | None = None,
+        club: str | None = None,
+        status: str | None = None,
         source_name: str | None = None,
         search: str | None = None,
     ) -> ArticleListResponse:
@@ -23,6 +26,9 @@ class ArticleService:
             page=page,
             page_size=page_size,
             category=category,
+            league=league,
+            club=club,
+            status=status,
             source_name=source_name,
             search=search,
         )
@@ -39,6 +45,15 @@ class ArticleService:
 
     def list_categories(self) -> list[str]:
         return list(self.article_repository.category_counts().keys())
+
+    def list_leagues(self) -> list[str]:
+        return self.article_repository.league_list()
+
+    def list_clubs(self) -> list[str]:
+        return self.article_repository.club_list()
+
+    def list_statuses(self) -> list[str]:
+        return self.article_repository.status_list()
 
     def list_sources(self) -> list[SourceItem]:
         return [SourceItem.model_validate(source) for source in self.source_repository.list_all()]
@@ -62,8 +77,14 @@ class ArticleService:
             title=article.title,
             source=article.source.name if article.source else "Source inconnue",
             source_meta=SourceItem.model_validate(article.source) if article.source else None,
-            category=article.category or "Macroéconomie",
+            category=article.category or "Premier League",
             sentiment=getattr(article, "sentiment", "Neutre") or "Neutre",
+            player_name=getattr(article, "player_name", None),
+            from_club=getattr(article, "from_club", None),
+            to_club=getattr(article, "to_club", None),
+            league=getattr(article, "league", None) or article.category,
+            transfer_fee=getattr(article, "transfer_fee", None),
+            status=getattr(article, "status", "RUMEUR 📰") or "RUMEUR 📰",
             date=article.raw_date,
             published_at=article.published_at,
             language=article.language,

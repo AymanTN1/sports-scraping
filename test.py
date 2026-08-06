@@ -118,13 +118,12 @@ def test_database():
 
 
 def test_scraping():
-    """Test rapide du scraping (1 source)"""
+    """Test rapide du scraping Mercato"""
     try:
-        from src.scraper import SOURCES, scrape_source
+        from src.scraper import SOURCES, parse_rss_feed
         src = SOURCES[0]
-        articles = scrape_source(src, retries=1)
-        real = [a for a in articles if len(a.get("title", "")) > 15]
-        print(f"✅ Scraping {src['name']}: {len(real)} articles réels")
+        articles = parse_rss_feed(src)
+        print(f"✅ Scraping Mercato {src['name']}: {len(articles)} articles réels")
         return True
     except Exception as e:
         print(f"❌ Scraping: {e}")

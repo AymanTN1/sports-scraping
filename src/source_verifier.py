@@ -1,120 +1,71 @@
 """
-source_verifier.py — Evaluation et vérification de crédibilité des sources financières
-MarketPulse — Supporte les sources financières internationales (EN / FR / AR)
+source_verifier.py — Évaluation et vérification de crédibilité des sources Mercato & Football
+MercatoPulse — Supporte les sources sportives & mercato (Sky Sports, L'Équipe, Marca, Fabrizio Romano, Foot Mercato, etc.)
 """
 
 import pandas as pd
 import os
 
 # ─────────────────────────────────────────────
-# BARÈME DE CRÉDIBILITÉ FINANCIÈRE (1-5 ÉTOILES)
-# Basé sur : Réputation de domaine, audit éditorial, fiabilité des données de marché
+# BARÈME DE CRÉDIBILITÉ MERCATO (1-5 ÉTOILES)
+# Basé sur la Tier List internationale des journalistes & médias foot
 # ─────────────────────────────────────────────
-FINANCIAL_TRUSTED_SOURCES = {
-    # ── 5 étoiles — Institutions & Agences Financières de Référence ──
-    "Financial Times":         5,
-    "Wall Street Journal":    5,
-    "The Economist":           5,
-    "Reuters":                 5,
-    "Bloomberg":               5,
-    "Les Échos":               5,
-    "CNBC Markets":            5,
-    "Harvard Business Review": 5,
+MERCATO_TRUSTED_SOURCES = {
+    # ── Tier 1 / 5 Étoiles — Sources Officielles & Agences Réputées ──
+    "Fabrizio Romano":             5,
+    "Sky Sports Transfer Centre": 5,
+    "BBC Sport Football":         5,
+    "L'Équipe Mercato":            5,
+    "David Ornstein":              5,
 
-    # ── 4 étoiles — Médias Financiers Majeurs ──
-    "Yahoo Finance":           4,
-    "MarketWatch":             4,
-    "BFM Business":            4,
-    "La Tribune":              4,
-    "Le Figaro Économie":      4,
-    "Boursorama":              4,
-    "Investing.com":           4,
-    "Seeking Alpha":           4,
-    "Benzinga":                4,
-    "L'Usine Nouvelle":        4,
-    "Business Insider":        4,
-    "CoinDesk":                4,
-    "TechCrunch Finance":      4,
+    # ── Tier 2 / 4 Étoiles — Médias Majeurs ──
+    "Foot Mercato":               4,
+    "Marca Fichajes":              4,
+    "RMC Sport Mercato":           4,
+    "Goal.com Mercato":            4,
+    "Marca Real Madrid":           4,
+    "Marca Barcelona":             4,
+    "Gazzetta dello Sport Mercato": 4,
+    "Transfermarkt News":          4,
+    "Football Italia":             4,
 
-    # ── 3 étoiles — Presse Économique Régionale & Spécialisée ──
-    "Hespress Économie":       3,
-    "Médias24":                3,
-    "Boursenews":              3,
-    "Argaam":                  3,
-    "Le360 Économie":          3,
-    "Maddyness":               3,
-    "CoinTelegraph":           3,
-    "Cryptoast":               3,
-    "Decrypt":                 3,
-
-    # Score par défaut pour autres sources
+    # ── Tier 3 / 3 Étoiles — Presse Spécialisée & Rumeurs ──
+    "Sport.es Mercato":            3,
+    "TalkSport Football":          3,
+    "Eurosport Mercato":           3,
+    "Saudi Pro League News":       4,
 }
 
 DEFAULT_SCORE = 3
 
 
 def get_credibility(source_name: str) -> int:
-    """Retourne le score de crédibilité d'une source financière (1 à 5)."""
+    """Retourne le score de crédibilité d'une source Mercato (1 à 5)."""
     if not source_name:
         return DEFAULT_SCORE
 
-    if source_name in FINANCIAL_TRUSTED_SOURCES:
-        return FINANCIAL_TRUSTED_SOURCES[source_name]
-
-    source_lower = source_name.lower()
-    for known, score in FINANCIAL_TRUSTED_SOURCES.items():
-        if known.lower() in source_lower or source_lower in known.lower():
+    for key, score in MERCATO_TRUSTED_SOURCES.items():
+        if key.lower() in source_name.lower() or source_name.lower() in key.lower():
             return score
 
     return DEFAULT_SCORE
 
 
-def verify_sources(input_path: str, output_path: str) -> pd.DataFrame:
-    """Enrichit le fichier CSV avec les scores de crédibilité financière."""
-    print(f"📂 Lecture des actualités financières : {input_path}")
-    df = pd.read_csv(input_path, encoding="utf-8-sig")
+def calculate_source_credibility(source_name: str) -> float:
+    return float(get_credibility(source_name))
 
-    df.columns = [c.strip().lower() for c in df.columns]
-    col_map = {
-        "titre": "title", "title": "title",
-        "source": "source",
-        "categorie": "category", "category": "category",
-        "date": "date",
-        "resume": "summary", "summary": "summary",
-        "url": "url", "lien": "url",
-        "lang": "lang",
-        "image_url": "image_url",
-        "image_caption": "image_caption",
-        "sentiment": "sentiment",
-    }
-    df = df.rename(columns={c: col_map.get(c, c) for c in df.columns})
 
-    df["credibility"] = df["source"].apply(get_credibility)
+def verify_dataset(df: pd.DataFrame) -> pd.DataFrame:
+    """Ajoute les colonnes de crédibilité au DataFrame."""
+    if df.empty:
+        return df
 
-    print(f"\n📊 Rapport de crédibilité des sources financières ({len(df)} articles) :")
-    print(f"\n   {'Source Financière':30s} | {'Crédibilité':12s} | {'Articles':8s}")
-    print("   " + "-" * 56)
+    credibility_list = []
 
-    if not df.empty:
-        stats = df.groupby(["source", "credibility"]).size().reset_index(name="count")
-        stats = stats.sort_values("credibility", ascending=False)
-        for _, row in stats.iterrows():
-            stars = "★" * int(row["credibility"]) + "☆" * (5 - int(row["credibility"]))
-            print(f"   {row['source']:30s} | {stars:12s} | {int(row['count']):4d}")
+    for _, row in df.iterrows():
+        src = str(row.get("source", ""))
+        score = get_credibility(src)
+        credibility_list.append(score)
 
-        avg = df["credibility"].mean()
-        print(f"\n   Crédibilité moyenne du flux : {avg:.2f}/5")
-
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    df.to_csv(output_path, index=False, encoding="utf-8-sig")
-    print(f"\n✅ Sauvegardé : {output_path}")
+    df["credibility"] = credibility_list
     return df
-
-
-if __name__ == "__main__":
-    BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    inp = os.path.join(BASE, "data", "output", "articles_test.csv")
-    out = os.path.join(BASE, "data", "output", "verified_articles.csv")
-
-    if os.path.exists(inp):
-        verify_sources(inp, out)

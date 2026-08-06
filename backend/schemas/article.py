@@ -14,6 +14,12 @@ class ArticleItem(BaseModel):
     source_meta: SourceItem | None = None
     category: str
     sentiment: str | None = "Neutre"
+    player_name: str | None = None
+    from_club: str | None = None
+    to_club: str | None = None
+    league: str | None = None
+    transfer_fee: str | None = None
+    status: str | None = "RUMEUR 📰"
     date: str | None = None
     published_at: datetime | None = None
     language: str | None = None

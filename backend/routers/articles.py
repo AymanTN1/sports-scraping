@@ -21,6 +21,9 @@ def list_articles(
     page: int = Query(1, ge=1),
     page_size: int = Query(200, ge=1, le=5000),
     category: str | None = None,
+    league: str | None = None,
+    club: str | None = None,
+    status: str | None = None,
     source: str | None = None,
     search: str | None = None,
     service: ArticleService = Depends(get_article_service),
@@ -29,6 +32,9 @@ def list_articles(
         page=page,
         page_size=page_size,
         category=category,
+        league=league,
+        club=club,
+        status=status,
         source_name=source,
         search=search,
     )
@@ -37,6 +43,21 @@ def list_articles(
 @router.get("/categories", response_model=list[str])
 def list_categories(service: ArticleService = Depends(get_article_service)):
     return service.list_categories()
+
+
+@router.get("/leagues", response_model=list[str])
+def list_leagues(service: ArticleService = Depends(get_article_service)):
+    return service.list_leagues()
+
+
+@router.get("/clubs", response_model=list[str])
+def list_clubs(service: ArticleService = Depends(get_article_service)):
+    return service.list_clubs()
+
+
+@router.get("/statuses", response_model=list[str])
+def list_statuses(service: ArticleService = Depends(get_article_service)):
+    return service.list_statuses()
 
 
 @router.get("/sources", response_model=list[SourceItem])

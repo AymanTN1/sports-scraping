@@ -26,17 +26,32 @@ class ArticleRepository:
         page: int,
         page_size: int,
         category: str | None = None,
+        league: str | None = None,
+        club: str | None = None,
+        status: str | None = None,
         source_name: str | None = None,
         search: str | None = None,
     ) -> tuple[list[Article], int]:
         filters = []
         if category:
-            filters.append(Article.category == category)
+            filters.append(or_(Article.category == category, Article.league == category))
+        if league:
+            filters.append(or_(Article.league == league, Article.category == league))
+        if club:
+            filters.append(or_(Article.from_club.ilike(f"%{club}%"), Article.to_club.ilike(f"%{club}%"), Article.title.ilike(f"%{club}%")))
+        if status:
+            filters.append(Article.status == status)
         if source_name:
             filters.append(Source.name == source_name)
         if search:
             term = f"%{search.strip()}%"
-            filters.append(or_(Article.title.ilike(term), Article.summary.ilike(term)))
+            filters.append(or_(
+                Article.title.ilike(term),
+                Article.summary.ilike(term),
+                Article.player_name.ilike(term),
+                Article.from_club.ilike(term),
+                Article.to_club.ilike(term)
+            ))
 
         total_stmt = select(func.count(Article.id)).join(Source)
         items_stmt = (
@@ -63,6 +78,21 @@ class ArticleRepository:
             .order_by(func.count(Article.id).desc(), Article.category.asc())
         )
         return {category or "Autre": int(count) for category, count in self.db.execute(stmt).all()}
+
+    def league_list(self) -> list[str]:
+        stmt = select(Article.league).where(Article.league.isnot(None)).distinct()
+        return [str(x[0]) for x in self.db.execute(stmt).all() if x[0]]
+
+    def club_list(self) -> list[str]:
+        stmt_from = select(Article.from_club).where(Article.from_club.isnot(None)).distinct()
+        stmt_to = select(Article.to_club).where(Article.to_club.isnot(None)).distinct()
+        from_clubs = [str(x[0]) for x in self.db.execute(stmt_from).all() if x[0]]
+        to_clubs = [str(x[0]) for x in self.db.execute(stmt_to).all() if x[0]]
+        return sorted(list(set(from_clubs + to_clubs)))
+
+    def status_list(self) -> list[str]:
+        stmt = select(Article.status).where(Article.status.isnot(None)).distinct()
+        return [str(x[0]) for x in self.db.execute(stmt).all() if x[0]]
 
     def source_counts(self) -> dict[str, int]:
         stmt = (
