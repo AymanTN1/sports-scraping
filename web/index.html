@@ -1114,7 +1114,7 @@
       document.getElementById('mClubs').textContent = clubs.size;
 
       const avg = filtered.length
-        ? (filtered.reduce((s, a) => s + a.credibility, 0) / filtered.length).toFixed(1)
+        ? (filtered.reduce((s, a) => s + (a.credibility || 0), 0) / filtered.length).toFixed(1)
         : '—';
       document.getElementById('mCred').textContent = avg + (filtered.length ? '/5' : '');
     }
@@ -1136,33 +1136,60 @@
         : a.status.includes('HERE WE GO') ? 'status-herewego'
         : a.status.includes('NEGOCIATION') ? 'status-negoc' : 'status-rumeur';
 
-      const hasImg = !!a.image_url;
-
       // Smart URL: use article URL if available, otherwise generate Google News search
       const articleUrl = a.url && a.url.startsWith('http')
         ? a.url
         : `https://news.google.com/search?q=${encodeURIComponent(a.player_name + ' ' + (a.from_club || '') + ' ' + (a.to_club || '') + ' transfert mercato')}&hl=fr`;
 
       const isGoogleFallback = !a.url || !a.url.startsWith('http') || a.url.includes('news.google.com');
-      const linkLabel = isGoogleFallback ? '🔍 Rechercher sur Google News' : '🔗 Voir l\'article source';
-      const linkIcon = isGoogleFallback ? '🔍' : '🔗';
+      const linkLabel = isGoogleFallback ? '🔍 Google News' : '🔗 Source';
 
-      const visual = hasImg ? `
+      // League-based gradient palette for fallback visuals
+      const leagueGradients = {
+        'Premier League': 'linear-gradient(135deg, #3b0764 0%, #1e1b4b 50%, #0c4a6e 100%)',
+        'La Liga': 'linear-gradient(135deg, #7c2d12 0%, #9a3412 50%, #1e3a5f 100%)',
+        'Ligue 1': 'linear-gradient(135deg, #1e3a5f 0%, #1e40af 50%, #0f172a 100%)',
+        'Bundesliga': 'linear-gradient(135deg, #1a1a1a 0%, #7c0000 50%, #1a1a1a 100%)',
+        'Serie A': 'linear-gradient(135deg, #0c1445 0%, #1a237e 50%, #0c1445 100%)',
+        'Champions League': 'linear-gradient(135deg, #0a0a2e 0%, #1a1a5e 50%, #0a0a2e 100%)',
+        'Saudi Pro League': 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #14532d 100%)',
+        'default': 'linear-gradient(135deg, #0d1624 0%, #1a283d 50%, #0d1624 100%)'
+      };
+
+      const leagueKey = Object.keys(leagueGradients).find(k => (a.league || '').includes(k)) || 'default';
+      const fallbackGradient = leagueGradients[leagueKey];
+
+      // Player initials for fallback
+      const playerInitials = (a.player_name || 'MP')
+        .split(' ').slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || '⚽';
+
+      // Status glow color
+      const glowColor = a.status.includes('OFFICIEL') ? '#00ff87'
+        : a.status.includes('HERE WE GO') ? '#ffd700'
+        : a.status.includes('NEGOCIATION') ? '#00e5ff'
+        : 'rgba(255,255,255,0.2)';
+
+      // Always show a visual — real image or rich fallback
+      const visual = a.image_url ? `
         <div class="card-visual">
-          <img src="${escA(a.image_url)}" alt="${escA(a.title)}" loading="lazy" onerror="this.closest('.card-visual').style.display='none';this.closest('.feed-card').classList.add('no-img')">
+          <img src="${escA(a.image_url)}" alt="${escA(a.title)}" loading="lazy"
+            onerror="this.closest('.card-visual').innerHTML = this.closest('.card-visual').getAttribute('data-fallback'); this.closest('.card-visual').removeAttribute('data-fallback');">
           <div class="card-visual-overlay"></div>
           <div class="card-status-badge ${statusClass}">${esc(a.status)}</div>
-        </div>` : '';
-
-      const noImgBadge = !hasImg ? `<div style="margin-bottom:0.3rem;">
-        <span class="card-status-badge ${statusClass}" style="position:static;font-size:0.6rem;">${esc(a.status)}</span>
-      </div>` : '';
+        </div>`
+      : `
+        <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;min-height:160px;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 40%, ${glowColor}22 0%, transparent 70%);pointer-events:none;"></div>
+          <div style="font-size:3.5rem;font-weight:900;letter-spacing:-2px;color:white;opacity:0.25;font-family:'Syne',sans-serif;position:absolute;bottom:-8px;right:8px;line-height:1;">${esc(a.to_club || a.from_club || '').split(' ').slice(-1)[0] || 'CLUB'}</div>
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid ${glowColor};display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:white;letter-spacing:-1px;backdrop-filter:blur(4px);font-family:'Syne',sans-serif;z-index:1;">${playerInitials}</div>
+          <div style="margin-top:0.5rem;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:1px;z-index:1;">${esc(a.player_name || '')}</div>
+          <div class="card-status-badge ${statusClass}">${esc(a.status)}</div>
+        </div>`;
 
       return `
-        <article class="feed-card${hasImg ? '' : ' no-img'}" style="cursor:pointer">
+        <article class="feed-card" style="cursor:pointer">
           ${visual}
           <div class="card-body">
-            ${noImgBadge}
             <div class="card-header-row">
               <span class="card-league-tag">${esc(a.league)}</span>
               <span class="card-fee-tag">💰 ${esc(a.transfer_fee)}</span>
@@ -1181,15 +1208,13 @@
               <div class="card-source">🌐 ${esc(a.source)}</div>
               <a href="${escA(articleUrl)}" target="_blank" rel="noopener noreferrer"
                 onclick="event.stopPropagation()"
-                style="font-size:0.72rem;font-weight:700;color:${isGoogleFallback ? 'var(--gold)' : 'var(--pitch-green)'};text-decoration:none;display:flex;align-items:center;gap:0.25rem;padding:0.25rem 0.6rem;border-radius:6px;border:1px solid ${isGoogleFallback ? 'rgba(255,215,0,0.3)' : 'rgba(0,255,135,0.3)'};background:${isGoogleFallback ? 'rgba(255,215,0,0.06)' : 'rgba(0,255,135,0.06)'};transition:all 0.2s" 
+                style="font-size:0.72rem;font-weight:700;color:${isGoogleFallback ? 'var(--gold)' : 'var(--pitch-green)'};text-decoration:none;display:flex;align-items:center;gap:0.25rem;padding:0.25rem 0.6rem;border-radius:6px;border:1px solid ${isGoogleFallback ? 'rgba(255,215,0,0.3)' : 'rgba(0,255,135,0.3)'};background:${isGoogleFallback ? 'rgba(255,215,0,0.06)' : 'rgba(0,255,135,0.06)'};white-space:nowrap;transition:all 0.2s"
                 onmouseover="this.style.opacity='0.8'"
                 onmouseout="this.style.opacity='1'"
               >${linkLabel}</a>
             </div>
           </div>
         </article>`;
-    }
-
     }
 
     function renderPagination() {

@@ -265,6 +265,74 @@ def clean_html(text: str) -> str:
     return re.sub(r"\s+", " ", soup.get_text()).strip()
 
 
+def extract_image_from_rss_item(item, description_text: str, article_url: str) -> str:
+    """Extracts the best image URL from an RSS item using multiple strategies."""
+
+    # ── Strategy 1: <enclosure type="image/*"> ──
+    enclosure = item.find("enclosure")
+    if enclosure is not None and enclosure.get("url"):
+        url = enclosure.get("url", "")
+        if any(ext in url.lower() for ext in [".jpg", ".jpeg", ".png", ".webp", ".gif"]):
+            return url
+
+    # ── Strategy 2: <media:content url="..."> (namespace-agnostic search) ──
+    for child in item:
+        tag = child.tag.lower()
+        if "content" in tag or "thumbnail" in tag:
+            url = child.get("url", "")
+            if url and url.startswith("http"):
+                return url
+
+    # ── Strategy 3: Parse <description> HTML for <img> tags ──
+    if description_text:
+        try:
+            soup = BeautifulSoup(description_text, "html.parser")
+            img_tag = soup.find("img")
+            if img_tag:
+                src = img_tag.get("src", "") or img_tag.get("data-src", "")
+                if src and src.startswith("http"):
+                    return src
+        except Exception:
+            pass
+
+    # ── Strategy 4: Check <image> child of item ──
+    img_elem = item.find("image")
+    if img_elem is not None:
+        url = img_elem.get("url", "") or (img_elem.text or "").strip()
+        if url and url.startswith("http"):
+            return url
+
+    # ── Strategy 5: Fetch og:image from the article page (max 1 attempt, timeout 5s) ──
+    if article_url and article_url.startswith("http"):
+        try:
+            r = requests.get(article_url, headers=HEADERS, timeout=5, stream=True)
+            # Only read the first 50KB to avoid downloading full pages
+            content = b""
+            for chunk in r.iter_content(8192):
+                content += chunk
+                if len(content) > 51200:
+                    break
+            soup = BeautifulSoup(content, "html.parser")
+            # Try og:image
+            og = soup.find("meta", property="og:image") or soup.find("meta", attrs={"name": "og:image"})
+            if og and og.get("content", "").startswith("http"):
+                return og["content"]
+            # Try twitter:image
+            tw = soup.find("meta", attrs={"name": "twitter:image"}) or soup.find("meta", property="twitter:image")
+            if tw and tw.get("content", "").startswith("http"):
+                return tw["content"]
+            # Try first <img> in article body
+            first_img = soup.find("img")
+            if first_img:
+                src = first_img.get("src", "") or first_img.get("data-src", "")
+                if src and src.startswith("http") and not "logo" in src.lower() and not "icon" in src.lower():
+                    return src
+        except Exception:
+            pass
+
+    return ""
+
+
 def parse_rss_feed(source: dict) -> list[dict]:
     name = source["name"]
     url = source["url"]
@@ -288,16 +356,15 @@ def parse_rss_feed(source: dict) -> list[dict]:
 
             title = clean_html(title_elem.text) if title_elem is not None and title_elem.text else ""
             link = link_elem.text.strip() if link_elem is not None and link_elem.text else ""
-            summary = clean_html(desc_elem.text) if desc_elem is not None and desc_elem.text else title
+            raw_desc = desc_elem.text if desc_elem is not None and desc_elem.text else ""
+            summary = clean_html(raw_desc) if raw_desc else title
             pub_date = pub_elem.text.strip() if pub_elem is not None and pub_elem.text else datetime.utcnow().strftime("%Y-%m-%d")
 
             if not title or not link:
                 continue
 
-            img_url = ""
-            enclosure = item.find("enclosure")
-            if enclosure is not None and enclosure.get("url"):
-                img_url = enclosure.get("url")
+            # Extract image using all strategies
+            img_url = extract_image_from_rss_item(item, raw_desc, link)
 
             articles.append({
                 "title": title,
@@ -314,6 +381,7 @@ def parse_rss_feed(source: dict) -> list[dict]:
         print(f"⚠️ Erreur parsing RSS {name}: {e}")
 
     return articles
+
 
 
 def scrape_all_sources() -> pd.DataFrame:
