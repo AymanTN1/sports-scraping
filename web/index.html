@@ -3,67 +3,68 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MercatoPulse · Football Transfer & Mercato Intelligence Terminal</title>
-  <meta name="description" content="MercatoPulse — Plateforme d'intelligence et de détection des rumeurs, transferts officiels et mercato du football mondial en temps réel.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MercatoPulse · Live Football Transfer & Mercato Intelligence Terminal</title>
+  <meta name="description" content="MercatoPulse — Plateforme d'intelligence et de détection des rumeurs, transferts officiels, dépenses financières et valeur marchande du football mondial en temps réel.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
   <style>
     /* ═══════════════════════════════════════════════════════
-       DESIGN SYSTEM — MercatoPulse Stadium Scout v3.0
+       DESIGN SYSTEM — MercatoPulse Terminal Ultra Dark Mode
     ═══════════════════════════════════════════════════════ */
     :root {
-      --bg-deepest: #04080E;
-      --bg: #070D16;
-      --bg-elevated: #0D1624;
-      --bg-surface: #121D2F;
-      --bg-surface-hover: #1A283D;
+      --bg-deepest: #04060A;
+      --bg: #090C15;
+      --bg-elevated: #101623;
+      --bg-surface: #151D2D;
+      --bg-surface-hover: #1E283C;
 
       --border: rgba(255, 255, 255, 0.08);
       --border-subtle: rgba(255, 255, 255, 0.04);
-      --border-hover: rgba(0, 255, 135, 0.3);
-      --border-accent: rgba(0, 255, 135, 0.4);
+      --border-hover: rgba(0, 255, 135, 0.4);
+      --border-accent: rgba(0, 255, 135, 0.3);
 
       --pitch-green: #00FF87;
-      --pitch-green-dim: #00CC6A;
+      --pitch-green-dim: #05B863;
       --pitch-green-bg: rgba(0, 255, 135, 0.08);
-      --pitch-green-glow: rgba(0, 255, 135, 0.25);
+      --pitch-green-glow: rgba(0, 255, 135, 0.2);
 
-      --gold: #FFD700;
-      --gold-bg: rgba(255, 215, 0, 0.1);
+      --gold: #FFC700;
+      --gold-bg: rgba(255, 199, 0, 0.1);
 
       --cyan: #00E5FF;
       --cyan-bg: rgba(0, 229, 255, 0.1);
 
-      --hot-red: #FF3366;
-      --hot-red-bg: rgba(255, 51, 102, 0.1);
+      --hot-red: #FF2A55;
+      --hot-red-bg: rgba(255, 42, 85, 0.1);
 
-      --purple: #B066FF;
-      --neutral: #8492A6;
+      --purple: #A855F7;
+      --purple-bg: rgba(168, 85, 247, 0.1);
+      --neutral: #94A3B8;
 
       --text-primary: #F8FAFC;
-      --text-secondary: #CBD5E1;
-      --text-tertiary: #8492A6;
+      --text-secondary: #94A3B8;
+      --text-tertiary: #64748B;
       --text-quaternary: #475569;
 
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       --font-display: 'Syne', sans-serif;
 
       --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 16px;
-      --radius-xl: 20px;
+      --radius-xl: 24px;
 
       --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
-      --shadow-md: 0 6px 16px rgba(0,0,0,0.5);
-      --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
-      --shadow-glow: 0 0 35px rgba(0,255,135,0.12);
+      --shadow-md: 0 6px 18px rgba(0,0,0,0.5);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.7);
+      --shadow-glow: 0 0 30px rgba(0, 255, 135, 0.15);
 
-      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -84,7 +85,7 @@
       inset: 0;
       background:
         radial-gradient(ellipse 900px 700px at 15% 10%, rgba(0,255,135,0.04), transparent),
-        radial-gradient(ellipse 700px 500px at 85% 85%, rgba(0,229,255,0.04), transparent),
+        radial-gradient(ellipse 700px 500px at 85% 85%, rgba(59, 130, 246, 0.04), transparent),
         radial-gradient(ellipse 500px 500px at 50% 50%, rgba(255,215,0,0.02), transparent);
       pointer-events: none;
       z-index: 0;
@@ -102,98 +103,110 @@
       flex-direction: column;
       align-items: center;
       padding: 1.25rem 0;
-      gap: 1.5rem;
       position: sticky;
       top: 0;
       height: 100vh;
       z-index: 100;
-      flex-shrink: 0;
     }
 
     .brand-mark {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, var(--pitch-green), var(--cyan));
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--pitch-green) 0%, #00B8D9 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: var(--font-display);
       font-weight: 800;
-      font-size: 1.1rem;
+      font-size: 1.25rem;
       color: var(--bg-deepest);
-      box-shadow: 0 4px 20px rgba(0,255,135,0.3);
+      box-shadow: 0 0 20px var(--pitch-green-glow);
+      cursor: pointer;
+      margin-bottom: 2rem;
       transition: transform var(--transition);
     }
-
-    .brand-mark:hover { transform: scale(1.06) rotate(-2deg); }
+    .brand-mark:hover { transform: scale(1.08) rotate(3deg); }
 
     .nav-rail {
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      gap: 0.75rem;
       width: 100%;
       padding: 0 0.75rem;
+      flex: 1;
     }
 
     .nav-item {
       width: 100%;
-      aspect-ratio: 1;
+      height: 46px;
       border-radius: var(--radius-md);
       border: 1px solid transparent;
       background: transparent;
       color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 1.25rem;
-      display: grid;
-      place-items: center;
       cursor: pointer;
       transition: all var(--transition);
       position: relative;
     }
 
-    .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text-secondary); }
+    .nav-item:hover {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border-color: var(--border);
+    }
 
     .nav-item.active {
       background: var(--pitch-green-bg);
       color: var(--pitch-green);
-      border-color: var(--border-accent);
+      border-color: var(--pitch-green);
+      box-shadow: 0 0 15px var(--pitch-green-glow);
     }
 
-    .nav-item.active::before {
+    .nav-item.active::after {
       content: '';
       position: absolute;
-      left: -12px;
-      top: 20%;
-      bottom: 20%;
+      left: -0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
       width: 3px;
+      height: 20px;
       background: var(--pitch-green);
-      border-radius: 0 3px 3px 0;
+      border-radius: 0 4px 4px 0;
     }
 
     .sidebar-footer {
-      margin-top: auto;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0 0.75rem;
     }
 
     .sidebar-icon-btn {
-      width: 38px;
-      height: 38px;
+      width: 100%;
+      height: 40px;
       border-radius: var(--radius-sm);
-      border: none;
-      background: transparent;
-      color: var(--text-tertiary);
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 1rem;
       cursor: pointer;
-      display: grid;
-      place-items: center;
       transition: all var(--transition);
     }
+    .sidebar-icon-btn:hover {
+      background: var(--bg-surface-hover);
+      color: var(--pitch-green);
+      border-color: var(--border-hover);
+    }
 
-    .sidebar-icon-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
-
-    /* ── Main Wrapper ── */
+    /* ── Main Area ── */
     .main-wrapper {
       flex: 1;
       display: flex;
@@ -203,14 +216,14 @@
 
     /* ── Top Bar ── */
     .topbar {
-      height: 60px;
-      background: rgba(4,8,14,0.92);
-      backdrop-filter: blur(20px);
+      height: 64px;
+      background: rgba(7, 13, 22, 0.85);
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
-      padding: 0 1.5rem;
-      gap: 1.25rem;
+      padding: 0 1.75rem;
+      gap: 1.5rem;
       position: sticky;
       top: 0;
       z-index: 90;
@@ -219,129 +232,150 @@
     .brand-wordmark {
       font-family: var(--font-display);
       font-weight: 800;
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      white-space: nowrap;
-    }
-
-    .brand-wordmark .hi { background: linear-gradient(90deg, var(--pitch-green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-    .status-chip {
-      font-size: 0.62rem;
-      font-weight: 700;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      background: var(--pitch-green-bg);
-      color: var(--pitch-green);
-      border: 1px solid var(--border-accent);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
+      color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
+    .brand-wordmark .hi { color: var(--pitch-green); }
 
-    .pulse-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--pitch-green);
-      box-shadow: 0 0 8px var(--pitch-green);
-      animation: pulse 1.8s ease-in-out infinite;
-    }
-
-    @keyframes pulse { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
-
-    /* ── Ticker Strip ── */
-    .ticker-strip {
-      flex: 1;
-      height: 36px;
-      background: var(--bg-elevated);
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border-subtle);
-      overflow: hidden;
-      position: relative;
+    .status-chip {
       display: flex;
       align-items: center;
-      mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+      gap: 0.45rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--pitch-green);
+      background: var(--pitch-green-bg);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 0.28rem 0.65rem;
+      border-radius: 999px;
     }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--pitch-green);
+      animation: pulseGlow 1.8s infinite ease-in-out;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      50% { transform: scale(1.2); opacity: 0.8; box-shadow: 0 0 0 5px rgba(16, 185, 129, 0); }
+    }
+
+    /* Live Marquee Ticker */
+    .ticker-strip {
+      flex: 1;
+      height: 34px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .ticker-strip::before, .ticker-strip::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; width: 24px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .ticker-strip::before { left: 0; background: linear-gradient(90deg, var(--bg-surface), transparent); }
+    .ticker-strip::after { right: 0; background: linear-gradient(270deg, var(--bg-surface), transparent); }
 
     .ticker-track {
       display: flex;
-      gap: 2.2rem;
+      gap: 2.5rem;
       white-space: nowrap;
-      animation: scroll 50s linear infinite;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 500;
+      animation: tickerRoll 35s linear infinite;
+      padding-left: 100%;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes tickerRoll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
     }
 
-    .ticker-sym { display: flex; align-items: center; gap: 0.5rem; color: var(--text-tertiary); }
-    .ticker-sym b { color: var(--text-primary); }
-    .t-gold { color: var(--gold); font-weight: 600; }
-    .t-green { color: var(--pitch-green); font-weight: 600; }
-    .t-cyan { color: var(--cyan); font-weight: 600; }
-
-    @keyframes scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .ticker-sym {
+      font-size: 0.76rem;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-secondary);
+    }
+    .ticker-sym b { color: var(--text-primary); font-weight: 700; }
+    .ticker-sym .t-green { color: var(--pitch-green); font-weight: 700; }
+    .ticker-sym .t-gold { color: var(--gold); font-weight: 700; }
+    .ticker-sym .t-cyan { color: var(--cyan); font-weight: 700; }
 
     .clock {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-quaternary);
+      font-size: 0.76rem;
+      color: var(--text-tertiary);
       white-space: nowrap;
     }
 
-    /* ── Content Area ── */
-    .content-area { padding: 1.5rem; flex: 1; }
+    /* ── Content View System ── */
+    .content-area {
+      padding: 1.75rem;
+      max-width: 1560px;
+      width: 100%;
+      margin: 0 auto;
+    }
 
-    /* ── Tab Bar ── */
     .tab-bar {
       display: flex;
-      gap: 0.4rem;
-      padding: 0.3rem;
-      background: var(--bg-elevated);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
       margin-bottom: 1.5rem;
-      width: fit-content;
+      overflow-x: auto;
     }
 
     .tab-trigger {
-      background: transparent;
-      border: none;
-      color: var(--text-tertiary);
-      font-family: var(--font-sans);
-      font-weight: 600;
-      font-size: 0.85rem;
-      padding: 0.65rem 1.3rem;
+      padding: 0.55rem 1.15rem;
       border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all var(--transition);
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      transition: all var(--transition);
+      white-space: nowrap;
     }
 
-    .tab-trigger:hover { color: var(--text-secondary); background: rgba(255,255,255,0.04); }
+    .tab-trigger:hover {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+    }
 
     .tab-trigger.active {
       background: var(--bg-surface);
       color: var(--pitch-green);
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border);
+      border-color: var(--pitch-green);
+      box-shadow: 0 0 14px var(--pitch-green-glow);
     }
 
-    .tab-view { display: none; animation: viewIn 0.35s ease-out; }
-    .tab-view.active { display: block; }
+    .tab-view { display: none; }
+    .tab-view.active { display: block; animation: fadeIn 0.25s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes viewIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-
-    /* ═══════ KPI METRICS ═══════ */
+    /* ═══════ METRIC CARDS ═══════ */
     .metrics-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -351,178 +385,186 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
       position: relative;
       overflow: hidden;
+      box-shadow: var(--shadow-sm);
       transition: all var(--transition);
     }
-
     .metric-card:hover {
       border-color: var(--border-hover);
       transform: translateY(-2px);
       box-shadow: var(--shadow-md);
     }
-
     .metric-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 2px;
+      background: linear-gradient(90deg, transparent, var(--pitch-green), transparent);
+      opacity: 0.5;
     }
-
-    .metric-card:nth-child(1)::before { background: linear-gradient(90deg, var(--pitch-green), transparent); }
-    .metric-card:nth-child(2)::before { background: linear-gradient(90deg, var(--cyan), transparent); }
-    .metric-card:nth-child(3)::before { background: linear-gradient(90deg, var(--gold), transparent); }
-    .metric-card:nth-child(4)::before { background: linear-gradient(90deg, var(--purple), transparent); }
 
     .metric-label {
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--text-quaternary);
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .metric-value {
+      font-size: 0.72rem;
       font-family: var(--font-mono);
-      font-size: 2rem;
       font-weight: 700;
-      line-height: 1;
-      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.75px;
+      color: var(--text-tertiary);
     }
-
-    .metric-value.c-green { color: var(--pitch-green); }
-    .metric-value.c-cyan { color: var(--cyan); }
-    .metric-value.c-gold { color: var(--gold); }
-    .metric-value.c-purple { color: var(--purple); }
-
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 1.95rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
     .metric-hint {
       font-size: 0.72rem;
-      color: var(--text-quaternary);
+      color: var(--text-secondary);
       display: flex;
       align-items: center;
       gap: 0.3rem;
+      margin-top: 0.25rem;
     }
+    .c-green { color: var(--pitch-green); }
+    .c-gold { color: var(--gold); }
+    .c-cyan { color: var(--cyan); }
+    .c-red { color: var(--hot-red); }
+    .c-purple { color: var(--purple); }
 
-    /* ═══════ FILTER PANEL ═══════ */
+    /* ═══════ FILTERS ═══════ */
     .filter-panel {
       background: var(--bg-elevated);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 1.15rem 1.35rem;
+      padding: 1rem 1.25rem;
       display: flex;
-      gap: 1rem;
-      align-items: flex-end;
       flex-wrap: wrap;
-      margin-bottom: 1.25rem;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 1rem;
     }
 
     .f-group {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.3rem;
       flex: 1;
       min-width: 160px;
     }
 
     .f-group label {
       font-size: 0.68rem;
-      color: var(--text-quaternary);
+      font-family: var(--font-mono);
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.6px;
+      color: var(--text-tertiary);
     }
 
     .f-select, .f-input {
+      height: 38px;
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 0.6rem 0.9rem;
       border-radius: var(--radius-sm);
+      padding: 0 0.75rem;
+      color: var(--text-primary);
       font-family: var(--font-sans);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       outline: none;
-      transition: border-color var(--transition), box-shadow var(--transition);
-      width: 100%;
+      transition: all var(--transition);
     }
-
     .f-select:focus, .f-input:focus {
-      border-color: var(--pitch-green-dim);
-      box-shadow: 0 0 0 3px var(--pitch-green-bg);
+      border-color: var(--pitch-green);
+      box-shadow: 0 0 10px var(--pitch-green-glow);
     }
 
     .btn-primary {
-      background: var(--pitch-green);
+      height: 38px;
+      background: linear-gradient(135deg, var(--pitch-green) 0%, #00CC6A 100%);
       color: var(--bg-deepest);
       border: none;
-      font-weight: 700;
-      font-size: 0.82rem;
-      padding: 0.65rem 1.4rem;
       border-radius: var(--radius-sm);
+      padding: 0 1.25rem;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: all var(--transition);
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      white-space: nowrap;
+      transition: all var(--transition);
+      align-self: flex-end;
     }
-
-    .btn-primary:hover { box-shadow: 0 0 20px var(--pitch-green-glow); transform: translateY(-1px); }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px var(--pitch-green-glow);
+    }
 
     .btn-ghost {
-      background: transparent;
+      height: 38px;
+      background: var(--bg-surface);
       color: var(--text-secondary);
-      border: 1px solid var(--border-hover);
-      font-weight: 600;
-      font-size: 0.82rem;
-      padding: 0.65rem 1.2rem;
+      border: 1px solid var(--border);
       border-radius: var(--radius-sm);
+      padding: 0 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all var(--transition);
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      white-space: nowrap;
+      transition: all var(--transition);
+      align-self: flex-end;
+    }
+    .btn-ghost:hover {
+      background: var(--bg-surface-hover);
+      color: var(--text-primary);
+      border-color: var(--border-hover);
     }
 
-    .btn-ghost:hover { background: rgba(255,255,255,0.05); }
-
-    /* ── Category / League Pills Strip ── */
+    /* Quick League Filter Pills */
     .pill-strip {
       display: flex;
       gap: 0.5rem;
+      margin-bottom: 1.5rem;
       overflow-x: auto;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.25rem;
-      scrollbar-width: none;
+      padding-bottom: 0.25rem;
     }
 
-    .pill-strip::-webkit-scrollbar { display: none; }
-
     .pill {
-      background: var(--bg-surface);
+      background: var(--bg-elevated);
       border: 1px solid var(--border);
-      color: var(--text-tertiary);
-      padding: 0.4rem 0.95rem;
-      border-radius: 20px;
-      font-size: 0.78rem;
+      border-radius: 999px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.75rem;
       font-weight: 600;
+      color: var(--text-secondary);
       cursor: pointer;
       white-space: nowrap;
       transition: all var(--transition);
     }
-
-    .pill:hover, .pill.active {
+    .pill:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+    .pill.active {
       background: var(--pitch-green-bg);
+      border-color: var(--pitch-green);
       color: var(--pitch-green);
-      border-color: var(--border-accent);
+      box-shadow: 0 0 10px var(--pitch-green-glow);
     }
 
-    /* ═══════ CARDS GRID ═══════ */
+    /* ═══════ FEED CARDS ═══════ */
     .feed-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
       gap: 1.25rem;
+      margin-bottom: 2rem;
     }
 
     .feed-card {
@@ -532,20 +574,20 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
+      position: relative;
     }
-
     .feed-card:hover {
-      transform: translateY(-4px);
       border-color: var(--border-hover);
-      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
     }
 
     .card-visual {
-      height: 180px;
-      position: relative;
+      height: 160px;
       background: var(--bg-surface);
+      position: relative;
       overflow: hidden;
     }
 
@@ -553,140 +595,119 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.5s ease;
+      transition: transform 0.4s ease;
     }
-
-    .feed-card:hover .card-visual img { transform: scale(1.05); }
+    .feed-card:hover .card-visual img { transform: scale(1.04); }
 
     .card-visual-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, transparent 35%, var(--bg-elevated) 100%);
+      background: linear-gradient(180deg, transparent 40%, rgba(13, 22, 36, 0.95) 100%);
     }
 
     .card-status-badge {
       position: absolute;
-      top: 0.75rem;
-      right: 0.75rem;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 0.25rem 0.75rem;
-      border-radius: 6px;
+      top: 10px;
+      right: 10px;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }
-
-    .status-officiel { background: rgba(0, 255, 135, 0.25); color: var(--pitch-green); border: 1px solid rgba(0, 255, 135, 0.5); }
-    .status-herewego { background: rgba(255, 51, 102, 0.25); color: var(--hot-red); border: 1px solid rgba(255, 51, 102, 0.5); }
-    .status-negoc { background: rgba(0, 229, 255, 0.25); color: var(--cyan); border: 1px solid rgba(0, 229, 255, 0.5); }
-    .status-rumeur { background: rgba(255, 215, 0, 0.25); color: var(--gold); border: 1px solid rgba(255, 215, 0, 0.5); }
+    .status-officiel { background: rgba(16, 185, 129, 0.2); color: var(--pitch-green); border: 1px solid var(--pitch-green); }
+    .status-herewego { background: rgba(255, 51, 102, 0.2); color: #FF3366; border: 1px solid #FF3366; }
+    .status-negoc { background: rgba(59, 130, 246, 0.2); color: var(--cyan); border: 1px solid var(--cyan); }
+    .status-rumeur { background: rgba(255, 215, 0, 0.2); color: var(--gold); border: 1px solid var(--gold); }
 
     .card-body {
-      padding: 1.25rem;
-      flex: 1;
+      padding: 1.15rem;
       display: flex;
       flex-direction: column;
       gap: 0.65rem;
+      flex: 1;
     }
 
     .card-header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.5rem;
     }
 
     .card-league-tag {
-      font-size: 0.68rem;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
       font-weight: 700;
       color: var(--cyan);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
     }
 
     .card-fee-tag {
-      font-size: 0.72rem;
-      font-weight: 800;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.78rem;
       color: var(--gold);
       background: var(--gold-bg);
-      border: 1px solid rgba(255,215,0,0.3);
-      padding: 0.15rem 0.55rem;
+      padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      font-family: var(--font-mono);
     }
 
     .card-transfer-track {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 0.5rem 0.75rem;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-primary);
+      gap: 0.5rem;
+      padding: 0.45rem 0.65rem;
+      background: var(--bg-surface);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
     }
-
     .track-club { color: var(--text-secondary); }
-    .track-arrow { color: var(--pitch-green); font-weight: 900; font-size: 0.9rem; }
+    .track-arrow { color: var(--pitch-green); font-weight: 800; font-size: 0.85rem; }
 
     .card-title {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      line-height: 1.4;
       color: var(--text-primary);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      line-height: 1.35;
     }
 
     .card-summary {
-      font-size: 0.82rem;
-      color: var(--text-tertiary);
-      line-height: 1.55;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
     .card-footer {
-      margin-top: auto;
-      padding-top: 0.85rem;
-      border-top: 1px solid var(--border-subtle);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding-top: 0.65rem;
+      border-top: 1px solid var(--border-subtle);
+      margin-top: auto;
     }
 
     .card-source {
       font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--text-tertiary);
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.3rem;
     }
 
-    .card-cred {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--gold);
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    .feed-card.no-img .card-body { padding-top: 1.5rem; }
-
-    /* ═══════ TAB 2: ANALYTICS ═══════ */
+    /* ═══════ ANALYTICS & CHARTS ═══════ */
     .analytics-layout {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     .chart-panel {
@@ -694,85 +715,184 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      box-shadow: var(--shadow-sm);
     }
-
-    .chart-panel.full-width { grid-column: 1 / -1; }
+    .chart-panel.full-width { grid-column: span 2; }
 
     .chart-heading {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: baseline;
+      margin-bottom: 1.25rem;
     }
-
     .chart-heading h3 {
-      font-size: 0.92rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
+    .chart-heading span {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--text-tertiary);
+    }
 
-    /* ═══════ TAB 3: OFFICIAL DEALS BOARD ═══════ */
+    /* ═══════ NATIONAL TEAMS HUB ═══════ */
+    .national-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .national-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      transition: all var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+    .national-card:hover {
+      border-color: var(--pitch-green);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.1);
+    }
+
+    .nat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nat-flag { font-size: 2rem; line-height: 1; }
+    .nat-rank-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gold);
+      background: var(--gold-bg);
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .nat-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      font-family: var(--font-display);
+      color: var(--text-primary);
+    }
+
+    .nat-stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .nat-stat-box {
+      background: var(--bg-surface);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 0.65rem;
+    }
+    .nat-stat-lbl {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+    }
+    .nat-stat-val {
+      font-size: 0.95rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      margin-top: 0.15rem;
+    }
+
+    .nat-stars-label {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+    }
+    .nat-stars-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .star-tag {
+      font-size: 0.7rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      color: var(--text-secondary);
+    }
+    .star-tag.highlight {
+      border-color: rgba(16, 185, 129, 0.3);
+      color: var(--pitch-green);
+    }
+
+    /* ═══════ DEALS TABLE ═══════ */
     .deals-table-panel {
       background: var(--bg-elevated);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
 
     .deals-table-header {
-      padding: 1.5rem;
+      padding: 1.25rem 1.5rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
     .deals-table-header h2 {
-      font-family: var(--font-display);
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 800;
+      color: var(--text-primary);
     }
 
     .deals-table {
       width: 100%;
       border-collapse: collapse;
+      font-size: 0.82rem;
     }
 
     .deals-table th {
-      text-align: left;
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-quaternary);
-      font-weight: 700;
-      padding: 0.8rem 1rem;
-      border-bottom: 1px solid var(--border);
       background: var(--bg-surface);
+      color: var(--text-tertiary);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      text-align: left;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
     }
 
     .deals-table td {
-      padding: 0.85rem 1rem;
-      font-size: 0.85rem;
+      padding: 0.95rem 1.25rem;
       border-bottom: 1px solid var(--border-subtle);
       color: var(--text-secondary);
     }
+    .deals-table tr:hover td {
+      background: var(--bg-surface-hover);
+    }
 
-    .deals-table tr:hover td { background: rgba(255,255,255,0.02); }
-
-    /* ── Pagination ── */
+    /* Pagination */
     .pagination-bar {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+      gap: 0.4rem;
+      margin-top: 1rem;
     }
 
     .page-btn {
@@ -799,32 +919,183 @@
       border-color: var(--pitch-green);
     }
 
+    /* Rank Badges */
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .rank-1 { background: #FFD700; color: #000; box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+    .rank-2 { background: #E2E8F0; color: #000; }
+    .rank-3 { background: #CD7F32; color: #fff; }
+    .rank-other { background: rgba(255,255,255,0.1); color: var(--text-tertiary); }
+
     /* Empty state */
     .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-quaternary); }
     .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.5; }
 
+    /* Mobile Navigation Bar */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(9, 12, 21, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      z-index: 999;
+      padding: 0 0.25rem;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .mobile-nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      background: none;
+      border: none;
+      color: var(--text-tertiary);
+      font-size: 0.68rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      padding: 6px 0;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .mobile-nav-btn.active {
+      color: var(--pitch-green);
+    }
+    .mobile-nav-btn.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20%;
+      right: 20%;
+      height: 3px;
+      background: var(--pitch-green);
+      border-radius: 0 0 4px 4px;
+      box-shadow: 0 0 10px var(--pitch-green);
+    }
+    .mobile-nav-icon {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
     @media (max-width: 768px) {
-      .app-shell { flex-direction: column; }
-      .sidebar { width: 100%; height: auto; flex-direction: row; justify-content: space-between; padding: 0.6rem 1rem; }
-      .nav-rail { flex-direction: row; width: auto; }
-      .topbar { padding: 0 1rem; }
-      .ticker-strip { display: none; }
-      .metrics-row { grid-template-columns: 1fr 1fr; }
-      .feed-grid { grid-template-columns: 1fr; }
-      .analytics-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none !important; }
+      .mobile-nav { display: flex !important; }
+      .main-wrapper { min-width: 100%; width: 100%; padding-bottom: 72px; }
+      .topbar { padding: 0 0.75rem; height: 52px; gap: 0.5rem; }
+      .brand-wordmark { font-size: 1.1rem; flex-shrink: 0; }
+      .status-chip { display: none; }
+      #clock { display: none; }
+      #btnScrapeNow { font-size: 0.8rem !important; padding: 0.3rem 0.6rem !important; flex-shrink: 0; }
+      #btnScrapeNow span { display: none; }
+      .ticker-strip { height: 28px; font-size: 0.7rem; flex: 1; min-width: 0; }
+      .tab-bar { display: none !important; }
+      .metrics-row { grid-template-columns: 1fr 1fr !important; gap: 0.65rem !important; }
+      .metric-card { padding: 0.85rem !important; }
+      .metric-value { font-size: 1.3rem !important; }
+      .metric-label { font-size: 0.7rem !important; }
+      .filters-row { grid-template-columns: 1fr !important; gap: 0.65rem !important; }
+      .search-box { width: 100% !important; }
+      .pill-strip { gap: 0.35rem !important; padding-bottom: 0.5rem !important; }
+      .pill { padding: 0.35rem 0.75rem !important; font-size: 0.75rem !important; }
+      .feed-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
+      .national-grid { grid-template-columns: 1fr !important; }
+      .deals-table-panel { padding: 0.85rem !important; }
+      .deals-table th, .deals-table td { padding: 0.5rem 0.4rem !important; font-size: 0.73rem !important; }
+    }
+
+    @media (min-width: 769px) and (max-width: 1200px) {
+      .feed-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .metrics-row { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+
+    /* Loader Overlay */
+    #global-loader {
+      position: fixed; inset: 0; background: var(--bg-deepest);
+      z-index: 9999; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1.5rem;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .radar-spinner {
+      width: 80px; height: 80px; border-radius: 50%;
+      border: 2px solid var(--border-subtle);
+      border-top-color: var(--pitch-green);
+      animation: spin 1s linear infinite, glow 2s ease-in-out infinite alternate;
+      position: relative;
+    }
+    .radar-spinner::before {
+      content: ''; position: absolute; inset: 12px; border-radius: 50%;
+      border: 2px solid transparent; border-right-color: var(--cyan);
+      animation: spin 0.75s linear infinite reverse;
+    }
+    .radar-spinner::after {
+      content: ''; position: absolute; inset: 24px; border-radius: 50%;
+      background: var(--pitch-green); opacity: 0.2;
+      animation: pulse 1s ease-in-out infinite alternate;
+    }
+    .loader-text { font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: var(--text-primary); letter-spacing: 2px; text-transform: uppercase; }
+    .loader-text span { color: var(--pitch-green); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes glow { to { box-shadow: 0 0 20px var(--pitch-green-glow); } }
+    @keyframes pulse { to { transform: scale(1.3); opacity: 0.5; } }
+    
+    input, select {
+      background: #151D2D;
+      color: #F8FAFC;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-family: var(--font-sans);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    input:focus, select:focus {
+      border-color: #00FF87;
+      box-shadow: 0 0 0 2px rgba(0, 255, 135, 0.2);
     }
   </style>
 </head>
 
 <body>
+  
+  <div id="global-loader">
+    <img src="assets/loadingSpinner.svg" style="width:80px; height:80px; border-radius:50%; animation: spin 1.5s linear infinite;" />
+    <div class="loader-text">Mercato<span>Pulse</span></div>
+    <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-tertiary);">Acquisition des données en cours...</div>
+  </div>
   <div class="app-shell">
     <!-- ═══ SIDEBAR ═══ -->
     <aside class="sidebar">
-      <div class="brand-mark">MP</div>
+      <!-- 
+      [INSTRUCTION POUR LE LOGO] 
+      C'est ici que tu dois insérer le logo généré !
+      Remplace tout le bloc <svg>...</svg> ci-dessous par :
+      <img src="ton_chemin/logo.png" style="max-width:100%; max-height:45px; object-fit:contain; border-radius: 8px;" />
+    -->
+    <div class="brand-mark" onclick="switchView('feed')">
+        <img src="assets/Logo.png" style="max-width:100%; max-height:45px; object-fit:contain; border-radius: 8px;" />
+    </div>
       <div class="nav-rail">
         <button class="nav-item active" data-tab="feed" title="Mercato Live" onclick="switchView('feed')">⚽</button>
-        <button class="nav-item" data-tab="analytics" title="Analytics Mercato" onclick="switchView('analytics')">📊</button>
-        <button class="nav-item" data-tab="board" title="Official Deals Board" onclick="switchView('board')">📋</button>
+        <button class="nav-item" data-tab="analytics" title="Transfer Analytics & Dépenses" onclick="switchView('analytics')">📊</button>
+        <button class="nav-item" data-tab="national" title="Sélections Nationales & Valeur" onclick="switchView('national')">🌍</button>
+        <button class="nav-item" data-tab="board" title="Tableau des Deals Confirmés" onclick="switchView('board')">📋</button>
+        <button class="nav-item" data-tab="system" title="Système & Scrapers Monitor" onclick="switchView('system')">⚙️</button>
       </div>
       <div class="sidebar-footer">
         <button class="sidebar-icon-btn" title="Swagger API Docs" onclick="window.open('/api/docs','_blank')">📄</button>
@@ -836,25 +1107,31 @@
     <div class="main-wrapper">
       <!-- Top Bar -->
       <header class="topbar">
-        <div class="brand-wordmark">Mercato<span class="hi">Pulse</span></div>
+        <div class="brand-wordmark">Mercato<span class="hi">PULSE</span></div>
         <div class="status-chip"><div class="pulse-dot"></div>Mercato Live</div>
-        <button class="btn-primary" style="padding:0.35rem 0.85rem;font-size:0.75rem;" onclick="triggerLiveScrape()" id="btnScrapeNow">🔄 Actualiser les flux Mercato</button>
+        <button class="btn-primary" style="padding:0.35rem 0.85rem;font-size:0.75rem;" onclick="triggerLiveScrape()" id="btnScrapeNow">🔄 <span>Actualiser les flux Mercato</span></button>
 
         <div class="ticker-strip">
           <div class="ticker-track" id="tickerTrack">
+            <div class="ticker-sym">🔥 <b>RODRI</b> ➔ FC Barcelone / Real Madrid <span class="t-gold">Accélération Mercato</span></div>
             <div class="ticker-sym">⚽ <b>MBAPPÉ</b> ➔ Real Madrid <span class="t-green">OFFICIEL (Gratuit)</span></div>
             <div class="ticker-sym">🔥 <b>LAMINE YAMAL</b> ➔ FC Barcelone <span class="t-gold">Clause 1000M€</span></div>
-            <div class="ticker-sym">💬 <b>OSIMHEN</b> ➔ PSG <span class="t-cyan">Négociations 110M€</span></div>
-            <div class="ticker-sym">⚽ <b>HAALAND</b> ➔ Man City <span class="t-green">Prolongation 2030</span></div>
+            <div class="ticker-sym">💬 <b>OSIMHEN</b> ➔ PSG / Galatasaray <span class="t-cyan">Négociations 110M€</span></div>
+            <div class="ticker-sym">⚽ <b>BELLINGHAM</b> ➔ Real Madrid <span class="t-green">OFFICIEL 103M€</span></div>
             <div class="ticker-sym">🔥 <b>GYÖKERES</b> ➔ Arsenal <span class="t-gold">Here We Go 85M€</span></div>
-            <div class="ticker-sym">📰 <b>WIRTZ</b> ➔ Real Madrid <span class="t-cyan">Rumeur 130M€</span></div>
-            <!-- Duplicate for infinite marquee -->
+            <div class="ticker-sym">🌍 <b>ANGLETERRE</b> ➔ N°1 Monde <span class="t-cyan">1.52 Mrd €</span></div>
+            <div class="ticker-sym">🌍 <b>FRANCE</b> ➔ N°2 Monde <span class="t-green">1.48 Mrd €</span></div>
+            <div class="ticker-sym">📰 <b>WIRTZ</b> ➔ Real Madrid / Bayern <span class="t-cyan">Rumeur 130M€</span></div>
+            <!-- Infinite loop clones -->
+            <div class="ticker-sym">🔥 <b>RODRI</b> ➔ FC Barcelone / Real Madrid <span class="t-gold">Accélération Mercato</span></div>
             <div class="ticker-sym">⚽ <b>MBAPPÉ</b> ➔ Real Madrid <span class="t-green">OFFICIEL (Gratuit)</span></div>
             <div class="ticker-sym">🔥 <b>LAMINE YAMAL</b> ➔ FC Barcelone <span class="t-gold">Clause 1000M€</span></div>
-            <div class="ticker-sym">💬 <b>OSIMHEN</b> ➔ PSG <span class="t-cyan">Négociations 110M€</span></div>
-            <div class="ticker-sym">⚽ <b>HAALAND</b> ➔ Man City <span class="t-green">Prolongation 2030</span></div>
+            <div class="ticker-sym">💬 <b>OSIMHEN</b> ➔ PSG / Galatasaray <span class="t-cyan">Négociations 110M€</span></div>
+            <div class="ticker-sym">⚽ <b>BELLINGHAM</b> ➔ Real Madrid <span class="t-green">OFFICIEL 103M€</span></div>
             <div class="ticker-sym">🔥 <b>GYÖKERES</b> ➔ Arsenal <span class="t-gold">Here We Go 85M€</span></div>
-            <div class="ticker-sym">📰 <b>WIRTZ</b> ➔ Real Madrid <span class="t-cyan">Rumeur 130M€</span></div>
+            <div class="ticker-sym">🌍 <b>ANGLETERRE</b> ➔ N°1 Monde <span class="t-cyan">1.52 Mrd €</span></div>
+            <div class="ticker-sym">🌍 <b>FRANCE</b> ➔ N°2 Monde <span class="t-green">1.48 Mrd €</span></div>
+            <div class="ticker-sym">📰 <b>WIRTZ</b> ➔ Real Madrid / Bayern <span class="t-cyan">Rumeur 130M€</span></div>
           </div>
         </div>
 
@@ -866,33 +1143,37 @@
         <!-- View Navigation Tabs -->
         <div class="tab-bar">
           <button class="tab-trigger active" id="trig-feed" onclick="switchView('feed')">⚽ Mercato Live & Base de Données</button>
-          <button class="tab-trigger" id="trig-analytics" onclick="switchView('analytics')">📊 Transfer Analytics & Scout Stats</button>
-          <button class="tab-trigger" id="trig-board" onclick="switchView('board')">📋 Tableau des Transferts Confirmés</button>
+          <button class="tab-trigger" id="trig-analytics" onclick="switchView('analytics')">📊 Transfer Analytics & Dépenses Mercato</button>
+          <button class="tab-trigger" id="trig-national" onclick="switchView('national')">🌍 Sélections Nationales & Valeur Marchande</button>
+          <button class="tab-trigger" id="trig-board" onclick="switchView('board')">📋 Tableau des Deals Confirmés</button>
+          <button class="tab-trigger" id="trig-system" onclick="switchView('system')">⚙️ Système & Monitoring Scrapers</button>
         </div>
 
-        <!-- ═══ VIEW 1: MERCATO LIVE & DATABASE ═══ -->
+        <!-- ═════════════════════════════════════════════════════════
+             VIEW 1: MERCATO LIVE & DATABASE
+        ═════════════════════════════════════════════════════════ -->
         <div class="tab-view active" id="view-feed">
           <!-- Metrics -->
           <div class="metrics-row">
             <div class="metric-card">
               <div class="metric-label">Transferts & News Collectés</div>
               <div class="metric-value c-green" id="mArticles">—</div>
-              <div class="metric-hint">⚡ Mise à jour automatique</div>
+              <div class="metric-hint">⚡ Scraping temps réel multi-sources</div>
             </div>
             <div class="metric-card">
-              <div class="metric-label">Championnats / Ligues</div>
+              <div class="metric-label">Championnats & Ligues</div>
               <div class="metric-value c-cyan" id="mLeagues">—</div>
-              <div class="metric-hint">🌐 Premier League, La Liga, Ligue 1...</div>
+              <div class="metric-hint">🌐 Premier League, La Liga, Ligue 1, Serie A...</div>
             </div>
             <div class="metric-card">
               <div class="metric-label">Clubs Analysés</div>
               <div class="metric-value c-gold" id="mClubs">—</div>
-              <div class="metric-hint">🏆 Real, PSG, Man City, Barca...</div>
+              <div class="metric-hint">🏆 Real, PSG, Man City, Arsenal, Barca...</div>
             </div>
             <div class="metric-card">
               <div class="metric-label">Score Fiabilité Médias</div>
               <div class="metric-value c-purple" id="mCred">—</div>
-              <div class="metric-hint">⭐ Audit des sources (1 à 5)</div>
+              <div class="metric-hint">⭐ Audit continu des sources (1 à 5)</div>
             </div>
           </div>
 
@@ -900,15 +1181,15 @@
           <div class="filter-panel">
             <div class="f-group">
               <label>Championnat / Ligue</label>
-              <select class="f-select" id="fLeague"><option value="">Tous les championnats</option></select>
+              <select class="f-select" id="fLeague" onchange="applyFilters()"><option value="">Tous les championnats</option></select>
             </div>
             <div class="f-group">
               <label>Club (Acheteur / Vendeur)</label>
-              <select class="f-select" id="fClub"><option value="">Tous les clubs</option></select>
+              <select class="f-select" id="fClub" onchange="applyFilters()"><option value="">Tous les clubs</option></select>
             </div>
             <div class="f-group">
               <label>Statut Mercato</label>
-              <select class="f-select" id="fStatus">
+              <select class="f-select" id="fStatus" onchange="applyFilters()">
                 <option value="">Tous les statuts</option>
                 <option value="OFFICIEL ✅">OFFICIEL ✅</option>
                 <option value="HERE WE GO 🔥">HERE WE GO 🔥</option>
@@ -918,11 +1199,11 @@
             </div>
             <div class="f-group">
               <label>Source Média</label>
-              <select class="f-select" id="fSource"><option value="">Toutes les sources</option></select>
+              <select class="f-select" id="fSource" onchange="applyFilters()"><option value="">Toutes les sources</option></select>
             </div>
             <div class="f-group" style="flex:1.5">
               <label>Recherche Joueur / Club</label>
-              <input type="text" class="f-input" id="fSearch" placeholder="Mbappé, Yamal, Osimhen, 100M€...">
+              <input type="text" class="f-input" id="fSearch" placeholder="Mbappé, Bellingham, Yamal, Osimhen, 100M€..." oninput="applyFilters()">
             </div>
             <button class="btn-primary" onclick="applyFilters()">⚡ Filtrer</button>
             <button class="btn-ghost" onclick="exportCsv()">📥 Export CSV</button>
@@ -938,30 +1219,112 @@
           <div class="pagination-bar" id="pagination"></div>
         </div>
 
-        <!-- ═══ VIEW 2: ANALYTICS ═══ -->
+        <!-- ═════════════════════════════════════════════════════════
+             VIEW 2: TRANSFER ANALYTICS & FINANCIAL INTELLIGENCE
+        ═════════════════════════════════════════════════════════ -->
         <div class="tab-view" id="view-analytics">
+          <!-- Executive Financial Metrics -->
+          <div class="metrics-row">
+            <div class="metric-card">
+              <div class="metric-label">Volume Financier Mercato 💶</div>
+              <div class="metric-value c-gold" id="kpiTotalSpend">—</div>
+              <div class="metric-hint">💰 Montant total estimé des transactions</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Ligue N°1 en Dépenses 🏆</div>
+              <div class="metric-value c-green" id="kpiTopLeague" style="font-size:1.45rem;">—</div>
+              <div class="metric-hint" id="kpiTopLeagueAmount">— M€ d'investissements</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Transfert Record Actuel 👑</div>
+              <div class="metric-value c-cyan" id="kpiTopDeal" style="font-size:1.35rem;">—</div>
+              <div class="metric-hint" id="kpiTopDealClub">➔ Destination Club</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Ratio Deals Confirmés ✅</div>
+              <div class="metric-value c-purple" id="kpiOfficialRate">—</div>
+              <div class="metric-hint">📊 Part des transferts validés / Here We Go</div>
+            </div>
+          </div>
+
+          <!-- Charts Grid -->
           <div class="analytics-layout">
+            <!-- Chart 1: League Spending -->
             <div class="chart-panel">
               <div class="chart-heading">
-                <h3>📊 Répartition des Statuts de Transfert</h3>
+                <h3>💶 Dépenses & Flux par Championnat (€ Millions)</h3>
+                <span>Volume cumulé calculé</span>
               </div>
-              <canvas id="chartStatus" height="260"></canvas>
+              <canvas id="chartLeagueSpend" height="240"></canvas>
             </div>
 
+            <!-- Chart 2: Deal Status Breakdown -->
             <div class="chart-panel">
               <div class="chart-heading">
-                <h3>🌐 Volume de Deals par Ligue</h3>
+                <h3>📊 Répartition des Statuts Mercato</h3>
+                <span>Officialité & Hype</span>
               </div>
-              <canvas id="chartLeagues" height="260"></canvas>
+              <canvas id="chartStatus" height="240"></canvas>
             </div>
 
-            <div class="chart-panel full-width">
+            <!-- Chart 3: Price Bracket Breakdown -->
+            <div class="chart-panel">
               <div class="chart-heading">
-                <h3>⭐ Fiabilité des Médias & Sources Mercato</h3>
+                <h3>🏷️ Distribution des Montants de Transfert</h3>
+                <span>Par tranches tarifaires</span>
               </div>
+              <canvas id="chartPriceBrackets" height="240"></canvas>
+            </div>
+
+            <!-- Chart 4: Top Active Clubs -->
+            <div class="chart-panel">
+              <div class="chart-heading">
+                <h3>🏟️ Clubs les Plus Actifs (Achats / Ventes)</h3>
+                <span>Nombre de dossiers traités</span>
+              </div>
+              <canvas id="chartTopClubs" height="240"></canvas>
+            </div>
+          </div>
+
+          <!-- Top Expensive Deals Leaderboard -->
+          <div class="chart-panel full-width" style="margin-bottom:2rem;">
+            <div class="chart-heading">
+              <h3>👑 Leaderboard des 10 Plus Gros Transferts du Mercato</h3>
+              <span>Classés par montant financier</span>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="deals-table" id="topExpensiveTable">
+                <thead>
+                  <tr>
+                    <th>Rang</th>
+                    <th>Joueur</th>
+                    <th>Mouvement</th>
+                    <th>Montant</th>
+                    <th>Ligue</th>
+                    <th>Statut</th>
+                    <th>Détails</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Source Reliability Audit -->
+          <div class="chart-panel full-width">
+            <div class="chart-heading">
+              <h3>⭐ Audit & Fiabilité des Médias Spécialisés Football</h3>
+              <span>Évaluation temps réel des algorithmes anti-fake news</span>
+            </div>
+            <div style="overflow-x:auto">
               <table class="deals-table" id="sourcesTable">
                 <thead>
-                  <tr><th>Source Média</th><th>Nombre d'Articles</th><th>Score Crédibilité</th><th>Statut Principal</th></tr>
+                  <tr>
+                    <th>Média / Source</th>
+                    <th>Volume Analysé</th>
+                    <th>Indice de Fiabilité</th>
+                    <th>Statut de Surveillance</th>
+                  </tr>
                 </thead>
                 <tbody></tbody>
               </table>
@@ -969,26 +1332,171 @@
           </div>
         </div>
 
-        <!-- ═══ VIEW 3: OFFICIAL DEALS BOARD ═══ -->
+        <!-- ═════════════════════════════════════════════════════════
+             VIEW 3: NATIONAL TEAMS HUB & SQUAD VALUES
+        ═════════════════════════════════════════════════════════ -->
+        <div class="tab-view" id="view-national">
+          <!-- National Teams KPIs -->
+          <div class="metrics-row">
+            <div class="metric-card">
+              <div class="metric-label">Sélections Trackées 🌍</div>
+              <div class="metric-value c-cyan">10 Sélections</div>
+              <div class="metric-hint">Top Nations Mondiales FIFA</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Sélection la Plus Chère 💎</div>
+              <div class="metric-value c-gold">1.52 Mrd €</div>
+              <div class="metric-hint">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Angleterre (Three Lions)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Star N°1 en Sélection 🌟</div>
+              <div class="metric-value c-green">180 M€</div>
+              <div class="metric-hint">Mbappé 🇫🇷 / Bellingham 🏴󠁧󠁢󠁥󠁮󠁧󠁿 / Haaland 🇳🇴</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Prochaine Compétition 🏆</div>
+              <div class="metric-value c-purple" style="font-size:1.4rem;">FIFA World Cup 2026</div>
+              <div class="metric-hint">🇺🇸 USA · 🇨🇦 Canada · 🇲🇽 Mexique</div>
+            </div>
+          </div>
+
+          <!-- National Teams Market Value Comparison Chart -->
+          <div class="chart-panel full-width">
+            <div class="chart-heading">
+              <h3>📊 Classement des Équipes Nationales par Valeur Marchande Totale (€ Milliards / Millions)</h3>
+              <span>Données Market Value & Scout Intelligence</span>
+            </div>
+            <canvas id="chartNationalValues" height="280"></canvas>
+          </div>
+
+          <!-- National Teams Interactive Cards -->
+          <div style="margin-top:2rem;">
+            <div class="chart-heading">
+              <h3>🌍 Fiches Détaillées des Sélections & Stars Internationales</h3>
+              <span>Cliquez sur une équipe pour inspecter ses convoqués, son mercato & ses actualités</span>
+            </div>
+            <div class="national-grid" id="nationalGrid"></div>
+          </div>
+
+          <!-- Squad & Convocations Inspector Modal/Drawer -->
+          <div class="chart-panel full-width" id="squadInspectorPanel" style="margin-top:2rem;display:none;">
+            <div class="chart-heading">
+              <h3 id="squadInspectorTitle">📋 Convocations & Valeurs Individuelles — Sélection</h3>
+              <button class="btn-ghost" onclick="document.getElementById('squadInspectorPanel').style.display='none'">✕ Fermer l'inspecteur</button>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="deals-table" id="squadInspectorTable">
+                <thead>
+                  <tr>
+                    <th>Joueur Convoqué</th>
+                    <th>Poste & Ligne</th>
+                    <th>Club Actuel</th>
+                    <th>Valeur Marchande</th>
+                    <th>Statut Mercato Actuel</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <!-- National Team Specific Mercato News -->
+            <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+              <h4 style="font-size:0.95rem;font-weight:700;color:var(--pitch-green);margin-bottom:0.75rem;">📰 Actualités & Rumeurs Mercato Liées à cette Sélection</h4>
+              <div id="nationalTeamNewsGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));gap:1rem;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═════════════════════════════════════════════════════════
+             VIEW 4: OFFICIAL DEALS BOARD
+        ═════════════════════════════════════════════════════════ -->
         <div class="tab-view" id="view-board">
           <div class="deals-table-panel">
             <div class="deals-table-header">
               <h2>📋 Tableau des Deals Confirmés & Here We Go</h2>
-              <button class="btn-primary" onclick="loadData()">🔄 Rafraîchir</button>
+              <div style="display:flex;gap:0.5rem;">
+                <button class="btn-ghost" onclick="exportCsv()">📥 Exporter CSV</button>
+                <button class="btn-primary" onclick="loadData()">🔄 Rafraîchir</button>
+              </div>
             </div>
-            <table class="deals-table" id="officialDealsTable">
-              <thead>
-                <tr>
-                  <th>Statut</th>
-                  <th>Joueur</th>
-                  <th>Club Vendeur ➔ Acheteur</th>
-                  <th>Montant Estimé</th>
-                  <th>Ligue</th>
-                  <th>Source</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+            <div style="overflow-x:auto">
+              <table class="deals-table" id="officialDealsTable">
+                <thead>
+                  <tr>
+                    <th>Statut</th>
+                    <th>Joueur</th>
+                    <th>Mouvement Mercato</th>
+                    <th>Montant Estimé</th>
+                    <th>Ligue</th>
+                    <th>Source</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═════════════════════════════════════════════════════════
+             VIEW 5: SYSTEM & SCRAPERS MONITOR
+        ═════════════════════════════════════════════════════════ -->
+        <div class="tab-view" id="view-system">
+          <div class="metrics-row">
+            <div class="metric-card">
+              <div class="metric-label">Statut du Pipeline Scraper ⚡</div>
+              <div class="metric-value c-green" id="sysPipelineStatus">Actif & En Veille</div>
+              <div class="metric-hint">Scraping périodique toutes les 15 min</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Sources Actives Monitorées 🌐</div>
+              <div class="metric-value c-cyan" id="sysSourcesCount">250+ Sources & Mots-Clés</div>
+              <div class="metric-hint">Gazzetta, Kicker, BBC, Marca + Tracking VIP (Rodri, Haaland, Mbappé, 650+ joueurs)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Base de Données SQLite 💾</div>
+              <div class="metric-value c-gold" id="sysDbTotal">— Articles</div>
+              <div class="metric-hint">Stockage persistant & indexé</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Moteur IA & NLP 🤖</div>
+              <div class="metric-value c-purple">Opérationnel</div>
+              <div class="metric-hint">Extraction d'entités & classification</div>
+            </div>
+          </div>
+
+          <div class="chart-panel full-width">
+            <div class="chart-heading">
+              <h3>📡 Console de Contrôle des Scrapers & Ingestion</h3>
+              <button class="btn-primary" onclick="triggerLiveScrape()">🚀 Lancer l'Ingestion Complète Maintenant</button>
+            </div>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem;line-height:1.5;">
+              Le système MercatoIQ scrute en continu les 15 plus grands canaux médiatiques de football (Foot Mercato, Sky Sports, L'Équipe, BBC Sport, Marca, Gazzetta dello Sport, RMC Sport, etc.), extrait les montants de transferts, identifie les joueurs et leurs nationalités, et met à jour les indicateurs financiers en temps réel.
+            </p>
+
+            <div style="overflow-x:auto">
+              <table class="deals-table" id="scrapersDetailTable">
+                <thead>
+                  <tr>
+                    <th>Canal Média</th>
+                    <th>Catégorie de Couverture</th>
+                    <th>Langue</th>
+                    <th>Score Fiabilité</th>
+                    <th>Statut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Foot Mercato</td><td>Ligue 1 & Europe</td><td>🇫🇷 Français</td><td><b style="color:var(--gold)">4.7 / 5</b></td><td><span class="card-status-badge status-officiel" style="position:static">ACTIF</span></td></tr>
+                  <tr><td>Sky Sports Transfer Centre</td><td>Premier League & Mondial</td><td>🇬🇧 Anglais</td><td><b style="color:var(--gold)">4.9 / 5</b></td><td><span class="card-status-badge status-officiel" style="position:static">ACTIF</span></td></tr>
+                  <tr><td>L'Équipe Mercato</td><td>Ligue 1 & International</td><td>🇫🇷 Français</td><td><b style="color:var(--gold)">4.8 / 5</b></td><td><span class="card-status-badge status-officiel" style="position:static">ACTIF</span></td></tr>
+                  <tr><td>Marca Fichajes & Real Madrid</td><td>La Liga & International</td><td>🇪🇸 Espagnol</td><td><b style="color:var(--gold)">4.6 / 5</b></td><td><span class="card-status-badge status-officiel" style="position:static">ACTIF</span></td></tr>
+                  <tr><td>BBC Sport Football</td><td>Premier League & Mercato</td><td>🇬🇧 Anglais</td><td><b style="color:var(--gold)">4.9 / 5</b></td><td><span class="card-status-badge status-officiel" style="position:static">ACTIF</span></td></tr>
+                  <tr><td>Gazzetta dello Sport</td><td>Serie A & Calciomercato</td><td>🇮🇹 Italien</td><td><b style="color:var(--gold)">4.5 / 5</b></td><td><span class="card-status-badge status-officiel" style="position:static">ACTIF</span></td></tr>
+                  <tr><td>RMC Sport Mercato</td><td>Ligue 1 & Transferts</td><td>🇫🇷 Français</td><td><b style="color:var(--gold)">4.6 / 5</b></td><td><span class="card-status-badge status-officiel" style="position:static">ACTIF</span></td></tr>
+                  <tr><td>Sport.es & Barça News</td><td>La Liga & FC Barcelone</td><td>🇪🇸 Espagnol</td><td><b style="color:var(--gold)">4.4 / 5</b></td><td><span class="card-status-badge status-officiel" style="position:static">ACTIF</span></td></tr>
+                  <tr><td>Eurosport Football</td><td>Champions League & Europe</td><td>🇫🇷 Français</td><td><b style="color:var(--gold)">4.7 / 5</b></td><td><span class="card-status-badge status-officiel" style="position:static">ACTIF</span></td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -997,9 +1505,9 @@
   </div>
 
   <script>
-    /* ═══════════════════════════════════════
-       MercatoPulse Engine v3.0
-    ═══════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════
+       MercatoIQ Engine & Data Intelligence v4.0
+    ═══════════════════════════════════════════════════════ */
 
     const API = '/api/v1/articles?page=1&page_size=5000';
     let allArticles = [];
@@ -1008,15 +1516,195 @@
     const PER_PAGE = 12;
     let currentPage = 1;
 
+    // ─────────────────────────────────────────────
+    // BASE DE DONNÉES DES SÉLECTIONS NATIONALES
+    // ─────────────────────────────────────────────
+    const NATIONAL_TEAMS = [
+      {
+        id: 'england',
+        name: 'Angleterre',
+        flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+        valueM: 1520, // 1.52 Mrd €
+        fifaRank: 4,
+        avgAge: 25.8,
+        confed: 'UEFA 🇪🇺',
+        topStars: ['Jude Bellingham (180M€)', 'Bukayo Saka (140M€)', 'Phil Foden (150M€)', 'Declan Rice (120M€)', 'Harry Kane (100M€)'],
+        squad: [
+          { name: 'Jude Bellingham', pos: 'Milieu Offensif', club: 'Real Madrid', val: '180M€', status: 'OFFICIEL ✅' },
+          { name: 'Phil Foden', pos: 'Ailier / Milieu', club: 'Manchester City', val: '150M€', status: 'Sous contrat' },
+          { name: 'Bukayo Saka', pos: 'Ailier Droit', club: 'Arsenal', val: '140M€', status: 'Sous contrat' },
+          { name: 'Declan Rice', pos: 'Milieu Défensif', club: 'Arsenal', val: '120M€', status: 'OFFICIEL ✅ (116M€)' },
+          { name: 'Harry Kane', pos: 'Attaquant', club: 'Bayern Munich', val: '100M€', status: 'OFFICIEL ✅ (100M€)' },
+          { name: 'Cole Palmer', pos: 'Milieu Offensif', club: 'Chelsea', val: '90M€', status: 'Prolongation 2033' },
+          { name: 'Trent Alexander-Arnold', pos: 'Latéral Droit', club: 'Liverpool', val: '70M€', status: 'Négociation Real Madrid' }
+        ]
+      },
+      {
+        id: 'france',
+        name: 'France',
+        flag: '🇫🇷',
+        valueM: 1480, // 1.48 Mrd €
+        fifaRank: 2,
+        avgAge: 26.1,
+        confed: 'UEFA 🇪🇺',
+        topStars: ['Kylian Mbappé (180M€)', 'Eduardo Camavinga (100M€)', 'Aurélien Tchouaméni (100M€)', 'William Saliba (80M€)', 'Michael Olise (65M€)'],
+        squad: [
+          { name: 'Kylian Mbappé', pos: 'Attaquant', club: 'Real Madrid', val: '180M€', status: 'OFFICIEL ✅ (Gratuit)' },
+          { name: 'Eduardo Camavinga', pos: 'Milieu Central', club: 'Real Madrid', val: '100M€', status: 'Sous contrat 2029' },
+          { name: 'Aurélien Tchouaméni', pos: 'Milieu Défensif', club: 'Real Madrid', val: '100M€', status: 'Sous contrat' },
+          { name: 'William Saliba', pos: 'Défenseur Central', club: 'Arsenal', val: '80M€', status: 'Sous contrat' },
+          { name: 'Michael Olise', pos: 'Ailier Droit', club: 'Bayern Munich', val: '65M€', status: 'OFFICIEL ✅ (60M€)' },
+          { name: 'Leny Yoro', pos: 'Défenseur Central', club: 'Manchester United', val: '62M€', status: 'OFFICIEL ✅ (62M€)' },
+          { name: 'Ousmane Dembélé', pos: 'Ailier', club: 'PSG', val: '60M€', status: 'Sous contrat' }
+        ]
+      },
+      {
+        id: 'brazil',
+        name: 'Brésil',
+        flag: '🇧🇷',
+        valueM: 1250, // 1.25 Mrd €
+        fifaRank: 5,
+        avgAge: 25.4,
+        confed: 'CONMEBOL 🌎',
+        topStars: ['Vinicius Jr (180M€)', 'Rodrygo (110M€)', 'Bruno Guimarães (85M€)', 'Endrick (60M€)', 'Gabriel Magalhães (75M€)'],
+        squad: [
+          { name: 'Vinicius Jr', pos: 'Ailier Gauche', club: 'Real Madrid', val: '180M€', status: 'RUMEUR 📰 (Offre 350M€ Al-Hilal)' },
+          { name: 'Rodrygo', pos: 'Ailier / Attaquant', club: 'Real Madrid', val: '110M€', status: 'Sous contrat 2028' },
+          { name: 'Bruno Guimarães', pos: 'Milieu', club: 'Newcastle', val: '85M€', status: 'Cible PSG / Man City' },
+          { name: 'Gabriel Magalhães', pos: 'Défenseur Central', club: 'Arsenal', val: '75M€', status: 'Sous contrat' },
+          { name: 'Endrick', pos: 'Attaquant', club: 'Real Madrid', val: '60M€', status: 'OFFICIEL ✅ (60M€)' },
+          { name: 'Estevao', pos: 'Ailier', club: 'Chelsea (prêt)', val: '45M€', status: 'OFFICIEL ✅ (Chelsea 2025)' }
+        ]
+      },
+      {
+        id: 'spain',
+        name: 'Espagne',
+        flag: '🇪🇸',
+        valueM: 1100, // 1.10 Mrd €
+        fifaRank: 3,
+        avgAge: 24.9,
+        confed: 'UEFA 🇪🇺',
+        topStars: ['Lamine Yamal (150M€)', 'Rodri (130M€)', 'Pedri (80M€)', 'Nico Williams (70M€)', 'Dani Olmo (60M€)'],
+        squad: [
+          { name: 'Lamine Yamal', pos: 'Ailier Droit', club: 'FC Barcelone', val: '150M€', status: 'HERE WE GO 🔥 (Clause 1000M€)' },
+          { name: 'Rodri', pos: 'Milieu Défensif (Ballon d\'Or)', club: 'Manchester City', val: '130M€', status: 'Sous contrat 2027' },
+          { name: 'Pedri', pos: 'Milieu Central', club: 'FC Barcelone', val: '80M€', status: 'Prolongation en cours' },
+          { name: 'Nico Williams', pos: 'Ailier Gauche', club: 'Athletic Bilbao', val: '70M€', status: 'Cible FC Barcelone 58M€' },
+          { name: 'Dani Olmo', pos: 'Milieu Offensif', club: 'FC Barcelone', val: '60M€', status: 'OFFICIEL ✅ (55M€)' },
+          { name: 'Gavi', pos: 'Milieu Central', club: 'FC Barcelone', val: '90M€', status: 'Sous contrat' }
+        ]
+      },
+      {
+        id: 'portugal',
+        name: 'Portugal',
+        flag: '🇵🇹',
+        valueM: 1050, // 1.05 Mrd €
+        fifaRank: 6,
+        avgAge: 26.5,
+        confed: 'UEFA 🇪🇺',
+        topStars: ['Rafael Leão (90M€)', 'Bernardo Silva (70M€)', 'Rúben Dias (80M€)', 'Bruno Fernandes (70M€)', 'João Neves (70M€)'],
+        squad: [
+          { name: 'Rafael Leão', pos: 'Ailier Gauche', club: 'AC Milan', val: '90M€', status: 'Clause 175M€' },
+          { name: 'Rúben Dias', pos: 'Défenseur Central', club: 'Manchester City', val: '80M€', status: 'Sous contrat' },
+          { name: 'João Neves', pos: 'Milieu Défensif', club: 'PSG', val: '70M€', status: 'OFFICIEL ✅ (70M€)' },
+          { name: 'Bruno Fernandes', pos: 'Milieu Offensif', club: 'Manchester United', val: '70M€', status: 'Prolongation signée' },
+          { name: 'Bernardo Silva', pos: 'Milieu / Ailier', club: 'Manchester City', val: '70M€', status: 'Clause active' },
+          { name: 'Cristiano Ronaldo', pos: 'Attaquant', club: 'Al-Nassr', val: '15M€', status: 'OFFICIEL ✅ (2027)' }
+        ]
+      },
+      {
+        id: 'argentina',
+        name: 'Argentine',
+        flag: '🇦🇷',
+        valueM: 850, // 850 M€
+        fifaRank: 1,
+        avgAge: 27.8,
+        confed: 'CONMEBOL 🌎',
+        topStars: ['Lautaro Martínez (110M€)', 'Julián Álvarez (95M€)', 'Alexis Mac Allister (75M€)', 'Enzo Fernández (75M€)', 'Lionel Messi (30M€)'],
+        squad: [
+          { name: 'Lautaro Martínez', pos: 'Attaquant', club: 'Inter Milan', val: '110M€', status: 'Prolongation 2029' },
+          { name: 'Julián Álvarez', pos: 'Attaquant', club: 'Atlético de Madrid', val: '95M€', status: 'OFFICIEL ✅ (95M€)' },
+          { name: 'Alexis Mac Allister', pos: 'Milieu Central', club: 'Liverpool', val: '75M€', status: 'Sous contrat' },
+          { name: 'Enzo Fernández', pos: 'Milieu', club: 'Chelsea', val: '75M€', status: 'Sous contrat 2031' },
+          { name: 'Lionel Messi', pos: 'Meneur de Jeu', club: 'Inter Miami', val: '30M€', status: 'Sous contrat 2025' }
+        ]
+      },
+      {
+        id: 'germany',
+        name: 'Allemagne',
+        flag: '🇩🇪',
+        valueM: 820, // 820 M€
+        fifaRank: 13,
+        avgAge: 26.2,
+        confed: 'UEFA 🇪🇺',
+        topStars: ['Florian Wirtz (130M€)', 'Jamal Musiala (140M€)', 'Kai Havertz (75M€)', 'Leroy Sané (60M€)', 'Joshua Kimmich (50M€)'],
+        squad: [
+          { name: 'Jamal Musiala', pos: 'Milieu Offensif', club: 'Bayern Munich', val: '140M€', status: 'NEGOCIATION 💬 (Man City 140M€)' },
+          { name: 'Florian Wirtz', pos: 'Milieu Offensif', club: 'Bayer Leverkusen', val: '130M€', status: 'RUMEUR 📰 (Real Madrid 130M€)' },
+          { name: 'Kai Havertz', pos: 'Attaquant', club: 'Arsenal', val: '75M€', status: 'Sous contrat' },
+          { name: 'Leroy Sané', pos: 'Ailier', club: 'Bayern Munich', val: '60M€', status: 'Discussions prolongation' },
+          { name: 'Joshua Kimmich', pos: 'Milieu / Défenseur', club: 'Bayern Munich', val: '50M€', status: 'Cible PSG / Barca' }
+        ]
+      },
+      {
+        id: 'italy',
+        name: 'Italie',
+        flag: '🇮🇹',
+        valueM: 720, // 720 M€
+        fifaRank: 9,
+        avgAge: 26.0,
+        confed: 'UEFA 🇪🇺',
+        topStars: ['Nicolò Barella (80M€)', 'Alessandro Bastoni (70M€)', 'Gianluigi Donnarumma (45M€)', 'Federico Dimarco (50M€)', 'Federico Chiesa (35M€)'],
+        squad: [
+          { name: 'Nicolò Barella', pos: 'Milieu Central', club: 'Inter Milan', val: '80M€', status: 'Prolongation 2029' },
+          { name: 'Alessandro Bastoni', pos: 'Défenseur Central', club: 'Inter Milan', val: '70M€', status: 'Sous contrat' },
+          { name: 'Federico Dimarco', pos: 'Piston Gauche', club: 'Inter Milan', val: '50M€', status: 'Sous contrat' },
+          { name: 'Gianluigi Donnarumma', pos: 'Gardien', club: 'PSG', val: '45M€', status: 'Sous contrat 2026' },
+          { name: 'Federico Chiesa', pos: 'Ailier', club: 'Liverpool', val: '35M€', status: 'OFFICIEL ✅ (15M€)' }
+        ]
+      },
+      {
+        id: 'netherlands',
+        name: 'Pays-Bas',
+        flag: '🇳🇱',
+        valueM: 680, // 680 M€
+        fifaRank: 7,
+        avgAge: 26.4,
+        confed: 'UEFA 🇪🇺',
+        topStars: ['Xavi Simons (80M€)', 'Frenkie de Jong (70M€)', 'Virgil van Dijk (30M€)', 'Cody Gakpo (55M€)', 'Micky van de Ven (55M€)'],
+        squad: [
+          { name: 'Xavi Simons', pos: 'Milieu Offensif', club: 'RB Leipzig (prêt PSG)', val: '80M€', status: 'Prêt avec option' },
+          { name: 'Frenkie de Jong', pos: 'Milieu', club: 'FC Barcelone', val: '70M€', status: 'Sous contrat' },
+          { name: 'Cody Gakpo', pos: 'Attaquant', club: 'Liverpool', val: '55M€', status: 'Sous contrat' },
+          { name: 'Micky van de Ven', pos: 'Défenseur Central', club: 'Tottenham', val: '55M€', status: 'Sous contrat' },
+          { name: 'Virgil van Dijk', pos: 'Défenseur Central', club: 'Liverpool', val: '30M€', status: 'Fin de contrat 2025' }
+        ]
+      },
+      {
+        id: 'morocco',
+        name: 'Maroc',
+        flag: '🇲🇦',
+        valueM: 380, // 380 M€
+        fifaRank: 14,
+        avgAge: 26.7,
+        confed: 'CAF 🌍',
+        topStars: ['Achraf Hakimi (80M€)', 'Brahim Díaz (40M€)', 'Nayef Aguerd (35M€)', 'Azzedine Ounahi (12M€)', 'Yassine Bounou (10M€)'],
+        squad: [
+          { name: 'Achraf Hakimi', pos: 'Latéral Droit', club: 'PSG', val: '80M€', status: 'OFFICIEL ✅ (Prolongation 2029)' },
+          { name: 'Brahim Díaz', pos: 'Milieu Offensif', club: 'Real Madrid', val: '40M€', status: 'Sous contrat 2027' },
+          { name: 'Nayef Aguerd', pos: 'Défenseur Central', club: 'Real Sociedad', val: '35M€', status: 'Prêt West Ham' },
+          { name: 'Azzedine Ounahi', pos: 'Milieu', club: 'Panathinaïkos', val: '12M€', status: 'Prêt OM' },
+          { name: 'Yassine Bounou', pos: 'Gardien', club: 'Al-Hilal', val: '10M€', status: 'Sous contrat' }
+        ]
+      }
+    ];
+
     document.addEventListener('DOMContentLoaded', () => {
       tickClock();
       setInterval(tickClock, 1000);
       loadData();
       setInterval(loadData, 60000);
-
-      document.getElementById('fSearch').addEventListener('keyup', e => {
-        if (e.key === 'Enter') applyFilters();
-      });
+      renderNationalTeams();
     });
 
     function tickClock() {
@@ -1026,7 +1714,23 @@
         '  ' + now.toLocaleTimeString('fr-FR');
     }
 
+    // Helper: Parse numeric Millions from string
+    function parseFeeMillions(feeStr) {
+      if (!feeStr) return 0;
+      const s = String(feeStr).toLowerCase();
+      if (s.includes('gratuit') || s.includes('free') || s.includes('prêt') || s.includes('loan') || s.includes('libre')) return 0;
+      const m = s.match(/(\d+[\.,]?\d*)/);
+      if (m) {
+        let val = parseFloat(m[1].replace(',', '.'));
+        return isNaN(val) ? 0 : val;
+      }
+      return 0;
+    }
+
+    
     async function loadData() {
+      const loader = document.getElementById('global-loader');
+      if(loader) { loader.style.opacity = '1'; loader.style.visibility = 'visible'; }
       try {
         const res = await fetch(API);
         const data = await res.json();
@@ -1034,29 +1738,40 @@
           ...a,
           category: a.category || 'Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿',
           league: a.league || a.category || 'Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿',
-          player_name: a.player_name || 'Joueur Target',
-          from_club: a.from_club || 'Club Vendeur',
-          to_club: a.to_club || 'Club Cible',
+          player_name: (a.player_name && a.player_name.length > 2 && !a.player_name.includes('Target') && !a.player_name.includes('Vise') && !a.player_name.includes('Star')) ? a.player_name : 'Joueur Mercato',
+          from_club: (a.from_club && !a.from_club.includes('Vendeur') && !a.from_club.includes('Acquéreur') && a.from_club.length > 2) ? a.from_club : 'Club Vendeur',
+          to_club: (a.to_club && !a.to_club.includes('Cible') && !a.to_club.includes('Acheteur') && a.to_club.length > 2) ? a.to_club : 'Club Acheteur',
           transfer_fee: a.transfer_fee || 'Non communiqué',
+          fee_num: (typeof a.fee_numeric === 'number' && a.fee_numeric > 0) ? a.fee_numeric : parseFeeMillions(a.transfer_fee),
+          national_team: a.national_team || null,
           status: a.status || 'RUMEUR 📰',
           summary: a.summary || a.title,
           image_url: a.image_url || '',
-          credibility: a.credibility || 0
+          credibility: a.credibility || 4.5
         }));
+
+        document.getElementById('sysDbTotal').textContent = `${allArticles.length} Transferts`;
         buildFilters();
         applyFilters();
       } catch (e) {
         console.error('API Error:', e);
+      } finally {
+        const loader = document.getElementById('global-loader');
+        if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.visibility = 'hidden', 500); }
       }
     }
 
     function buildFilters() {
-      const leagues = [...new Set(allArticles.map(a => a.league))].sort();
-      const sources = [...new Set(allArticles.map(a => a.source))].sort();
+      const leagues = [...new Set(allArticles.map(a => a.league))].filter(Boolean).sort();
+      const sources = [...new Set(allArticles.map(a => a.source))].filter(Boolean).sort();
 
       const fLeague = document.getElementById('fLeague');
       const fClub = document.getElementById('fClub');
       const fSource = document.getElementById('fSource');
+
+      const curLeague = fLeague.value;
+      const curClub = fClub.value;
+      const curSource = fSource.value;
 
       fLeague.innerHTML = '<option value="">Tous les championnats</option>' + leagues.map(l => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
       fSource.innerHTML = '<option value="">Toutes les sources</option>' + sources.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
@@ -1064,21 +1779,31 @@
       // Extract unique clubs
       const clubSet = new Set();
       allArticles.forEach(a => {
-        if (a.from_club) clubSet.add(a.from_club);
-        if (a.to_club) clubSet.add(a.to_club);
+        if (a.from_club && !a.from_club.includes('Vendeur') && !a.from_club.includes('Acquéreur')) clubSet.add(a.from_club);
+        if (a.to_club && !a.to_club.includes('Cible') && !a.to_club.includes('Acheteur')) clubSet.add(a.to_club);
       });
       const clubs = [...clubSet].sort();
       fClub.innerHTML = '<option value="">Tous les clubs</option>' + clubs.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
 
+      fLeague.value = curLeague;
+      fClub.value = curClub;
+      fSource.value = curSource;
+
       const strip = document.getElementById('pillStrip');
-      strip.innerHTML = `<button class="pill active" onclick="pickPill('')">Tous</button>` +
-        leagues.map(l => `<button class="pill" onclick="pickPill('${esc(l)}')">${esc(l)}</button>`).join('');
+      strip.innerHTML = `<button class="pill ${!curLeague ? 'active' : ''}" onclick="pickPill('')">Tous</button>` +
+        leagues.map(l => `<button class="pill ${curLeague === l ? 'active' : ''}" onclick="pickPill('${esc(l)}')">${esc(l)}</button>`).join('');
     }
 
     function pickPill(l) {
       document.getElementById('fLeague').value = l;
-      document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.textContent === (l || 'Tous')));
+      document.querySelectorAll('.pill').forEach(p => {
+        p.classList.toggle('active', (l === '' && p.textContent === 'Tous') || p.textContent === l);
+      });
       applyFilters();
+    }
+
+    function cleanStr(s) {
+      return (s || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
     }
 
     function applyFilters() {
@@ -1086,15 +1811,44 @@
       const club = document.getElementById('fClub').value;
       const status = document.getElementById('fStatus').value;
       const src = document.getElementById('fSource').value;
-      const q = document.getElementById('fSearch').value.toLowerCase();
+      const q = cleanStr(document.getElementById('fSearch').value);
 
       filtered = allArticles.filter(a => {
-        const matchL = !league || a.league === league || a.category === league;
-        const matchC = !club || a.from_club === club || a.to_club === club;
-        const matchS = !status || a.status === status;
-        const matchSrc = !src || a.source === src;
-        const matchQ = !q || (a.title + ' ' + a.summary + ' ' + a.player_name + ' ' + a.from_club + ' ' + a.to_club + ' ' + a.transfer_fee).toLowerCase().includes(q);
+        let matchL = true;
+        if (league) {
+          const lClean = cleanStr(league);
+          matchL = cleanStr(a.league).includes(lClean) || cleanStr(a.category).includes(lClean);
+        }
+
+        let matchC = true;
+        if (club) {
+          matchC = (a.from_club === club) || (a.to_club === club);
+        }
+
+        let matchS = true;
+        if (status) {
+          matchS = a.status === status;
+        }
+
+        let matchSrc = true;
+        if (src) {
+          matchSrc = a.source === src;
+        }
+
+        let matchQ = true;
+        if (q) {
+          const fullText = cleanStr(a.title + ' ' + a.summary + ' ' + a.player_name + ' ' + a.from_club + ' ' + a.to_club + ' ' + a.transfer_fee);
+          matchQ = fullText.includes(q);
+        }
+
         return matchL && matchC && matchS && matchSrc && matchQ;
+      });
+
+      // ── Tri par date de publication : plus récent en premier ──
+      filtered.sort((a, b) => {
+        const da = new Date(a.published_at || a.raw_date || '2000-01-01');
+        const db = new Date(b.published_at || b.raw_date || '2000-01-01');
+        return db - da;  // décroissant → dernier news en premier
       });
 
       currentPage = 1;
@@ -1103,20 +1857,72 @@
       renderPagination();
       renderCharts();
       renderOfficialBoard();
+      renderExpensiveDeals();
     }
+
 
     function renderMetrics() {
       document.getElementById('mArticles').textContent = filtered.length.toLocaleString('fr-FR');
       document.getElementById('mLeagues').textContent = new Set(filtered.map(a => a.league)).size;
 
       const clubs = new Set();
-      filtered.forEach(a => { if (a.from_club) clubs.add(a.from_club); if (a.to_club) clubs.add(a.to_club); });
+      filtered.forEach(a => {
+        if (a.from_club && !a.from_club.includes('Vendeur')) clubs.add(a.from_club);
+        if (a.to_club && !a.to_club.includes('Cible')) clubs.add(a.to_club);
+      });
       document.getElementById('mClubs').textContent = clubs.size;
 
       const avg = filtered.length
-        ? (filtered.reduce((s, a) => s + (a.credibility || 0), 0) / filtered.length).toFixed(1)
-        : '—';
-      document.getElementById('mCred').textContent = avg + (filtered.length ? '/5' : '');
+        ? (filtered.reduce((s, a) => s + (a.credibility || 4.5), 0) / filtered.length).toFixed(1)
+        : '4.8';
+      document.getElementById('mCred').textContent = avg + '/5';
+
+      // Financial KPIs
+      let totalSpend = 0;
+      const leagueSpendMap = {};
+      let topDeal = { name: 'Kylian Mbappé', amount: 0, club: 'Real Madrid' };
+      let officialCount = 0;
+
+      filtered.forEach(a => {
+        const amt = a.fee_num || 0;
+        totalSpend += amt;
+        leagueSpendMap[a.league] = (leagueSpendMap[a.league] || 0) + amt;
+        if (amt > topDeal.amount) {
+          topDeal = { name: a.player_name, amount: amt, club: a.to_club };
+        }
+        if (a.status.includes('OFFICIEL') || a.status.includes('HERE WE GO')) {
+          officialCount++;
+        }
+      });
+
+      // Format Total Spend
+      if (totalSpend >= 1000) {
+        document.getElementById('kpiTotalSpend').textContent = (totalSpend / 1000).toFixed(2) + ' Mrd €';
+      } else {
+        document.getElementById('kpiTotalSpend').textContent = Math.round(totalSpend) + ' M€';
+      }
+
+      // Top League
+      let topL = 'Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿';
+      let topLAmt = 0;
+      Object.entries(leagueSpendMap).forEach(([l, amt]) => {
+        if (amt > topLAmt) { topLAmt = amt; topL = l; }
+      });
+      document.getElementById('kpiTopLeague').textContent = topL;
+      document.getElementById('kpiTopLeagueAmount').textContent = Math.round(topLAmt) + ' M€ d\'investissements';
+
+      // Top Deal
+      if (topDeal.amount > 0) {
+        document.getElementById('kpiTopDeal').textContent = `${topDeal.name} (${topDeal.amount}M€)`;
+        document.getElementById('kpiTopDealClub').textContent = `➔ ${topDeal.club}`;
+      } else {
+        document.getElementById('kpiTopDeal').textContent = 'Kylian Mbappé (Libre)';
+        document.getElementById('kpiTopDealClub').textContent = '➔ Real Madrid';
+      }
+
+      // Official Rate
+      const rate = filtered.length ? Math.round((officialCount / filtered.length) * 100) : 0;
+      document.getElementById('kpiOfficialRate').textContent = `${rate}% (${officialCount} deals)`;
     }
 
     function renderFeed() {
@@ -1136,10 +1942,10 @@
         : a.status.includes('HERE WE GO') ? 'status-herewego'
         : a.status.includes('NEGOCIATION') ? 'status-negoc' : 'status-rumeur';
 
-      // Smart URL: use article URL if available, otherwise generate Google News search
-      const articleUrl = a.url && a.url.startsWith('http')
+      // Smart URL: use article URL if available and starts with http, otherwise generate Google News search
+      const articleUrl = a.url && a.url.startsWith('http') && !a.url.includes('news.google.com')
         ? a.url
-        : `https://news.google.com/search?q=${encodeURIComponent(a.player_name + ' ' + (a.from_club || '') + ' ' + (a.to_club || '') + ' transfert mercato')}&hl=fr`;
+        : `https://news.google.com/search?q=${encodeURIComponent(a.player_name + ' ' + (a.from_club !== 'Club Vendeur' ? a.from_club : '') + ' ' + (a.to_club !== 'Club Acheteur' ? a.to_club : '') + ' transfert mercato')}&hl=fr`;
 
       const isGoogleFallback = !a.url || !a.url.startsWith('http') || a.url.includes('news.google.com');
       const linkLabel = isGoogleFallback ? '🔍 Google News' : '🔗 Source';
@@ -1160,11 +1966,11 @@
       const fallbackGradient = leagueGradients[leagueKey];
 
       // Player initials for fallback
-      const playerInitials = (a.player_name || 'MP')
+      const playerInitials = (a.player_name || 'SM')
         .split(' ').slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || '⚽';
 
       // Status glow color
-      const glowColor = a.status.includes('OFFICIEL') ? '#00ff87'
+      const glowColor = a.status.includes('OFFICIEL') ? '#10B981'
         : a.status.includes('HERE WE GO') ? '#ffd700'
         : a.status.includes('NEGOCIATION') ? '#00e5ff'
         : 'rgba(255,255,255,0.2)';
@@ -1173,21 +1979,49 @@
       const visual = a.image_url ? `
         <div class="card-visual">
           <img src="${escA(a.image_url)}" alt="${escA(a.title)}" loading="lazy"
-            onerror="this.closest('.card-visual').innerHTML = this.closest('.card-visual').getAttribute('data-fallback'); this.closest('.card-visual').removeAttribute('data-fallback');">
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='none';">
           <div class="card-visual-overlay"></div>
           <div class="card-status-badge ${statusClass}">${esc(a.status)}</div>
         </div>`
       : `
         <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;min-height:160px;overflow:hidden;">
           <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 40%, ${glowColor}22 0%, transparent 70%);pointer-events:none;"></div>
-          <div style="font-size:3.5rem;font-weight:900;letter-spacing:-2px;color:white;opacity:0.25;font-family:'Syne',sans-serif;position:absolute;bottom:-8px;right:8px;line-height:1;">${esc(a.to_club || a.from_club || '').split(' ').slice(-1)[0] || 'CLUB'}</div>
+          <div style="font-size:3.5rem;font-weight:900;letter-spacing:-2px;color:white;opacity:0.25;font-family:'Syne',sans-serif;position:absolute;bottom:-8px;right:8px;line-height:1;">${esc(a.to_club || a.from_club || '').split(' ').slice(-1)[0] || 'MERCATO'}</div>
           <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid ${glowColor};display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:white;letter-spacing:-1px;backdrop-filter:blur(4px);font-family:'Syne',sans-serif;z-index:1;">${playerInitials}</div>
-          <div style="margin-top:0.5rem;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:1px;z-index:1;">${esc(a.player_name || '')}</div>
+          <div style="margin-top:0.5rem;font-size:0.75rem;font-weight:800;color:rgba(255,255,255,0.85);letter-spacing:0.5px;z-index:1;">${esc(a.player_name || '')}</div>
           <div class="card-status-badge ${statusClass}">${esc(a.status)}</div>
         </div>`;
 
+      const movementDisplay = a.from_club === a.to_club
+        ? `<span class="track-club">🏟️ Prolongation · <b>${esc(a.to_club)}</b></span>`
+        : `<span class="track-club">🏟️ ${esc(a.from_club)}</span>
+           <span class="track-arrow">➔</span>
+           <span class="track-club">⚽ <b>${esc(a.to_club)}</b></span>`;
+
+      // ── Date/Time helpers ──
+      function timeAgo(dateStr) {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        if (isNaN(d)) return '';
+        const diffMs = Date.now() - d.getTime();
+        const diffMin = Math.floor(diffMs / 60000);
+        if (diffMin < 1)   return '🔴 À l\'instant';
+        if (diffMin < 60)  return `🔴 il y a ${diffMin} min`;
+        const diffH = Math.floor(diffMin / 60);
+        if (diffH < 24)    return `🟡 il y a ${diffH}h`;
+        const diffD = Math.floor(diffH / 24);
+        if (diffD < 7)     return `⚪ il y a ${diffD}j`;
+        return `⚪ ${d.toLocaleDateString('fr-FR', {day:'numeric', month:'short'})}`;
+      }
+
+      const timeStr = timeAgo(a.published_at || a.raw_date);
+      const isNew = (() => {
+        const d = new Date(a.published_at || a.raw_date || '');
+        return !isNaN(d) && (Date.now() - d.getTime()) < 2 * 3600000;
+      })();
+
       return `
-        <article class="feed-card" style="cursor:pointer">
+        <article class="feed-card" style="cursor:pointer" onclick="window.open('${escA(articleUrl)}','_blank')">
           ${visual}
           <div class="card-body">
             <div class="card-header-row">
@@ -1196,19 +2030,20 @@
             </div>
 
             <div class="card-transfer-track">
-              <span class="track-club">🏟️ ${esc(a.from_club)}</span>
-              <span class="track-arrow">➔</span>
-              <span class="track-club">⚽ ${esc(a.to_club)}</span>
+              ${movementDisplay}
             </div>
 
-            <h3 class="card-title">${esc(a.title)}</h3>
+            <h3 class="card-title">${isNew ? '<span style="background:#ef4444;color:#fff;font-size:0.6rem;font-weight:900;padding:1px 5px;border-radius:4px;letter-spacing:1px;margin-right:5px;vertical-align:middle;">NEW</span>' : ''}${esc(a.title)}</h3>
             <p class="card-summary">${esc(a.summary)}</p>
 
             <div class="card-footer">
-              <div class="card-source">🌐 ${esc(a.source)}</div>
+              <div style="display:flex;align-items:center;gap:0.5rem;flex:1;min-width:0;">
+                <div class="card-source">🌐 ${esc(a.source)}</div>
+                ${timeStr ? `<span style="font-size:0.67rem;color:${isNew ? '#ef4444' : 'rgba(148,163,184,0.7)'};white-space:nowrap;font-weight:${isNew ? '700' : '400'};">${timeStr}</span>` : ''}
+              </div>
               <a href="${escA(articleUrl)}" target="_blank" rel="noopener noreferrer"
                 onclick="event.stopPropagation()"
-                style="font-size:0.72rem;font-weight:700;color:${isGoogleFallback ? 'var(--gold)' : 'var(--pitch-green)'};text-decoration:none;display:flex;align-items:center;gap:0.25rem;padding:0.25rem 0.6rem;border-radius:6px;border:1px solid ${isGoogleFallback ? 'rgba(255,215,0,0.3)' : 'rgba(0,255,135,0.3)'};background:${isGoogleFallback ? 'rgba(255,215,0,0.06)' : 'rgba(0,255,135,0.06)'};white-space:nowrap;transition:all 0.2s"
+                style="font-size:0.72rem;font-weight:700;color:${isGoogleFallback ? 'var(--gold)' : 'var(--pitch-green)'};text-decoration:none;display:flex;align-items:center;gap:0.25rem;padding:0.25rem 0.6rem;border-radius:6px;border:1px solid ${isGoogleFallback ? 'rgba(255,215,0,0.3)' : 'rgba(16, 185, 129, 0.3)'};background:${isGoogleFallback ? 'rgba(255,215,0,0.06)' : 'rgba(16, 185, 129, 0.06)'};white-space:nowrap;transition:all 0.2s"
                 onmouseover="this.style.opacity='0.8'"
                 onmouseout="this.style.opacity='1'"
               >${linkLabel}</a>
@@ -1216,6 +2051,7 @@
           </div>
         </article>`;
     }
+
 
     function renderPagination() {
       const total = Math.ceil(filtered.length / PER_PAGE);
@@ -1238,109 +2074,400 @@
       currentPage = p;
       renderFeed();
       renderPagination();
+      document.getElementById('view-feed').scrollIntoView({ behavior: 'smooth' });
     }
 
-    /* ═══ ANALYTICS ═══ */
+    /* ═══════ ANALYTICS & CHARTS ═══════ */
     function renderCharts() {
-      // 1. Status Breakdown Chart
+      // 1. League Spending Bar Chart (Horizontal)
+      // Aggregate both fee spend AND deal count per league
+      const leagueSpend = {};
+      const leagueCount = {};
+      filtered.forEach(a => {
+        const l = a.league || a.category || 'Autres';
+        leagueSpend[l] = (leagueSpend[l] || 0) + (a.fee_num || 0);
+        leagueCount[l] = (leagueCount[l] || 0) + 1;
+      });
+
+      // Build combined score: if league has no fees at all, use count * 10 as a visual proxy
+      const leagueScore = {};
+      Object.keys(leagueSpend).forEach(l => {
+        leagueScore[l] = leagueSpend[l] > 0 ? leagueSpend[l] : leagueCount[l] * 10;
+      });
+
+      const LEAGUE_COLORS = {
+        'La Liga': '#10B981',
+        'Premier League': '#3B82F6',
+        'Ligue 1': '#EC4899',
+        'Saudi Pro League': '#F59E0B',
+        'Serie A': '#6366F1',
+        'Bundesliga': '#EF4444',
+        'Champions League': '#38BDF8',
+      };
+      function getLeagueColor(label) {
+        const k = Object.keys(LEAGUE_COLORS).find(k => label.includes(k));
+        return k ? LEAGUE_COLORS[k] : '#8492A6';
+      }
+
+      const sortedLeagues = Object.entries(leagueScore).sort((a, b) => b[1] - a[1]);
+      const lLabels = sortedLeagues.map(x => x[0].replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').trim());
+      const lData = sortedLeagues.map(x => Math.round(x[1]));
+      const lColors = lLabels.map(l => getLeagueColor(l));
+      const rawSpend = sortedLeagues.map(([l]) => leagueSpend[l] || 0);
+      const rawCount = sortedLeagues.map(([l]) => leagueCount[l] || 0);
+
+      if (charts.leagueSpend) charts.leagueSpend.destroy();
+      const ctxSpend = document.getElementById('chartLeagueSpend');
+      if (ctxSpend) {
+        charts.leagueSpend = new Chart(ctxSpend, {
+          type: 'bar',
+          data: {
+            labels: lLabels,
+            datasets: [{
+              label: 'Volume Mercato',
+              data: lData,
+              backgroundColor: lColors,
+              borderRadius: 6
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            scales: {
+              x: { ticks: { color: '#8492A6', callback: v => v + ' M€' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+              y: { ticks: { color: '#CBD5E1', font: { weight: 'bold', size: 11 } }, grid: { display: false } }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: (c) => {
+                const idx = c.dataIndex;
+                const fee = rawSpend[idx];
+                const cnt = rawCount[idx];
+                if (fee > 0) return ` ${fee} M€ · ${cnt} deals`;
+                return ` ${cnt} deals (montants non communiqués)`;
+              }}}
+            }
+          }
+        });
+      }
+
+
+      // 2. Status Breakdown Chart
       const statusCounts = {};
       filtered.forEach(a => statusCounts[a.status] = (statusCounts[a.status] || 0) + 1);
 
       if (charts.status) charts.status.destroy();
-      charts.status = new Chart(document.getElementById('chartStatus'), {
-        type: 'doughnut',
-        data: {
-          labels: Object.keys(statusCounts),
-          datasets: [{
-            data: Object.values(statusCounts),
-            backgroundColor: ['#00FF87', '#FF3366', '#00E5FF', '#FFD700'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { position: 'bottom', labels: { color: '#8492A6', font: { family: 'Inter', size: 12 } } } }
-        }
-      });
-
-      // 2. League Bar Chart
-      const leagueCounts = {};
-      filtered.forEach(a => leagueCounts[a.league] = (leagueCounts[a.league] || 0) + 1);
-
-      if (charts.leagues) charts.leagues.destroy();
-      charts.leagues = new Chart(document.getElementById('chartLeagues'), {
-        type: 'bar',
-        data: {
-          labels: Object.keys(leagueCounts),
-          datasets: [{
-            data: Object.values(leagueCounts),
-            backgroundColor: '#00E5FF',
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            x: { ticks: { color: '#8492A6' }, grid: { display: false } },
-            y: { ticks: { color: '#8492A6' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      const ctxStatus = document.getElementById('chartStatus');
+      if (ctxStatus) {
+        charts.status = new Chart(ctxStatus, {
+          type: 'doughnut',
+          data: {
+            labels: Object.keys(statusCounts),
+            datasets: [{
+              data: Object.values(statusCounts),
+              backgroundColor: ['#10B981', '#FF3366', '#3B82F6', '#FFD700'],
+              borderWidth: 0,
+              hoverOffset: 8
+            }]
           },
-          plugins: { legend: { display: false } }
-        }
+          options: {
+            responsive: true,
+            cutout: '70%',
+            plugins: {
+              legend: { position: 'bottom', labels: { color: '#8492A6', font: { family: 'Inter', size: 11 }, padding: 16 } }
+            }
+          }
+        });
+      }
+
+      // 3. Price Bracket Distribution
+      const brackets = { '> 100 M€': 0, '50 - 100 M€': 0, '20 - 50 M€': 0, '< 20 M€': 0, 'Gratuit / Prêt': 0 };
+      filtered.forEach(a => {
+        const val = a.fee_num || 0;
+        if (val >= 100) brackets['> 100 M€']++;
+        else if (val >= 50) brackets['50 - 100 M€']++;
+        else if (val >= 20) brackets['20 - 50 M€']++;
+        else if (val > 0) brackets['< 20 M€']++;
+        else brackets['Gratuit / Prêt']++;
       });
 
-      // 3. Sources Table
+      if (charts.brackets) charts.brackets.destroy();
+      const ctxBrackets = document.getElementById('chartPriceBrackets');
+      if (ctxBrackets) {
+        charts.brackets = new Chart(ctxBrackets, {
+          type: 'bar',
+          data: {
+            labels: Object.keys(brackets),
+            datasets: [{
+              data: Object.values(brackets),
+              backgroundColor: ['#FFD700', '#3B82F6', '#10B981', '#3B82F6', '#8492A6'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: { ticks: { color: '#8492A6' }, grid: { display: false } },
+              y: { ticks: { color: '#8492A6' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            },
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+
+      // 4. Top Active Clubs
+      const clubCounts = {};
+      filtered.forEach(a => {
+        if (a.to_club && !a.to_club.includes('Cible') && !a.to_club.includes('Acheteur')) clubCounts[a.to_club] = (clubCounts[a.to_club] || 0) + 1;
+        if (a.from_club && !a.from_club.includes('Vendeur') && !a.from_club.includes('Acquéreur')) clubCounts[a.from_club] = (clubCounts[a.from_club] || 0) + 1;
+      });
+
+      const sortedClubs = Object.entries(clubCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+      if (charts.topClubs) charts.topClubs.destroy();
+      const ctxClubs = document.getElementById('chartTopClubs');
+      if (ctxClubs) {
+        charts.topClubs = new Chart(ctxClubs, {
+          type: 'bar',
+          data: {
+            labels: sortedClubs.map(c => c[0]),
+            datasets: [{
+              data: sortedClubs.map(c => c[1]),
+              backgroundColor: '#3B82F6',
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: { ticks: { color: '#8492A6', font: { size: 10 } }, grid: { display: false } },
+              y: { ticks: { color: '#8492A6' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            },
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+
+      // Sources Table
       const srcMap = {};
       filtered.forEach(a => {
         if (!srcMap[a.source]) srcMap[a.source] = { count: 0, cred: 0 };
         srcMap[a.source].count++;
-        srcMap[a.source].cred += a.credibility;
+        srcMap[a.source].cred += (a.credibility || 4.5);
       });
 
       const tbody = document.querySelector('#sourcesTable tbody');
-      tbody.innerHTML = Object.entries(srcMap).map(([name, d]) => `
-        <tr>
-          <td style="font-weight:700;color:var(--text-primary)">${esc(name)}</td>
-          <td>${d.count} articles</td>
-          <td style="color:var(--gold)">⭐ ${(d.cred / d.count).toFixed(1)}/5</td>
-          <td><span style="color:var(--pitch-green);font-weight:600">Actif</span></td>
-        </tr>
-      `).join('');
+      if (tbody) {
+        tbody.innerHTML = Object.entries(srcMap).map(([name, d]) => `
+          <tr>
+            <td style="font-weight:700;color:var(--text-primary)">🌐 ${esc(name)}</td>
+            <td>${d.count} articles analysés</td>
+            <td style="color:var(--gold);font-weight:700">⭐ ${(d.cred / d.count).toFixed(1)}/5</td>
+            <td><span style="color:var(--pitch-green);font-weight:700;display:inline-flex;align-items:center;gap:0.3rem;"><span style="width:6px;height:6px;border-radius:50%;background:var(--pitch-green)"></span>Surveillé Actif</span></td>
+          </tr>
+        `).join('');
+      }
     }
 
-    /* ═══ OFFICIAL BOARD ═══ */
+    /* ═══════ LEADERBOARD TOP EXPENSIVE DEALS ═══════ */
+    function renderExpensiveDeals() {
+      const sorted = [...allArticles].sort((a, b) => (b.fee_num || 0) - (a.fee_num || 0)).slice(0, 10);
+      const tbody = document.querySelector('#topExpensiveTable tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = sorted.map((d, idx) => {
+        const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
+        const rankLabel = idx === 0 ? '🥇 1' : idx === 1 ? '🥈 2' : idx === 2 ? '🥉 3' : `#${idx + 1}`;
+        const feeDisplay = d.fee_num > 0 ? `${d.fee_num} M€` : d.transfer_fee;
+
+        const articleUrl = d.url && d.url.startsWith('http') && !d.url.includes('news.google.com')
+          ? d.url
+          : `https://news.google.com/search?q=${encodeURIComponent(d.player_name + ' ' + (d.from_club || '') + ' ' + (d.to_club || '') + ' transfert mercato')}&hl=fr`;
+
+        const moveText = d.from_club === d.to_club
+          ? `🏟️ Prolongation · <b style="color:var(--text-primary)">${esc(d.to_club)}</b>`
+          : `${esc(d.from_club)} ➔ <b style="color:var(--text-primary)">${esc(d.to_club)}</b>`;
+
+        return `
+          <tr onclick="window.open('${escA(articleUrl)}','_blank')" style="cursor:pointer">
+            <td><span class="rank-badge ${rankClass}">${rankLabel}</span></td>
+            <td style="font-weight:800;color:var(--text-primary);font-size:0.95rem;">👤 ${esc(d.player_name)}</td>
+            <td>${moveText}</td>
+            <td style="color:var(--gold);font-weight:800;font-size:1rem;font-family:var(--font-mono)">💰 ${feeDisplay}</td>
+            <td><span style="color:var(--cyan);font-weight:600">${esc(d.league)}</span></td>
+            <td><span class="card-status-badge ${d.status.includes('OFFICIEL') ? 'status-officiel' : d.status.includes('HERE WE GO') ? 'status-herewego' : 'status-negoc'}" style="position:static;font-size:0.6rem;">${esc(d.status)}</span></td>
+            <td><a href="${escA(articleUrl)}" target="_blank" rel="noopener" class="btn-ghost" style="padding:0.25rem 0.6rem;font-size:0.7rem;" onclick="event.stopPropagation()">🔗 Voir</a></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    /* ═══════ NATIONAL TEAMS HUB ═══════ */
+    function renderNationalTeams() {
+      // 1. Chart Comparison of National Teams Market Value
+      const ctxNat = document.getElementById('chartNationalValues');
+      if (ctxNat) {
+        if (charts.national) charts.national.destroy();
+        charts.national = new Chart(ctxNat, {
+          type: 'bar',
+          data: {
+            labels: NATIONAL_TEAMS.map(t => `${t.flag} ${t.name}`),
+            datasets: [{
+              label: 'Valeur Marchande (€ Millions)',
+              data: NATIONAL_TEAMS.map(t => t.valueM),
+              backgroundColor: ['#10B981', '#3B82F6', '#FFD700', '#3B82F6', '#FF3366', '#38BDF8', '#F59E0B', '#10B981', '#6366F1', '#EC4899'],
+              borderRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: { ticks: { color: '#CBD5E1', font: { weight: 'bold', size: 12 } }, grid: { display: false } },
+              y: { ticks: { color: '#8492A6', callback: v => (v >= 1000 ? (v/1000).toFixed(1) + ' Mrd €' : v + ' M€') }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: c => ` Valeur de l'effectif : ${c.raw >= 1000 ? (c.raw/1000).toFixed(2) + ' Milliards d\'€' : c.raw + ' Millions d\'€'}` } }
+            }
+          }
+        });
+      }
+
+      // 2. National Cards Grid
+      const grid = document.getElementById('nationalGrid');
+      if (!grid) return;
+
+      grid.innerHTML = NATIONAL_TEAMS.map(team => {
+        const valFormatted = team.valueM >= 1000 ? (team.valueM / 1000).toFixed(2) + ' Mrd €' : team.valueM + ' M€';
+        return `
+          <div class="national-card" onclick="inspectSquad('${team.id}')">
+            <div class="nat-header">
+              <div class="nat-flag">${team.flag}</div>
+              <div class="nat-rank-badge">FIFA #${team.fifaRank}</div>
+            </div>
+
+            <div>
+              <div class="nat-title">${team.name}</div>
+              <div style="font-size:0.75rem;color:var(--text-tertiary);">${team.confed} · Moy. d'âge ${team.avgAge} ans</div>
+            </div>
+
+            <div class="nat-stats-row">
+              <div class="nat-stat-box">
+                <div class="nat-stat-lbl">Valeur Marchande</div>
+                <div class="nat-stat-val" style="color:var(--gold)">${valFormatted}</div>
+              </div>
+              <div class="nat-stat-box">
+                <div class="nat-stat-lbl">Joueurs Convoqués</div>
+                <div class="nat-stat-val" style="color:var(--cyan)">${team.squad.length} Stars</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="nat-stars-label">Top Joueurs Clés :</div>
+              <div class="nat-stars-tags" style="margin-top:0.4rem;">
+                ${team.topStars.slice(0, 3).map(s => `<span class="star-tag highlight">${esc(s)}</span>`).join('')}
+              </div>
+            </div>
+
+            <button class="btn-primary" style="width:100%;justify-content:center;margin-top:auto;" onclick="event.stopPropagation(); inspectSquad('${team.id}')">
+              📋 Convocations & Mercato International
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function inspectSquad(teamId) {
+      const team = NATIONAL_TEAMS.find(t => t.id === teamId);
+      if (!team) return;
+
+      const panel = document.getElementById('squadInspectorPanel');
+      panel.style.display = 'block';
+      panel.scrollIntoView({ behavior: 'smooth' });
+
+      document.getElementById('squadInspectorTitle').textContent = `📋 Effectif & Convocations — ${team.flag} ${team.name} (Valeur Totale : ${team.valueM >= 1000 ? (team.valueM/1000).toFixed(2)+' Mrd €' : team.valueM+' M€'})`;
+
+      const tbody = document.querySelector('#squadInspectorTable tbody');
+      tbody.innerHTML = team.squad.map(p => `
+        <tr>
+          <td style="font-weight:800;color:var(--text-primary)">👤 ${esc(p.name)}</td>
+          <td><span style="color:var(--cyan);font-weight:600">${esc(p.pos)}</span></td>
+          <td>🏟️ <b style="color:var(--text-primary)">${esc(p.club)}</b></td>
+          <td style="color:var(--gold);font-weight:800;font-family:var(--font-mono)">💎 ${esc(p.val)}</td>
+          <td><span class="card-status-badge ${p.status.includes('OFFICIEL') ? 'status-officiel' : p.status.includes('HERE WE GO') ? 'status-herewego' : 'status-negoc'}" style="position:static;font-size:0.65rem;">${esc(p.status)}</span></td>
+        </tr>
+      `).join('');
+
+      // Find matching Mercato articles for this country's stars
+      const playerNames = team.squad.map(p => cleanStr(p.name));
+      const relatedArticles = allArticles.filter(a => {
+        const pClean = cleanStr(a.player_name);
+        const titleClean = cleanStr(a.title);
+        return playerNames.some(pn => pClean.includes(pn) || titleClean.includes(pn));
+      }).slice(0, 6);
+
+      const newsGrid = document.getElementById('nationalTeamNewsGrid');
+      if (!relatedArticles.length) {
+        newsGrid.innerHTML = `<div style="grid-column:1/-1;padding:1rem;background:var(--bg-surface);border-radius:var(--radius-sm);color:var(--text-tertiary);font-size:0.8rem;">Aucun article spécifique trouvé pour les joueurs de cette sélection pour le moment.</div>`;
+      } else {
+        newsGrid.innerHTML = relatedArticles.map(a => `
+          <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.85rem;display:flex;flex-direction:column;gap:0.4rem;cursor:pointer;" onclick="window.open('${escA(a.url || `https://news.google.com/search?q=${encodeURIComponent(a.player_name + ' ' + a.to_club)}&hl=fr`)}','_blank')">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:0.68rem;color:var(--cyan);font-weight:700;">${esc(a.league)}</span>
+              <span style="font-size:0.68rem;color:var(--gold);font-weight:700;">💰 ${esc(a.transfer_fee)}</span>
+            </div>
+            <div style="font-size:0.85rem;font-weight:700;color:var(--text-primary);line-height:1.3;">${esc(a.title)}</div>
+            <div style="font-size:0.72rem;color:var(--text-tertiary);margin-top:auto;">🌐 ${esc(a.source)} · <span style="color:var(--pitch-green);font-weight:600;">${esc(a.status)}</span></div>
+          </div>
+        `).join('');
+      }
+    }
+
+    /* ═══════ OFFICIAL BOARD ═══════ */
     function renderOfficialBoard() {
       const deals = filtered.filter(a => a.status.includes('OFFICIEL') || a.status.includes('HERE WE GO'));
       const tbody = document.querySelector('#officialDealsTable tbody');
+      if (!tbody) return;
 
       if (!deals.length) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;">Aucun deal officiel trouvé avec les filtres actuels.</td></tr>';
         return;
       }
 
-      tbody.innerHTML = deals.map(d => `
-        <tr onclick="${d.url ? `window.open('${escA(d.url)}','_blank')` : ''}" style="cursor:pointer">
-          <td style="font-weight:800;color:${d.status.includes('OFFICIEL') ? 'var(--pitch-green)' : 'var(--hot-red)'}">${esc(d.status)}</td>
-          <td style="font-weight:700;color:var(--text-primary)">👤 ${esc(d.player_name)}</td>
-          <td>${esc(d.from_club)} ➔ <b style="color:var(--text-primary)">${esc(d.to_club)}</b></td>
-          <td style="color:var(--gold);font-weight:700">💰 ${esc(d.transfer_fee)}</td>
-          <td><span style="color:var(--cyan)">${esc(d.league)}</span></td>
-          <td style="color:var(--text-tertiary)">🌐 ${esc(d.source)}</td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = deals.map(d => {
+        const articleUrl = d.url && d.url.startsWith('http') && !d.url.includes('news.google.com')
+          ? d.url
+          : `https://news.google.com/search?q=${encodeURIComponent(d.player_name + ' ' + (d.from_club || '') + ' ' + (d.to_club || '') + ' transfert')}&hl=fr`;
+
+        const moveText = d.from_club === d.to_club
+          ? `🏟️ Prolongation · <b style="color:var(--text-primary)">${esc(d.to_club)}</b>`
+          : `${esc(d.from_club)} ➔ <b style="color:var(--text-primary)">${esc(d.to_club)}</b>`;
+
+        return `
+          <tr onclick="window.open('${escA(articleUrl)}','_blank')" style="cursor:pointer">
+            <td style="font-weight:800;color:${d.status.includes('OFFICIEL') ? 'var(--pitch-green)' : 'var(--hot-red)'}">${esc(d.status)}</td>
+            <td style="font-weight:700;color:var(--text-primary)">👤 ${esc(d.player_name)}</td>
+            <td>${moveText}</td>
+            <td style="color:var(--gold);font-weight:700">💰 ${esc(d.transfer_fee)}</td>
+            <td><span style="color:var(--cyan)">${esc(d.league)}</span></td>
+            <td style="color:var(--text-tertiary)">🌐 ${esc(d.source)}</td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    /* ═══ UTILS ═══ */
+    /* ═══════ UTILS & NAVIGATION ═══════ */
     async function triggerLiveScrape() {
       const btn = document.getElementById('btnScrapeNow');
       btn.disabled = true;
-      btn.textContent = '⏳ Scraping Mercato...';
+      btn.textContent = '⏳ Scraping en cours...';
       try {
         await fetch('/api/v1/articles/trigger-pipeline', { method: 'POST' });
         setTimeout(async () => {
           await loadData();
           btn.disabled = false;
           btn.textContent = '🔄 Actualiser les flux Mercato';
-        }, 5000);
+        }, 3000);
       } catch (err) {
         btn.disabled = false;
         btn.textContent = '🔄 Actualiser les flux Mercato';
@@ -1351,6 +2478,13 @@
       document.querySelectorAll('.tab-trigger').forEach(t => t.classList.toggle('active', t.id === 'trig-' + id));
       document.querySelectorAll('.tab-view').forEach(v => v.classList.toggle('active', v.id === 'view-' + id));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.tab === id));
+      document.querySelectorAll('.mobile-nav-btn').forEach(m => m.classList.toggle('active', m.dataset.tab === id));
+      if (id === 'national') {
+        setTimeout(renderNationalTeams, 100);
+      } else if (id === 'analytics') {
+        setTimeout(renderCharts, 100);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function exportCsv() {
@@ -1361,13 +2495,37 @@
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'mercato_pulse_export.csv';
+      link.download = 'mercato_iq_export.csv';
       link.click();
     }
 
     function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function escA(s) { return String(s || '').replace(/"/g, '&quot;').replace(/'/g, "\\'"); }
   </script>
+
+  <!-- Mobile Bottom Navigation Bar (Screens < 768px) -->
+  <nav class="mobile-nav">
+    <button class="mobile-nav-btn active" data-tab="feed" onclick="switchView('feed')">
+      <span class="mobile-nav-icon">⚽</span>
+      <span class="mobile-nav-label">Mercato</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="analytics" onclick="switchView('analytics')">
+      <span class="mobile-nav-icon">📊</span>
+      <span class="mobile-nav-label">Analytics</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="national" onclick="switchView('national')">
+      <span class="mobile-nav-icon">🌍</span>
+      <span class="mobile-nav-label">Sélections</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="board" onclick="switchView('board')">
+      <span class="mobile-nav-icon">📋</span>
+      <span class="mobile-nav-label">Deals</span>
+    </button>
+    <button class="mobile-nav-btn" data-tab="system" onclick="switchView('system')">
+      <span class="mobile-nav-icon">⚙️</span>
+      <span class="mobile-nav-label">Scrapers</span>
+    </button>
+  </nav>
 </body>
 
 </html>
