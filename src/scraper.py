@@ -664,8 +664,8 @@ try:
     for category, entities in VIP_PLAYERS.items():
         for chunk in _chunk_list(entities, 5):
             names = [f'"{e[1]}"' for e in chunk]
-            # Feed 1: French (when:7d)
-            query_fr = f"({' OR '.join(names)}) (transfer OR mercato OR fichajes) when:7d"
+            # Feed 1: French (when:24h)
+            query_fr = f"({' OR '.join(names)}) (transfer OR mercato OR fichajes) when:24h"
             url_fr = f"https://news.google.com/rss/search?q={urllib.parse.quote(query_fr)}&hl=fr&gl=FR&ceid=FR:fr"
             SOURCES.append({
                 "name": f"VIP Search FR ({chunk[0][0]}...)",
@@ -674,8 +674,8 @@ try:
                 "category_default": category,
                 "credibility": 0.85
             })
-            # Feed 2: English (when:7d)
-            query_en = f"({' OR '.join(names)}) (transfer OR signing OR deal OR bid OR loan) when:7d"
+            # Feed 2: English (when:24h)
+            query_en = f"({' OR '.join(names)}) (transfer OR signing OR deal OR bid OR loan) when:24h"
             url_en = f"https://news.google.com/rss/search?q={urllib.parse.quote(query_en)}&hl=en-GB&gl=GB&ceid=GB:en"
             SOURCES.append({
                 "name": f"VIP Search EN ({chunk[0][0]}...)",
@@ -688,7 +688,7 @@ try:
     for category, entities in VIP_MANAGERS.items():
         for chunk in _chunk_list(entities, 5):
             names = [f'"{e[1]}"' for e in chunk]
-            query = f"({' OR '.join(names)}) (transfer OR mercato OR manager) when:7d"
+            query = f"({' OR '.join(names)}) (transfer OR mercato OR manager) when:24h"
             url = f"https://news.google.com/rss/search?q={urllib.parse.quote(query)}&hl=fr&gl=FR&ceid=FR:fr"
             SOURCES.append({
                 "name": f"Coach Search ({chunk[0][0]}...)",

@@ -29,7 +29,7 @@ class ScraperScheduler:
         if self.scheduler.get_job("scrape_job"):
             return
             
-        interval_minutes = int(os.getenv("SCRAPE_INTERVAL_MINUTES", "15"))
+        interval_minutes = int(os.getenv("SCRAPE_INTERVAL_MINUTES", "5"))
         
         if interval_minutes > 0:
             # Mode Ultra-Rapide / Haute Fréquence (ex: toutes les 15 minutes)
