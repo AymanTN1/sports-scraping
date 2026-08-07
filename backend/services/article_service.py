@@ -72,6 +72,12 @@ class ArticleService:
 
     @staticmethod
     def _serialize_article(article) -> ArticleItem:
+        from src.ai_organizer import parse_numeric_fee, PLAYER_NATIONALITY
+        fee_str = getattr(article, "transfer_fee", None) or ""
+        fee_num = parse_numeric_fee(fee_str)
+        player = getattr(article, "player_name", None) or ""
+        nat_team = PLAYER_NATIONALITY.get(player, None)
+
         return ArticleItem(
             id=article.id,
             title=article.title,
@@ -79,11 +85,13 @@ class ArticleService:
             source_meta=SourceItem.model_validate(article.source) if article.source else None,
             category=article.category or "Premier League",
             sentiment=getattr(article, "sentiment", "Neutre") or "Neutre",
-            player_name=getattr(article, "player_name", None),
+            player_name=player or None,
+            national_team=nat_team,
             from_club=getattr(article, "from_club", None),
             to_club=getattr(article, "to_club", None),
             league=getattr(article, "league", None) or article.category,
-            transfer_fee=getattr(article, "transfer_fee", None),
+            transfer_fee=fee_str or None,
+            fee_numeric=fee_num,
             status=getattr(article, "status", "RUMEUR 📰") or "RUMEUR 📰",
             date=article.raw_date,
             published_at=article.published_at,

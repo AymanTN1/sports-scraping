@@ -15,10 +15,12 @@ class ArticleItem(BaseModel):
     category: str
     sentiment: str | None = "Neutre"
     player_name: str | None = None
+    national_team: str | None = None
     from_club: str | None = None
     to_club: str | None = None
     league: str | None = None
     transfer_fee: str | None = None
+    fee_numeric: float = 0.0
     status: str | None = "RUMEUR 📰"
     date: str | None = None
     published_at: datetime | None = None
