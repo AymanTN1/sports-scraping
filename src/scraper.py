@@ -661,45 +661,99 @@ try:
         for i in range(0, len(lst), n):
             yield lst[i:i + n]
             
+    # Dictionnaire des mots-clés de transferts par langue
+    TRANSFER_KEYWORDS = {
+        "fr": "(transfert OR mercato OR rumeur OR signature OR recrue OR prêt)",
+        "en": "(transfer OR signing OR deal OR bid OR loan OR rumor OR target OR fee)",
+        "es": "(fichaje OR traspaso OR mercado OR fichajes OR cesión OR rumor)",
+        "it": "(calciomercato OR acquisto OR trattativa OR prestito OR ingaggio)",
+        "de": "(wechsel OR transfer OR neuzugang OR gerücht OR ablöse)",
+        "ar": "(انتقال OR صفقة OR ميركاتو OR توقيع OR إعارة)"
+    }
+
+    # Configuration des éditions locales Google News par catégorie
+    CATEGORY_LANG_CONFIGS = {
+        "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿": [
+            ("en", "hl=en-GB&gl=GB&ceid=GB:en", "VIP EN"),
+            ("fr", "hl=fr&gl=FR&ceid=FR:fr", "VIP FR"),
+            ("es", "hl=es&gl=ES&ceid=ES:es", "VIP ES")
+        ],
+        "La Liga 🇪🇸": [
+            ("es", "hl=es&gl=ES&ceid=ES:es", "VIP ES"),
+            ("fr", "hl=fr&gl=FR&ceid=FR:fr", "VIP FR"),
+            ("en", "hl=en-GB&gl=GB&ceid=GB:en", "VIP EN")
+        ],
+        "Serie A 🇮🇹": [
+            ("it", "hl=it&gl=IT&ceid=IT:it", "VIP IT"),
+            ("fr", "hl=fr&gl=FR&ceid=FR:fr", "VIP FR"),
+            ("en", "hl=en-GB&gl=GB&ceid=GB:en", "VIP EN")
+        ],
+        "Bundesliga 🇩🇪": [
+            ("de", "hl=de&gl=DE&ceid=DE:de", "VIP DE"),
+            ("fr", "hl=fr&gl=FR&ceid=FR:fr", "VIP FR"),
+            ("en", "hl=en-GB&gl=GB&ceid=GB:en", "VIP EN")
+        ],
+        "Ligue 1 🇫🇷": [
+            ("fr", "hl=fr&gl=FR&ceid=FR:fr", "VIP FR"),
+            ("en", "hl=en-GB&gl=GB&ceid=GB:en", "VIP EN"),
+            ("es", "hl=es&gl=ES&ceid=ES:es", "VIP ES")
+        ],
+        "Saudi Pro League 🇸🇦": [
+            ("ar", "hl=ar&gl=SA&ceid=SA:ar", "VIP AR"),
+            ("en", "hl=en-GB&gl=GB&ceid=GB:en", "VIP EN"),
+            ("fr", "hl=fr&gl=FR&ceid=FR:fr", "VIP FR")
+        ]
+    }
+
+    # Fallback pour catégories secondaires
+    DEFAULT_LANG_CONFIGS = [
+        ("fr", "hl=fr&gl=FR&ceid=FR:fr", "VIP FR"),
+        ("en", "hl=en-GB&gl=GB&ceid=GB:en", "VIP EN")
+    ]
+
     for category, entities in VIP_PLAYERS.items():
+        configs = CATEGORY_LANG_CONFIGS.get(category, DEFAULT_LANG_CONFIGS)
         for chunk in _chunk_list(entities, 5):
             names = [f'"{e[1]}"' for e in chunk]
-            # Feed 1: French (when:24h)
-            query_fr = f"({' OR '.join(names)}) (transfer OR mercato OR fichajes) when:24h"
-            url_fr = f"https://news.google.com/rss/search?q={urllib.parse.quote(query_fr)}&hl=fr&gl=FR&ceid=FR:fr"
-            SOURCES.append({
-                "name": f"VIP Search FR ({chunk[0][0]}...)",
-                "url": url_fr,
-                "lang": "fr",
-                "category_default": category,
-                "credibility": 0.85
-            })
-            # Feed 2: English (when:24h)
-            query_en = f"({' OR '.join(names)}) (transfer OR signing OR deal OR bid OR loan) when:24h"
-            url_en = f"https://news.google.com/rss/search?q={urllib.parse.quote(query_en)}&hl=en-GB&gl=GB&ceid=GB:en"
-            SOURCES.append({
-                "name": f"VIP Search EN ({chunk[0][0]}...)",
-                "url": url_en,
-                "lang": "en",
-                "category_default": category,
-                "credibility": 0.88
-            })
+            names_query = f"({' OR '.join(names)})"
             
+            for lang_code, param_str, tag in configs:
+                kw = TRANSFER_KEYWORDS.get(lang_code, TRANSFER_KEYWORDS["fr"])
+                query = f"{names_query} {kw} when:24h"
+                url = f"https://news.google.com/rss/search?q={urllib.parse.quote(query)}&{param_str}"
+                SOURCES.append({
+                    "name": f"{tag} ({chunk[0][0]}...)",
+                    "url": url,
+                    "lang": lang_code,
+                    "category_default": category,
+                    "credibility": 0.88
+                })
+
     for category, entities in VIP_MANAGERS.items():
         for chunk in _chunk_list(entities, 5):
             names = [f'"{e[1]}"' for e in chunk]
-            query = f"({' OR '.join(names)}) (transfer OR mercato OR manager) when:24h"
-            url = f"https://news.google.com/rss/search?q={urllib.parse.quote(query)}&hl=fr&gl=FR&ceid=FR:fr"
+            names_query = f"({' OR '.join(names)})"
+            
+            # Recherche bilingue Entraîneurs (FR + EN)
+            query_fr = f"{names_query} {TRANSFER_KEYWORDS['fr']} when:24h"
             SOURCES.append({
-                "name": f"Coach Search ({chunk[0][0]}...)",
-                "url": url,
+                "name": f"Coach Search FR ({chunk[0][0]}...)",
+                "url": f"https://news.google.com/rss/search?q={urllib.parse.quote(query_fr)}&hl=fr&gl=FR&ceid=FR:fr",
                 "lang": "fr",
                 "category_default": "Entraîneurs 👔",
                 "credibility": 0.85
             })
-            
+            query_en = f"{names_query} {TRANSFER_KEYWORDS['en']} when:24h"
+            SOURCES.append({
+                "name": f"Coach Search EN ({chunk[0][0]}...)",
+                "url": f"https://news.google.com/rss/search?q={urllib.parse.quote(query_en)}&hl=en-GB&gl=GB&ceid=GB:en",
+                "lang": "en",
+                "category_default": "Entraîneurs 👔",
+                "credibility": 0.85
+            })
+
 except Exception as e:
-    print(f"⚠️ Erreur lors de l'intégration des VIPs: {e}")
+    print(f"⚠️ Erreur lors de l'intégration des VIPs multilingues: {e}")
 
 
 # ─────────────────────────────────────────────
