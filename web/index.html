@@ -329,6 +329,7 @@
       max-width: 1560px;
       width: 100%;
       margin: 0 auto;
+      overflow-x: hidden;
     }
 
     .tab-bar {
@@ -993,35 +994,117 @@
       line-height: 1;
     }
 
+    /* ═══════ RESPONSIVE — MOBILE PHONES (< 768px) ═══════ */
     @media (max-width: 768px) {
       .sidebar { display: none !important; }
       .mobile-nav { display: flex !important; }
-      .main-wrapper { min-width: 100%; width: 100%; padding-bottom: 72px; }
-      .topbar { padding: 0 0.75rem; height: 52px; gap: 0.5rem; }
-      .brand-wordmark { font-size: 1.1rem; flex-shrink: 0; }
+      .main-wrapper { min-width: 0; width: 100%; padding-bottom: 72px; }
+      
+      /* Topbar */
+      .topbar { padding: 0 0.65rem; height: 48px; gap: 0.4rem; }
+      .brand-wordmark { font-size: 1rem; flex-shrink: 0; }
       .status-chip { display: none; }
       #clock { display: none; }
-      #btnScrapeNow { font-size: 0.8rem !important; padding: 0.3rem 0.6rem !important; flex-shrink: 0; }
+      #btnScrapeNow { font-size: 0.8rem !important; padding: 0.25rem 0.5rem !important; flex-shrink: 0; }
       #btnScrapeNow span { display: none; }
-      .ticker-strip { height: 28px; font-size: 0.7rem; flex: 1; min-width: 0; }
+      .ticker-strip { height: 28px; font-size: 0.68rem; flex: 1; min-width: 0; }
+      
+      /* Hide desktop tabs — mobile nav replaces them */
       .tab-bar { display: none !important; }
-      .metrics-row { grid-template-columns: 1fr 1fr !important; gap: 0.65rem !important; }
-      .metric-card { padding: 0.85rem !important; }
-      .metric-value { font-size: 1.3rem !important; }
-      .metric-label { font-size: 0.7rem !important; }
-      .filters-row { grid-template-columns: 1fr !important; gap: 0.65rem !important; }
-      .search-box { width: 100% !important; }
-      .pill-strip { gap: 0.35rem !important; padding-bottom: 0.5rem !important; }
-      .pill { padding: 0.35rem 0.75rem !important; font-size: 0.75rem !important; }
-      .feed-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
-      .national-grid { grid-template-columns: 1fr !important; }
-      .deals-table-panel { padding: 0.85rem !important; }
-      .deals-table th, .deals-table td { padding: 0.5rem 0.4rem !important; font-size: 0.73rem !important; }
+      
+      /* Content area */
+      .content-area { padding: 0.85rem !important; }
+      
+      /* Metrics */
+      .metrics-row { grid-template-columns: 1fr 1fr !important; gap: 0.55rem !important; margin-bottom: 1rem !important; }
+      .metric-card { padding: 0.75rem !important; }
+      .metric-value { font-size: 1.2rem !important; word-break: break-word; }
+      .metric-label { font-size: 0.65rem !important; letter-spacing: 0.4px !important; }
+      .metric-hint { font-size: 0.65rem !important; }
+      
+      /* Filters */
+      .filters-row { grid-template-columns: 1fr 1fr !important; gap: 0.5rem !important; padding: 0.75rem !important; }
+      .f-group { min-width: 0 !important; }
+      .f-group label { font-size: 0.6rem !important; }
+      .f-select, .f-input { height: 34px !important; font-size: 0.78rem !important; }
+      .search-box { width: 100% !important; grid-column: span 2; }
+      .btn-primary, .btn-ghost { height: 34px !important; font-size: 0.78rem !important; padding: 0 0.75rem !important; }
+      
+      /* Pills */
+      .pill-strip { gap: 0.3rem !important; padding-bottom: 0.5rem !important; margin-bottom: 0.85rem !important; -webkit-overflow-scrolling: touch; }
+      .pill { padding: 0.3rem 0.65rem !important; font-size: 0.7rem !important; }
+      
+      /* Feed cards */
+      .feed-grid { grid-template-columns: 1fr !important; gap: 0.85rem !important; }
+      .card-visual { height: 140px !important; }
+      .card-body { padding: 0.85rem !important; }
+      .card-title { font-size: 0.88rem !important; -webkit-line-clamp: 2 !important; }
+      .card-summary { font-size: 0.76rem !important; -webkit-line-clamp: 2 !important; }
+      .card-footer { font-size: 0.68rem !important; }
+      
+      /* Analytics */
+      .analytics-layout { grid-template-columns: 1fr !important; gap: 0.85rem !important; }
+      .chart-panel { padding: 0.85rem !important; }
+      .chart-panel.full-width { grid-column: span 1 !important; }
+      .chart-heading { flex-direction: column !important; gap: 0.3rem !important; margin-bottom: 0.85rem !important; }
+      .chart-heading h3 { font-size: 0.88rem !important; }
+      .chart-heading span { font-size: 0.65rem !important; }
+      canvas { max-height: 220px !important; }
+      
+      /* National teams */
+      .national-grid { grid-template-columns: 1fr !important; gap: 0.75rem !important; }
+      .national-card { padding: 1rem !important; }
+      .nat-title { font-size: 1rem !important; }
+      
+      /* Deals table */
+      .deals-table-panel { padding: 0 !important; border-radius: var(--radius-md) !important; }
+      .deals-table-header { padding: 0.75rem 0.85rem !important; flex-direction: column !important; gap: 0.5rem !important; align-items: flex-start !important; }
+      .deals-table-header h2 { font-size: 0.9rem !important; }
+      .deals-table { font-size: 0.72rem !important; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .deals-table th { padding: 0.5rem 0.45rem !important; font-size: 0.6rem !important; white-space: nowrap; }
+      .deals-table td { padding: 0.55rem 0.45rem !important; font-size: 0.7rem !important; }
+      
+      /* Pagination */
+      .pagination-bar { gap: 0.25rem !important; }
+      .page-btn { width: 32px !important; height: 32px !important; font-size: 0.7rem !important; }
+      
+      /* Squad Inspector */
+      #squadInspectorPanel { margin-top: 1rem !important; }
+      #nationalTeamNewsGrid { grid-template-columns: 1fr !important; }
     }
 
+    /* ═══════ ULTRA SMALL PHONES (< 400px) ═══════ */
+    @media (max-width: 400px) {
+      .topbar { padding: 0 0.5rem; height: 44px; }
+      .brand-wordmark { font-size: 0.9rem; }
+      .ticker-strip { height: 24px; font-size: 0.62rem; }
+      .ticker-sym { font-size: 0.62rem !important; }
+      .content-area { padding: 0.65rem !important; }
+      .metrics-row { gap: 0.4rem !important; }
+      .metric-card { padding: 0.6rem !important; }
+      .metric-value { font-size: 1rem !important; }
+      .metric-label { font-size: 0.58rem !important; }
+      .filters-row { grid-template-columns: 1fr !important; }
+      .search-box { grid-column: span 1 !important; }
+      .mobile-nav { height: 56px; }
+      .mobile-nav-icon { font-size: 1rem; }
+      .mobile-nav-btn { font-size: 0.6rem; }
+    }
+
+    /* ═══════ TABLETS (769px – 1200px) ═══════ */
     @media (min-width: 769px) and (max-width: 1200px) {
       .feed-grid { grid-template-columns: repeat(2, 1fr) !important; }
       .metrics-row { grid-template-columns: repeat(2, 1fr) !important; }
+      .analytics-layout { grid-template-columns: 1fr 1fr !important; }
+      .chart-panel.full-width { grid-column: span 2 !important; }
+      .content-area { padding: 1.25rem !important; }
+    }
+
+    /* ═══════ LARGE DESKTOP / 4K (> 1800px) ═══════ */
+    @media (min-width: 1800px) {
+      .feed-grid { grid-template-columns: repeat(4, 1fr) !important; }
+      .metrics-row { grid-template-columns: repeat(4, 1fr) !important; }
+      .content-area { padding: 2.5rem 3rem !important; }
     }
 
     /* Loader Overlay */
