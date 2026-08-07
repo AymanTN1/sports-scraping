@@ -664,20 +664,31 @@ try:
     for category, entities in VIP_PLAYERS.items():
         for chunk in _chunk_list(entities, 5):
             names = [f'"{e[1]}"' for e in chunk]
-            query = f"({' OR '.join(names)}) (transfer OR mercato OR fichajes) when:24h"
-            url = f"https://news.google.com/rss/search?q={urllib.parse.quote(query)}&hl=fr&gl=FR&ceid=FR:fr"
+            # Feed 1: French (when:7d)
+            query_fr = f"({' OR '.join(names)}) (transfer OR mercato OR fichajes) when:7d"
+            url_fr = f"https://news.google.com/rss/search?q={urllib.parse.quote(query_fr)}&hl=fr&gl=FR&ceid=FR:fr"
             SOURCES.append({
-                "name": f"VIP Search ({chunk[0][0]}...)",
-                "url": url,
+                "name": f"VIP Search FR ({chunk[0][0]}...)",
+                "url": url_fr,
                 "lang": "fr",
                 "category_default": category,
                 "credibility": 0.85
+            })
+            # Feed 2: English (when:7d)
+            query_en = f"({' OR '.join(names)}) (transfer OR signing OR deal OR bid OR loan) when:7d"
+            url_en = f"https://news.google.com/rss/search?q={urllib.parse.quote(query_en)}&hl=en-GB&gl=GB&ceid=GB:en"
+            SOURCES.append({
+                "name": f"VIP Search EN ({chunk[0][0]}...)",
+                "url": url_en,
+                "lang": "en",
+                "category_default": category,
+                "credibility": 0.88
             })
             
     for category, entities in VIP_MANAGERS.items():
         for chunk in _chunk_list(entities, 5):
             names = [f'"{e[1]}"' for e in chunk]
-            query = f"({' OR '.join(names)}) (transfer OR mercato OR fichajes) when:24h"
+            query = f"({' OR '.join(names)}) (transfer OR mercato OR manager) when:7d"
             url = f"https://news.google.com/rss/search?q={urllib.parse.quote(query)}&hl=fr&gl=FR&ceid=FR:fr"
             SOURCES.append({
                 "name": f"Coach Search ({chunk[0][0]}...)",
@@ -847,6 +858,57 @@ HISTORICAL_MERCATO_DEALS = [
         "to_club": "Real Madrid",
         "transfer_fee": "130M€",
         "status": "RUMEUR 📰",
+        "sentiment": "Bullish"
+    },
+    {
+        "title": "RUMEUR : Liverpool négocie l'arrivée de Ronald Araújo en provenance du FC Barcelone pour 80M€",
+        "source": "Sky Sports Transfer Centre",
+        "url": "https://news.google.com/search?q=Ronald+Araujo+Liverpool+transfer+Barca&hl=en",
+        "raw_date": "2026-08-06",
+        "published_at": "2026-08-06T15:30:00Z",
+        "language": "en",
+        "summary": "Liverpool prépare une offre colossale de 80M€ pour convaincre le FC Barcelone de céder son défenseur central uruguayen Ronald Araújo.",
+        "image_url": "",
+        "category": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "player_name": "Ronald Araújo",
+        "from_club": "FC Barcelone",
+        "to_club": "Liverpool",
+        "transfer_fee": "80M€",
+        "status": "NEGOCIATION 💬",
+        "sentiment": "Bullish"
+    },
+    {
+        "title": "OFFICIEL : Nayef Aguerd rejoint la Real Sociedad en prêt de West Ham",
+        "source": "L'Équipe Mercato",
+        "url": "https://news.google.com/search?q=Nayef+Aguerd+Real+Sociedad+officiel&hl=fr",
+        "raw_date": "2026-08-05",
+        "published_at": "2026-08-05T11:00:00Z",
+        "language": "fr",
+        "summary": "Le défenseur international marocain Nayef Aguerd s'engage avec la Real Sociedad sous forme de prêt sans option d'achat en provenance de West Ham.",
+        "image_url": "",
+        "category": "La Liga 🇪🇸",
+        "player_name": "Nayef Aguerd",
+        "from_club": "West Ham",
+        "to_club": "Real Sociedad",
+        "transfer_fee": "Prêt",
+        "status": "OFFICIEL ✅",
+        "sentiment": "Neutre"
+    },
+    {
+        "title": "HERE WE GO : Viktor Gyökeres en route vers Arsenal pour 85M€",
+        "source": "CaughtOffside / Fabrizio Romano",
+        "url": "https://news.google.com/search?q=Viktor+Gyokeres+Arsenal+Here+We+Go&hl=en",
+        "raw_date": "2026-08-06",
+        "published_at": "2026-08-06T18:45:00Z",
+        "language": "en",
+        "summary": "Arsenal scelle un accord majeur avec le Sporting CP pour l’attaquant suédois Viktor Gyökeres contre 85M€.",
+        "image_url": "",
+        "category": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "player_name": "Viktor Gyökeres",
+        "from_club": "Sporting CP",
+        "to_club": "Arsenal",
+        "transfer_fee": "85M€",
+        "status": "HERE WE GO 🔥",
         "sentiment": "Bullish"
     },
     {
