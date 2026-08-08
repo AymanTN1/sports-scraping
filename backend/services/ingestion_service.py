@@ -148,13 +148,18 @@ class CsvIngestionService:
             if not sentiment:
                 sentiment = analyze_sentiment(title, summary)
 
-            if not player_name or not status:
-                extracted = extract_mercato_entities(title, summary)
-                player_name = player_name or extracted["player_name"]
-                from_club = from_club or extracted["from_club"]
-                to_club = to_club or extracted["to_club"]
-                transfer_fee = transfer_fee or extracted["transfer_fee"]
-                status = status or extracted["status"]
+            # Toujours appliquer le moteur NLP haute précision pour corriger inversions et placeholders
+            extracted = extract_mercato_entities(title, summary)
+            if not player_name or player_name in ["Joueur Star", "Joueur Mercato", "nan"]:
+                player_name = extracted["player_name"]
+            if not from_club or from_club in ["Club Vendeur", "Club Acquéreur", "nan"]:
+                from_club = extracted["from_club"]
+            if not to_club or to_club in ["Club Acheteur", "Club Cible", "nan"]:
+                to_club = extracted["to_club"]
+            if not status or status == "nan":
+                status = extracted["status"]
+            if not transfer_fee or transfer_fee == "nan":
+                transfer_fee = extracted.get("transfer_fee", "Non communiqué")
 
             external_key = self._build_external_key(source=source, title=title, raw_date=raw_date, url=url)
             if external_key in seen_keys:

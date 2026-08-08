@@ -2083,11 +2083,24 @@
           <div class="card-status-badge ${statusClass}" style="z-index:4;">${esc(a.status)}</div>
         </div>`;
 
-      const movementDisplay = a.from_club === a.to_club
-        ? `<span class="track-club">🏟️ Prolongation · <b>${esc(a.to_club)}</b></span>`
-        : `<span class="track-club">🏟️ ${esc(a.from_club)}</span>
-           <span class="track-arrow">➔</span>
-           <span class="track-club">⚽ <b>${esc(a.to_club)}</b></span>`;
+      // Clean up club names from any old placeholders
+      const cleanFrom = (a.from_club && !a.from_club.includes('Vendeur') && !a.from_club.includes('Acquéreur') && a.from_club !== 'nan') ? a.from_club.trim() : '';
+      const cleanTo = (a.to_club && !a.to_club.includes('Acheteur') && !a.to_club.includes('Cible') && a.to_club !== 'nan') ? a.to_club.trim() : '';
+
+      let movementDisplay = '';
+      if (cleanFrom && cleanTo && cleanFrom === cleanTo) {
+        movementDisplay = `<span class="track-club">🏟️ Prolongation · <b>${esc(cleanFrom)}</b></span>`;
+      } else if (cleanFrom && cleanTo) {
+        movementDisplay = `<span class="track-club">🏟️ ${esc(cleanFrom)}</span>
+                           <span class="track-arrow">➔</span>
+                           <span class="track-club">⚽ <b>${esc(cleanTo)}</b></span>`;
+      } else if (cleanTo) {
+        movementDisplay = `<span class="track-club">🎯 En approche vers ⚽ <b>${esc(cleanTo)}</b></span>`;
+      } else if (cleanFrom) {
+        movementDisplay = `<span class="track-club">🏟️ En départ de <b>${esc(cleanFrom)}</b> ➔ ⚽ En discussion</span>`;
+      } else {
+        movementDisplay = `<span class="track-club">⚡ Négociation Mercato en cours</span>`;
+      }
 
       // ── Date/Time helpers ──
       function timeAgo(dateStr) {

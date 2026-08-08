@@ -36,6 +36,7 @@ HEADERS = {
 CLUB_BADGES: Dict[str, str] = {
     "Manchester City": "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/500px-Manchester_City_FC_badge.svg.png",
     "Barcelona": "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/500px-FC_Barcelona_%28crest%29.svg.png",
+    "FC Barcelone": "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/500px-FC_Barcelona_%28crest%29.svg.png",
     "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/500px-Real_Madrid_CF.svg.png",
     "Liverpool": "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/500px-Liverpool_FC.svg.png",
     "Arsenal": "https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/500px-Arsenal_FC.svg.png",
@@ -48,20 +49,46 @@ CLUB_BADGES: Dict[str, str] = {
     "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/FC_Internazionale_Milano_2021.svg/500px-FC_Internazionale_Milano_2021.svg.png",
     "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_of_AC_Milan.svg/500px-Logo_of_AC_Milan.svg.png",
     "Atletico Madrid": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Atletico_Madrid_2017_logo.svg/500px-Atletico_Madrid_2017_logo.svg.png",
+    "Atlético de Madrid": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Atletico_Madrid_2017_logo.svg/500px-Atletico_Madrid_2017_logo.svg.png",
     "Tottenham": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b4/Tottenham_Hotspur.svg/500px-Tottenham_Hotspur.svg.png",
     "Newcastle": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Newcastle_United_Logo.svg/500px-Newcastle_United_Logo.svg.png",
     "Aston Villa": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/Aston_Villa_logo.svg/500px-Aston_Villa_logo.svg.png",
     "Sporting CP": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e1/Sporting_Clube_de_Portugal_%28Logo%29.svg/500px-Sporting_Clube_de_Portugal_%28Logo%29.svg.png",
     "Benfica": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/SL_Benfica_logo.svg/500px-SL_Benfica_logo.svg.png",
+    "SL Benfica": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/SL_Benfica_logo.svg/500px-SL_Benfica_logo.svg.png",
     "Porto": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/FC_Porto.svg/500px-FC_Porto.svg.png",
+    "FC Porto": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/FC_Porto.svg/500px-FC_Porto.svg.png",
     "Napoli": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/SSC_Napoli_2024_%28deep_blue_navy%29.svg/500px-SSC_Napoli_2024_%28deep_blue_navy%29.svg.png",
+    "AS Roma": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f7/AS_Roma_logo_%282017%29.svg/500px-AS_Roma_logo_%282017%29.svg.png",
+    "Roma": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f7/AS_Roma_logo_%282017%29.svg/500px-AS_Roma_logo_%282017%29.svg.png",
+    "SS Lazio": "https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/S.S._Lazio_badge.svg/500px-S.S._Lazio_badge.svg.png",
+    "Lazio": "https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/S.S._Lazio_badge.svg/500px-S.S._Lazio_badge.svg.png",
     "Dortmund": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/500px-Borussia_Dortmund_logo.svg.png",
+    "Borussia Dortmund": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/500px-Borussia_Dortmund_logo.svg.png",
     "Leverkusen": "https://upload.wikimedia.org/wikipedia/en/thumb/5/59/Bayer_04_Leverkusen_logo.svg/500px-Bayer_04_Leverkusen_logo.svg.png",
+    "Bayer Leverkusen": "https://upload.wikimedia.org/wikipedia/en/thumb/5/59/Bayer_04_Leverkusen_logo.svg/500px-Bayer_04_Leverkusen_logo.svg.png",
+    "RB Leipzig": "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/RB_Leipzig_2020_logo.svg/500px-RB_Leipzig_2020_logo.svg.png",
     "Marseille": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_de_Marseille_logo.svg/500px-Olympique_de_Marseille_logo.svg.png",
+    "Olympique de Marseille": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Olympique_de_Marseille_logo.svg/500px-Olympique_de_Marseille_logo.svg.png",
     "Lyon": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Olympique_Lyonnais.svg/500px-Olympique_Lyonnais.svg.png",
+    "Olympique Lyonnais": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Olympique_Lyonnais.svg/500px-Olympique_Lyonnais.svg.png",
+    "AS Monaco": "https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/AS_Monaco_FC.svg/500px-AS_Monaco_FC.svg.png",
+    "Monaco": "https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/AS_Monaco_FC.svg/500px-AS_Monaco_FC.svg.png",
     "Al-Hilal": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Al-Hilal_Saudi_Club_logo.svg/500px-Al-Hilal_Saudi_Club_logo.svg.png",
     "Al-Nassr": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Al_Nassr_FC_Logo.svg/500px-Al_Nassr_FC_Logo.svg.png",
     "Al-Ittihad": "https://upload.wikimedia.org/wikipedia/en/thumb/5/50/Al-Ittihad_Club_%28Jeddah%29_logo.svg/500px-Al-Ittihad_Club_%28Jeddah%29_logo.svg.png",
+    "Al-Ahli": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b8/Al-Ahli_Saudi_FC_logo.svg/500px-Al-Ahli_Saudi_FC_logo.svg.png",
+    "Galatasaray": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.svg/500px-Galatasaray_Sports_Club_Logo.svg.png",
+    "Fenerbahçe": "https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Fenerbah%C3%A7e_SK_logo.svg/500px-Fenerbah%C3%A7e_SK_logo.svg.png",
+    "Beşiktaş": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Besiktas_JK_logo.svg/500px-Besiktas_JK_logo.svg.png",
+    "Trabzonspor": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/Trabzonspor_Amblemi.png/500px-Trabzonspor_Amblemi.png",
+    "LA Galaxy": "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Los_Angeles_Galaxy_logo.svg/500px-Los_Angeles_Galaxy_logo.svg.png",
+    "Los Angeles Galaxy": "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Los_Angeles_Galaxy_logo.svg/500px-Los_Angeles_Galaxy_logo.svg.png",
+    "Inter Miami": "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Inter_Miami_CF_logo.svg/500px-Inter_Miami_CF_logo.svg.png",
+    "San Diego FC": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/San_Diego_FC_logo.svg/500px-San_Diego_FC_logo.svg.png",
+    "Real Sociedad": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/Real_Sociedad_logo.svg/500px-Real_Sociedad_logo.svg.png",
+    "Villarreal": "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Villarreal_CF_logo.svg/500px-Villarreal_CF_logo.svg.png",
+    "Athletic Bilbao": "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/500px-Club_Athletic_Bilbao_logo.svg.png",
 }
 
 _cache_lock = threading.Lock()
@@ -187,6 +214,15 @@ def fetch_player_photo_from_web(player_name: str) -> str:
                 img = p.get("strCutout") or p.get("strThumb") or p.get("strRender")
                 if img and img.startswith("http"):
                     return clean_image_url(img)
+    except Exception:
+        pass
+
+    # ── 3. Web Search & Wikipedia Summary Fallback (Ultra Robuste) ──
+    try:
+        from src.web_resolver import search_web_player_info
+        info = search_web_player_info(clean_name)
+        if info and info.get("photo"):
+            return clean_image_url(info["photo"])
     except Exception:
         pass
     
