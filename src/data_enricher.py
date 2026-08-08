@@ -273,20 +273,21 @@ def enrich_dataframe(
                 frame.at[row_index, "summary"] = summary
 
         if needs_better_image:
-            source_image = clean_text(page_data.get("image_url", ""))
-            source_caption = clean_text(page_data.get("image_caption", ""))
-            if is_remote_image(source_image):
-                frame.at[row_index, "image_url"] = source_image
-                frame.at[row_index, "image_caption"] = source_caption
-            elif is_wikipedia_image(current_image) and not article_like_url:
-                frame.at[row_index, "image_url"] = ""
-                frame.at[row_index, "image_caption"] = ""
-            elif not current_image or current_image == "nan":
-                wiki_lang = "ar" if lang == "ar" else "fr" if lang == "fr" else "en"
-                image_data = fetch_wikipedia_image(title, wiki_lang)
-                if image_data:
-                    frame.at[row_index, "image_url"] = image_data["url"]
-                    frame.at[row_index, "image_caption"] = image_data.get("caption", "")
+            try:
+                from src.photo_enricher import resolve_photo_for_article
+                best_img = resolve_photo_for_article(
+                    article_url=url,
+                    player_name=str(row.get("player_name", "")),
+                    to_club=str(row.get("to_club", "")),
+                    from_club=str(row.get("from_club", "")),
+                    current_image=current_image,
+                )
+                if best_img:
+                    frame.at[row_index, "image_url"] = best_img
+            except Exception:
+                source_image = clean_text(page_data.get("image_url", ""))
+                if is_remote_image(source_image):
+                    frame.at[row_index, "image_url"] = source_image
 
         time.sleep(0.3)
 

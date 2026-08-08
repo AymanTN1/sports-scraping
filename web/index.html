@@ -596,9 +596,10 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      object-position: center 20%;
+      transition: transform 0.4s ease, opacity 0.3s ease;
     }
-    .feed-card:hover .card-visual img { transform: scale(1.04); }
+    .feed-card:hover .card-visual img { transform: scale(1.05); }
 
     .card-visual-overlay {
       position: absolute;
@@ -2058,21 +2059,28 @@
         : a.status.includes('NEGOCIATION') ? '#00e5ff'
         : 'rgba(255,255,255,0.2)';
 
+      // Fallback HTML if image fails or is missing
+      const fallbackInner = `
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 40%, ${glowColor}22 0%, transparent 70%);pointer-events:none;"></div>
+        <div style="font-size:3.5rem;font-weight:900;letter-spacing:-2px;color:white;opacity:0.25;font-family:'Syne',sans-serif;position:absolute;bottom:-8px;right:8px;line-height:1;">${esc(a.to_club || a.from_club || '').split(' ').slice(-1)[0] || 'MERCATO'}</div>
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid ${glowColor};display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:white;letter-spacing:-1px;backdrop-filter:blur(4px);font-family:'Syne',sans-serif;z-index:1;">${playerInitials}</div>
+        <div style="margin-top:0.5rem;font-size:0.75rem;font-weight:800;color:rgba(255,255,255,0.85);letter-spacing:0.5px;z-index:1;">${esc(a.player_name || '')}</div>
+      `;
+
       // Always show a visual — real image or rich fallback
-      const visual = a.image_url ? `
-        <div class="card-visual">
-          <img src="${escA(a.image_url)}" alt="${escA(a.title)}" loading="lazy"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='none';">
-          <div class="card-visual-overlay"></div>
-          <div class="card-status-badge ${statusClass}">${esc(a.status)}</div>
+      const visual = (a.image_url && a.image_url.startsWith('http')) ? `
+        <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;">
+          <img src="${escA(a.image_url)}" alt="${escA(a.player_name || a.title)}" loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='none';"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;z-index:2;">
+          <div class="card-visual-overlay" style="z-index:3;"></div>
+          ${fallbackInner}
+          <div class="card-status-badge ${statusClass}" style="z-index:4;">${esc(a.status)}</div>
         </div>`
       : `
         <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;min-height:160px;overflow:hidden;">
-          <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 40%, ${glowColor}22 0%, transparent 70%);pointer-events:none;"></div>
-          <div style="font-size:3.5rem;font-weight:900;letter-spacing:-2px;color:white;opacity:0.25;font-family:'Syne',sans-serif;position:absolute;bottom:-8px;right:8px;line-height:1;">${esc(a.to_club || a.from_club || '').split(' ').slice(-1)[0] || 'MERCATO'}</div>
-          <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid ${glowColor};display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:white;letter-spacing:-1px;backdrop-filter:blur(4px);font-family:'Syne',sans-serif;z-index:1;">${playerInitials}</div>
-          <div style="margin-top:0.5rem;font-size:0.75rem;font-weight:800;color:rgba(255,255,255,0.85);letter-spacing:0.5px;z-index:1;">${esc(a.player_name || '')}</div>
-          <div class="card-status-badge ${statusClass}">${esc(a.status)}</div>
+          ${fallbackInner}
+          <div class="card-status-badge ${statusClass}" style="z-index:4;">${esc(a.status)}</div>
         </div>`;
 
       const movementDisplay = a.from_club === a.to_club

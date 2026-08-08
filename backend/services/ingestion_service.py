@@ -85,8 +85,21 @@ class CsvIngestionService:
             article.transfer_fee = row.get("transfer_fee")
             article.status = row.get("status") or "RUMEUR 📰"
             article.summary = row["summary"]
-            article.image_url = row["image_url"]
-            article.image_caption = row["image_caption"]
+            img_url = row.get("image_url") or ""
+            if not img_url or img_url == "nan" or not str(img_url).startswith("http"):
+                try:
+                    from src.photo_enricher import resolve_photo_for_article
+                    img_url = resolve_photo_for_article(
+                        article_url=row.get("url") or "",
+                        player_name=row.get("player_name") or "",
+                        to_club=row.get("to_club") or "",
+                        from_club=row.get("from_club") or "",
+                        current_image="",
+                    )
+                except Exception:
+                    img_url = ""
+            article.image_url = img_url or None
+            article.image_caption = row.get("image_caption")
             article.credibility_score = row["credibility"]
             article.source_id = source.id
 
