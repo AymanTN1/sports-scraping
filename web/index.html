@@ -94,63 +94,163 @@
     /* ═══════ LAYOUT ═══════ */
     .app-shell { display: flex; min-height: 100vh; position: relative; z-index: 1; }
 
-    /* ── Sidebar ── */
+    /* ── Sidebar (Collapsible) ── */
     .sidebar {
-      width: 76px;
+      width: 68px;
       background: var(--bg-deepest);
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 1.25rem 0;
+      align-items: flex-start;
+      padding: 0.75rem 0;
       position: sticky;
       top: 0;
       height: 100vh;
       z-index: 100;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      will-change: width;
+    }
+    .sidebar:hover,
+    .sidebar.expanded {
+      width: 240px;
+    }
+
+    /* ── Menu Toggle Button ── */
+    .sidebar-toggle {
+      width: calc(100% - 1rem);
+      height: 42px;
+      margin: 0 0.5rem 0.75rem 0.5rem;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0 0.85rem;
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+      overflow: hidden;
+      font-family: var(--font-sans);
+    }
+    .sidebar-toggle:hover {
+      background: var(--bg-surface);
+      color: var(--pitch-green);
+      border-color: var(--border);
+    }
+    .sidebar-toggle .toggle-icon {
+      min-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+    .sidebar.expanded .sidebar-toggle .toggle-icon {
+      transform: rotate(90deg);
+    }
+    .sidebar-toggle .toggle-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      opacity: 0;
+      transition: opacity 0.2s ease 0.05s;
+    }
+    .sidebar:hover .sidebar-toggle .toggle-label,
+    .sidebar.expanded .sidebar-toggle .toggle-label {
+      opacity: 1;
     }
 
     .brand-mark {
-      width: 44px;
-      height: 44px;
+      width: calc(100% - 1rem);
+      height: 48px;
       border-radius: var(--radius-md);
       background: linear-gradient(135deg, var(--pitch-green) 0%, #00B8D9 100%);
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.75rem;
+      padding: 0 0.55rem;
+      margin: 0 0.5rem 1rem 0.5rem;
       font-family: var(--font-display);
       font-weight: 800;
       font-size: 1.25rem;
       color: var(--bg-deepest);
       box-shadow: 0 0 20px var(--pitch-green-glow);
       cursor: pointer;
-      margin-bottom: 2rem;
       transition: transform var(--transition);
+      overflow: hidden;
+      white-space: nowrap;
     }
-    .brand-mark:hover { transform: scale(1.08) rotate(3deg); }
+    .brand-mark:hover { transform: scale(1.03); }
+    .brand-mark img {
+      min-width: 38px;
+      max-width: 38px;
+      max-height: 38px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .brand-mark .brand-text {
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--bg-deepest);
+      opacity: 0;
+      transition: opacity 0.2s ease 0.05s;
+    }
+    .sidebar:hover .brand-mark .brand-text,
+    .sidebar.expanded .brand-mark .brand-text {
+      opacity: 1;
+    }
 
     .nav-rail {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 0.35rem;
       width: 100%;
-      padding: 0 0.75rem;
+      padding: 0 0.5rem;
       flex: 1;
     }
 
     .nav-item {
       width: 100%;
-      height: 46px;
+      height: 44px;
       border-radius: var(--radius-md);
       border: 1px solid transparent;
       background: transparent;
       color: var(--text-tertiary);
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
+      gap: 0.85rem;
+      padding: 0 0.85rem;
+      font-size: 1.15rem;
       cursor: pointer;
       transition: all var(--transition);
       position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+      font-family: var(--font-sans);
+    }
+    .nav-item .nav-emoji {
+      min-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+    }
+    .nav-item .nav-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      opacity: 0;
+      transition: opacity 0.2s ease 0.05s;
+    }
+    .sidebar:hover .nav-item .nav-label,
+    .sidebar.expanded .nav-item .nav-label {
+      opacity: 1;
     }
 
     .nav-item:hover {
@@ -158,18 +258,20 @@
       color: var(--text-primary);
       border-color: var(--border);
     }
+    .nav-item:hover .nav-label { color: var(--text-primary); }
 
     .nav-item.active {
       background: var(--pitch-green-bg);
       color: var(--pitch-green);
-      border-color: var(--pitch-green);
+      border-color: rgba(0, 255, 135, 0.25);
       box-shadow: 0 0 15px var(--pitch-green-glow);
     }
+    .nav-item.active .nav-label { color: var(--pitch-green); }
 
     .nav-item.active::after {
       content: '';
       position: absolute;
-      left: -0.75rem;
+      left: -0.5rem;
       top: 50%;
       transform: translateY(-50%);
       width: 3px;
@@ -178,27 +280,55 @@
       border-radius: 0 4px 4px 0;
     }
 
+    /* ── Sidebar divider ── */
+    .sidebar-divider {
+      width: calc(100% - 1.5rem);
+      height: 1px;
+      background: var(--border);
+      margin: 0.5rem auto;
+    }
+
     .sidebar-footer {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.35rem;
       width: 100%;
-      padding: 0 0.75rem;
+      padding: 0 0.5rem;
     }
 
     .sidebar-icon-btn {
       width: 100%;
       height: 40px;
       border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: var(--bg-surface);
+      border: 1px solid transparent;
+      background: transparent;
       color: var(--text-secondary);
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.85rem;
+      padding: 0 0.85rem;
       font-size: 1rem;
       cursor: pointer;
       transition: all var(--transition);
+      white-space: nowrap;
+      overflow: hidden;
+      font-family: var(--font-sans);
+    }
+    .sidebar-icon-btn .nav-emoji {
+      min-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sidebar-icon-btn .nav-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.2s ease 0.05s;
+    }
+    .sidebar:hover .sidebar-icon-btn .nav-label,
+    .sidebar.expanded .sidebar-icon-btn .nav-label {
+      opacity: 1;
     }
     .sidebar-icon-btn:hover {
       background: var(--bg-surface-hover);
@@ -1163,27 +1293,57 @@
     <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-tertiary);">Acquisition des données en cours...</div>
   </div>
   <div class="app-shell">
-    <!-- ═══ SIDEBAR ═══ -->
-    <aside class="sidebar">
-      <!-- 
-      [INSTRUCTION POUR LE LOGO] 
-      C'est ici que tu dois insérer le logo généré !
-      Remplace tout le bloc <svg>...</svg> ci-dessous par :
-      <img src="ton_chemin/logo.png" style="max-width:100%; max-height:45px; object-fit:contain; border-radius: 8px;" />
-    -->
-    <div class="brand-mark" onclick="switchView('feed')">
-        <img src="assets/Logo.png" style="max-width:100%; max-height:45px; object-fit:contain; border-radius: 8px;" />
-    </div>
-      <div class="nav-rail">
-        <button class="nav-item active" data-tab="feed" title="Mercato Live" onclick="switchView('feed')">⚽</button>
-        <button class="nav-item" data-tab="analytics" title="Transfer Analytics & Dépenses" onclick="switchView('analytics')">📊</button>
-        <button class="nav-item" data-tab="national" title="Sélections Nationales & Valeur" onclick="switchView('national')">🌍</button>
-        <button class="nav-item" data-tab="board" title="Tableau des Deals Confirmés" onclick="switchView('board')">📋</button>
-        <button class="nav-item" data-tab="system" title="Système & Scrapers Monitor" onclick="switchView('system')">⚙️</button>
+    <!-- ═══ SIDEBAR (Collapsible) ═══ -->
+    <aside class="sidebar" id="appSidebar">
+      <!-- Menu Toggle -->
+      <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Menu">
+        <span class="toggle-icon">☰</span>
+        <span class="toggle-label">Menu</span>
+      </button>
+
+      <!-- Brand Logo -->
+      <div class="brand-mark" onclick="switchView('feed')">
+        <img src="assets/Logo.png" alt="MercatoPulse" />
+        <span class="brand-text">MercatoPULSE</span>
       </div>
+
+      <!-- Navigation -->
+      <div class="nav-rail">
+        <button class="nav-item active" data-tab="feed" title="Mercato Live" onclick="switchView('feed')">
+          <span class="nav-emoji">⚽</span>
+          <span class="nav-label">Mercato Live</span>
+        </button>
+        <button class="nav-item" data-tab="analytics" title="Transfer Analytics & Dépenses" onclick="switchView('analytics')">
+          <span class="nav-emoji">📊</span>
+          <span class="nav-label">Analytics</span>
+        </button>
+        <button class="nav-item" data-tab="national" title="Sélections Nationales & Valeur" onclick="switchView('national')">
+          <span class="nav-emoji">🌍</span>
+          <span class="nav-label">Sélections</span>
+        </button>
+        <button class="nav-item" data-tab="board" title="Tableau des Deals Confirmés" onclick="switchView('board')">
+          <span class="nav-emoji">📋</span>
+          <span class="nav-label">Deals Board</span>
+        </button>
+        <button class="nav-item" data-tab="system" title="Système & Scrapers Monitor" onclick="switchView('system')">
+          <span class="nav-emoji">⚙️</span>
+          <span class="nav-label">Système</span>
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="sidebar-divider"></div>
+
+      <!-- Footer Actions -->
       <div class="sidebar-footer">
-        <button class="sidebar-icon-btn" title="Swagger API Docs" onclick="window.open('/api/docs','_blank')">📄</button>
-        <button class="sidebar-icon-btn" title="Export Mercato CSV" onclick="exportCsv()">📥</button>
+        <button class="sidebar-icon-btn" title="Swagger API Docs" onclick="window.open('/api/docs','_blank')">
+          <span class="nav-emoji">📄</span>
+          <span class="nav-label">API Docs</span>
+        </button>
+        <button class="sidebar-icon-btn" title="Export Mercato CSV" onclick="exportCsv()">
+          <span class="nav-emoji">📥</span>
+          <span class="nav-label">Export CSV</span>
+        </button>
       </div>
     </aside>
 
@@ -2578,11 +2738,20 @@
       }
     }
 
+    // ── Sidebar Toggle ──
+    function toggleSidebar() {
+      const sidebar = document.getElementById('appSidebar');
+      sidebar.classList.toggle('expanded');
+    }
+
     function switchView(id) {
       document.querySelectorAll('.tab-trigger').forEach(t => t.classList.toggle('active', t.id === 'trig-' + id));
       document.querySelectorAll('.tab-view').forEach(v => v.classList.toggle('active', v.id === 'view-' + id));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.tab === id));
       document.querySelectorAll('.mobile-nav-btn').forEach(m => m.classList.toggle('active', m.dataset.tab === id));
+      // Collapse sidebar after navigation on click
+      const sidebar = document.getElementById('appSidebar');
+      if (sidebar) sidebar.classList.remove('expanded');
       if (id === 'national') {
         setTimeout(renderNationalTeams, 100);
       } else if (id === 'analytics') {
