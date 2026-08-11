@@ -21,9 +21,14 @@ class Settings:
     docs_url: str = "/api/docs"
     openapi_url: str = "/api/openapi.json"
     default_database_path: Path = BASE_DIR / "data" / "sportpulse.db"
-    database_url: str = os.getenv(
+    _raw_db_url: str = os.getenv(
         "DATABASE_URL",
         f"sqlite:///{default_database_path.as_posix()}",
+    )
+    database_url: str = (
+        _raw_db_url.replace("postgres://", "postgresql://", 1)
+        if _raw_db_url.startswith("postgres://")
+        else _raw_db_url
     )
     scheduler_timezone: str = os.getenv("SCHEDULER_TIMEZONE", "Africa/Casablanca")
     scheduler_hour: int = int(os.getenv("SCHEDULER_HOUR", "6"))
