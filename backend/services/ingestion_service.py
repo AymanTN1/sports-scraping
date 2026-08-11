@@ -122,12 +122,10 @@ class CsvIngestionService:
         for _, row in frame.iterrows():
             title = self._polish_text(self._first_non_empty(row, "title", "titre"))
             summary = self._polish_text(self._first_non_empty(row, "summary", "summary.1", "resume", "resume.1"))
-            
-            from src.mercato_nlp import is_football_mercato_article
-            if not title or not is_football_mercato_article(title, summary or ""):
-                continue
-
             source = self._polish_text(self._first_non_empty(row, "source")) or "Source inconnue"
+            from src.mercato_nlp import is_football_mercato_article
+            if not title or not is_football_mercato_article(title, summary or "", source=source):
+                continue
             raw_date = self._clean_value(self._first_non_empty(row, "date"))
             url = self._clean_value(self._first_non_empty(row, "url", "lien"))
             summary = self._polish_text(self._first_non_empty(row, "summary", "summary.1", "resume", "resume.1"))

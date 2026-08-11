@@ -198,7 +198,7 @@ PLAYER_REGISTRY: Dict[str, Dict[str, str]] = {
 # ─────────────────────────────────────────────────────────────
 CLUB_CANONICAL: Dict[str, str] = {
     # La Liga
-    "real madrid": "Real Madrid", "madrid": "Real Madrid", "los blancos": "Real Madrid", "merengue": "Real Madrid",
+    "real madrid": "Real Madrid", "los blancos": "Real Madrid", "merengue": "Real Madrid",
     "barcelona": "FC Barcelone", "fc barcelona": "FC Barcelone", "barca": "FC Barcelone", "barça": "FC Barcelone", "blaugrana": "FC Barcelone",
     "atletico madrid": "Atlético de Madrid", "atletico": "Atlético de Madrid", "atlético": "Atlético de Madrid", "colchoneros": "Atlético de Madrid",
     "sevilla": "FC Séville", "seville": "FC Séville", "sevilla fc": "FC Séville",
@@ -209,32 +209,32 @@ CLUB_CANONICAL: Dict[str, str] = {
     "girona": "Girona", "girone": "Girona", "valencia": "Valence CF", "valence": "Valence CF",
 
     # Premier League
-    "manchester city": "Manchester City", "man city": "Manchester City", "city": "Manchester City", "citizens": "Manchester City",
-    "liverpool": "Liverpool", "lfc": "Liverpool", "reds": "Liverpool",
+    "manchester city": "Manchester City", "man city": "Manchester City", "citizens": "Manchester City",
+    "liverpool": "Liverpool", "lfc": "Liverpool",
     "arsenal": "Arsenal", "gunners": "Arsenal",
-    "chelsea": "Chelsea", "blues": "Chelsea",
-    "manchester united": "Manchester United", "man utd": "Manchester United", "united": "Manchester United", "red devils": "Manchester United",
+    "chelsea": "Chelsea",
+    "manchester united": "Manchester United", "man utd": "Manchester United", "red devils": "Manchester United",
     "tottenham": "Tottenham", "spurs": "Tottenham", "tottenham hotspur": "Tottenham",
     "newcastle": "Newcastle", "newcastle united": "Newcastle", "magpies": "Newcastle",
-    "aston villa": "Aston Villa", "villa": "Aston Villa",
+    "aston villa": "Aston Villa",
     "west ham": "West Ham", "hammers": "West Ham",
     "brighton": "Brighton", "brentford": "Brentford", "everton": "Everton", "wolves": "Wolverhampton", "wolverhampton": "Wolverhampton",
     "crystal palace": "Crystal Palace", "fulham": "Fulham", "nottingham forest": "Nottingham Forest", "bournemouth": "Bournemouth",
 
     # Ligue 1
-    "psg": "PSG", "paris saint-germain": "PSG", "paris sg": "PSG", "paris": "PSG",
-    "marseille": "Olympique de Marseille", "om": "Olympique de Marseille", "olympique de marseille": "Olympique de Marseille",
-    "lyon": "Olympique Lyonnais", "ol": "Olympique Lyonnais", "olympique lyonnais": "Olympique Lyonnais",
+    "psg": "PSG", "paris saint-germain": "PSG", "paris sg": "PSG",
+    "marseille": "Olympique de Marseille", "olympique de marseille": "Olympique de Marseille",
+    "lyon": "Olympique Lyonnais", "olympique lyonnais": "Olympique Lyonnais",
     "monaco": "AS Monaco", "as monaco": "AS Monaco", "asm": "AS Monaco",
     "lille": "LOSC Lille", "losc": "LOSC Lille",
     "rennes": "Stade Rennais", "stade rennais": "Stade Rennais",
-    "nice": "OGC Nice", "ogc nice": "OGC Nice",
+    "ogc nice": "OGC Nice",
     "lens": "RC Lens", "rc lens": "RC Lens",
     "strasbourg": "RC Strasbourg", "nantes": "FC Nantes", "toulouse": "Toulouse FC",
 
     # Serie A
-    "inter milan": "Inter Milan", "inter": "Inter Milan", "nerazzurri": "Inter Milan", "internazionale": "Inter Milan",
-    "ac milan": "AC Milan", "milan": "AC Milan", "rossoneri": "AC Milan",
+    "inter milan": "Inter Milan", "nerazzurri": "Inter Milan", "internazionale": "Inter Milan",
+    "ac milan": "AC Milan", "rossoneri": "AC Milan",
     "juventus": "Juventus", "juve": "Juventus", "bianconeri": "Juventus",
     "napoli": "Napoli", "naples": "Napoli", "partenopei": "Napoli",
     "as roma": "AS Roma", "roma": "AS Roma", "giallorossi": "AS Roma",
@@ -256,13 +256,13 @@ CLUB_CANONICAL: Dict[str, str] = {
     "al-ahli": "Al-Ahli", "al ahli": "Al-Ahli", "ahli": "Al-Ahli",
 
     # Portugal & Other Europe
-    "sporting cp": "Sporting CP", "sporting": "Sporting CP", "sporting lisbon": "Sporting CP", "sporting lisbonne": "Sporting CP",
+    "sporting cp": "Sporting CP", "sporting lisbon": "Sporting CP", "sporting lisbonne": "Sporting CP",
     "benfica": "SL Benfica", "sl benfica": "SL Benfica",
     "porto": "FC Porto", "fc porto": "FC Porto",
     "galatasaray": "Galatasaray", "fenerbahce": "Fenerbahçe", "fenerbahçe": "Fenerbahçe", "besiktas": "Beşiktaş", "beşiktaş": "Beşiktaş", "trabzonspor": "Trabzonspor",
 
     # MLS & Americas
-    "inter miami": "Inter Miami", "miami": "Inter Miami",
+    "inter miami": "Inter Miami",
     "la galaxy": "LA Galaxy", "los angeles galaxy": "LA Galaxy", "galaxy": "LA Galaxy",
     "los angeles fc": "Los Angeles FC", "lafc": "Los Angeles FC",
     "san diego fc": "San Diego FC", "san diego": "San Diego FC",
@@ -284,16 +284,20 @@ def clean_text_norm(text: str) -> str:
 def detect_player(text: str) -> Tuple[Optional[str], Optional[Dict[str, str]]]:
     """Détecte avec certitude le joueur concerné à partir de la base de registres et alias."""
     norm = clean_text_norm(text)
+    if not norm:
+        return None, None
     
-    # 1. Correspondance exacte sur les noms complets (triés par longueur décroissante)
+    # 1. Correspondance exacte avec mot entier sur les noms complets (triés par longueur décroissante)
     sorted_players = sorted(PLAYER_REGISTRY.keys(), key=lambda x: len(x), reverse=True)
     for p_name in sorted_players:
-        if clean_text_norm(p_name) in norm:
+        p_norm = clean_text_norm(p_name)
+        if re.search(r"\b" + re.escape(p_norm) + r"\b", norm):
             return p_name, PLAYER_REGISTRY[p_name]
         
-        # Tester les alias
+        # Tester les alias avec r"\b" (mot entier requis)
         for alias in PLAYER_REGISTRY[p_name].get("alias", []):
-            if len(alias) >= 4 and clean_text_norm(alias) in norm:
+            a_norm = clean_text_norm(alias)
+            if len(a_norm) >= 4 and re.search(r"\b" + re.escape(a_norm) + r"\b", norm):
                 return p_name, PLAYER_REGISTRY[p_name]
 
     return None, None
@@ -501,11 +505,13 @@ def parse_article_full(title: str, summary: str = "") -> Dict[str, str]:
 
 # Sources à bloquer systématiquement (non-sportives)
 BLOCKED_SOURCE_DOMAINS = [
-    "business insider", "businessinsider", "yahoo finance", "yahoo news",
-    "bloomberg", "techcrunch", "buzzfeed", "huffpost", "buzzfeed",
+    "business insider", "businessinsider", "yahoo finance", "yahoo news", "yahoo",
+    "bloomberg", "techcrunch", "tech crunch", "buzzfeed", "huffpost",
     "new york times", "washington post", "the atlantic", "vox",
-    "insider", "marketwatch", "cnbc", "fox news", "daily mail",
-    "the sun", "the mirror", "express", "people.com", "tmz",
+    "insider", "marketwatch", "market watch", "cnbc", "fox news", "daily mail",
+    "the sun", "the mirror", "express", "people com", "tmz",
+    "wsj", "wall street journal", "cointelegraph", "coin telegraph", "coindesk", "coin desk",
+    "le monde", "le figaro", "hespress", "reuters",
 ]
 
 # Mots-clés football/sport — ASCII UNIQUEMENT (compatible avec clean_text_norm)

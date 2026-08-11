@@ -39,17 +39,17 @@ async def lifespan(app: FastAPI):
             from src.mercato_nlp import is_football_mercato_article
 
             # Purger immédiatement tous les anciens articles hors-sujet en base
-            from src.mercato_nlp import BLOCKED_SOURCE_DOMAINS
+            from src.mercato_nlp import BLOCKED_SOURCE_DOMAINS, clean_text_norm
             all_articles = db.query(Article).all()
             deleted_count = 0
             for art in all_articles:
-                source = getattr(art, "source", "") or ""
+                source_name = art.source.name if art.source and hasattr(art.source, "name") else (art.source if isinstance(art.source, str) else "")
                 title = art.title or ""
                 summary = art.summary or ""
                 # Bloquer Business Insider, Yahoo Finance, etc. + filtre NLP corrigé
-                source_norm = source.lower()
-                source_blocked = any(blocked in source_norm for blocked in BLOCKED_SOURCE_DOMAINS)
-                if source_blocked or not is_football_mercato_article(title, summary, source=source):
+                source_norm = clean_text_norm(source_name)
+                source_blocked = any(blocked in source_norm for blocked in BLOCKED_SOURCE_DOMAINS) if source_norm else False
+                if source_blocked or not is_football_mercato_article(title, summary, source=source_name):
                     db.delete(art)
                     deleted_count += 1
             if deleted_count > 0:

@@ -88,15 +88,14 @@ def purge_non_football(db: Session = Depends(get_db)):
     all_articles = db.query(Article).all()
     deleted_count = 0
     for art in all_articles:
-        source = getattr(art, "source", "") or ""
+        source_name = art.source.name if art.source and hasattr(art.source, "name") else (art.source if isinstance(art.source, str) else "")
         title = art.title or ""
         summary = art.summary or ""
         
-        # Vérifier si la source est bloquée (Business Insider, etc.)
-        source_norm = clean_text_norm(source)
-        source_blocked = any(blocked in source_norm for blocked in BLOCKED_SOURCE_DOMAINS)
+        source_norm = clean_text_norm(source_name)
+        source_blocked = any(blocked in source_norm for blocked in BLOCKED_SOURCE_DOMAINS) if source_norm else False
         
-        if source_blocked or not is_football_mercato_article(title, summary, source=source):
+        if source_blocked or not is_football_mercato_article(title, summary, source=source_name):
             db.delete(art)
             deleted_count += 1
     if deleted_count > 0:
@@ -112,10 +111,16 @@ async def trigger_pipeline(db: Session = Depends(get_db)):
     
     # Purger avant de relancer le pipeline
     from backend.models import Article
-    from src.mercato_nlp import is_football_mercato_article
+    from src.mercato_nlp import is_football_mercato_article, BLOCKED_SOURCE_DOMAINS
+    from src.mercato_nlp import clean_text_norm
     all_articles = db.query(Article).all()
     for art in all_articles:
-        if not is_football_mercato_article(art.title or "", art.summary or ""):
+        source_name = art.source.name if art.source and hasattr(art.source, "name") else (art.source if isinstance(art.source, str) else "")
+        title = art.title or ""
+        summary = art.summary or ""
+        source_norm = clean_text_norm(source_name)
+        source_blocked = any(blocked in source_norm for blocked in BLOCKED_SOURCE_DOMAINS) if source_norm else False
+        if source_blocked or not is_football_mercato_article(title, summary, source=source_name):
             db.delete(art)
     db.commit()
 

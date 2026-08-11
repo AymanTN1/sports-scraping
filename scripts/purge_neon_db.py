@@ -51,8 +51,13 @@ def purge_non_football(db_url: str, dry_run: bool = False) -> None:
     total = cur.fetchone()["total"]
     print(f"📊 Articles dans la base: {total}")
 
-    # 2. Récupérer tous les articles
-    cur.execute("SELECT id, title, summary, source FROM articles ORDER BY id")
+    # 2. Récupérer tous les articles avec le nom de la source
+    cur.execute("""
+        SELECT a.id, a.title, a.summary, s.name as source
+        FROM articles a
+        LEFT JOIN sources s ON a.source_id = s.id
+        ORDER BY a.id
+    """)
     articles = cur.fetchall()
 
     to_delete = []
