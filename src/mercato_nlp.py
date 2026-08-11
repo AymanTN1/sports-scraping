@@ -491,3 +491,72 @@ def parse_article_full(title: str, summary: str = "") -> Dict[str, str]:
         "to_club": to_club,
         "status": status,
     }
+
+
+# ─────────────────────────────────────────────────────────────
+# FILTRAGE STRICT FOOTBALL & MERCATO (Anti-Pollution / Anti-News Générales)
+# ─────────────────────────────────────────────────────────────
+NON_FOOTBALL_KEYWORDS = [
+    # Arabe (Économie, Taxes, Politique)
+    "الضرائب", "صناعات", "مباحثات", "اقتصاد", "استثمار", "بنكية", "مدخيل", "قطاعات", 
+    "انخفاض", "النسبية", "حسابات", "تداول", "عقارات",
+    # English (Non-sports, General news, Food, Tech, Personal)
+    "scrambled eggs", "recipe", "pitch deck", "layoff", "layoffs", "fatherhood", 
+    "shelter", "air fryer", "cruise", "memorabilia", "mortgage", "tax", "inflation", 
+    "macroeconomy", "braid daughter", "colonel sanders", "weeknight", "kitchen", 
+    "bathroom", "grief", "snack", "couch", "animal shelter", "home auction",
+    # French
+    "macroéconomie", "banque & fintech", "cryptomonnaies", "startups & vc", "impôts", 
+    "recette", "cuisine", "immobilier"
+]
+
+FOOTBALL_KEYWORDS = [
+    # French
+    "football", "foot", "mercato", "transfert", "joueur", "ligue 1", "la liga", 
+    "premier league", "serie a", "bundesliga", "champions league", "prolongation", 
+    "prêt", "entraîneur", "ballon d'or", "club", "sélection", "buteur", "gardien",
+    # English
+    "football", "soccer", "transfer", "signing", "signed", "loan", "premier league", 
+    "la liga", "serie a", "bundesliga", "champions league", "striker", "midfielder", 
+    "defender", "winger", "free agent", "bid", "contract", "club",
+    # Spanish
+    "fútbol", "futbol", "fichaje", "traspaso", "mercado", "liga", "jugador", "cesión", "club",
+    # Italian
+    "calcio", "calciomercato", "acquisto", "prestito", "giocatore", "società", "club",
+    # German
+    "fußball", "fussball", "wechsel", "transfer", "neuzugang", "ablöse", "spieler", "verein",
+    # Arabic
+    "كرة القدم", "كرة قدم", "ميركاتو", "انتقال", "صفقة", "لاعب", "نادي", "توقيع", "إعارة", "دوري", "فريق"
+]
+
+
+def is_football_mercato_article(title: str, summary: str = "") -> bool:
+    """
+    Vérifie si un article est REELLEMENT du football ou du mercato.
+    Élimine toutes les rumeurs polluantes non-sportives (économie, faits divers, cuisine, tech).
+    """
+    combined = f"{title} {summary}"
+    norm = clean_text_norm(combined)
+    if not norm:
+        return False
+
+    # 1. Si un joueur ou un club est reconnu dans nos bases -> VALIDE IMMEDIATEMENT
+    player_name, _ = detect_player(combined)
+    if player_name:
+        return True
+    
+    detected_clubs = detect_clubs_in_text(combined)
+    if detected_clubs:
+        return True
+
+    # 2. Si contient un mot-clé négatif explicite et aucun mot-clé football -> INVALIDE
+    has_negative = any(clean_text_norm(bad) in norm for bad in NON_FOOTBALL_KEYWORDS)
+
+    # 3. Vérifier les mots-clés positifs football
+    has_positive = any(clean_text_norm(good) in norm for good in FOOTBALL_KEYWORDS)
+
+    if has_negative and not has_positive:
+        return False
+
+    return has_positive
+

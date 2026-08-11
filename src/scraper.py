@@ -1324,6 +1324,8 @@ def parse_rss_feed(source: dict) -> list[dict]:
                     "img_url": img_url
                 })
 
+        from src.mercato_nlp import is_football_mercato_article
+
         for row in items_data:
             title = row["title"]
             link = row["link"]
@@ -1331,6 +1333,10 @@ def parse_rss_feed(source: dict) -> list[dict]:
                 continue
 
             summary = clean_html(row["desc"]) if row["desc"] else title
+            
+            # Filtre strict : éliminer immédiatement les actualités générales (économie, cuisine, tech, etc.)
+            if not is_football_mercato_article(title, summary):
+                continue
             articles.append({
                 "title": title,
                 "url": link,

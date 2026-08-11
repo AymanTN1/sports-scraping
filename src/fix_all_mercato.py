@@ -1,10 +1,3 @@
-"""
-fix_all_mercato.py — Ré-analyse complète et enrichissement de toute la base SQLite et des CSV.
-1. Applique le nouveau moteur NLP Mercato (correction inversions, détection clubs vendeur/acheteur).
-2. Enrichit chaque article avec sa vraie photo officielle HD.
-3. Met à jour SQLite (sportpulse.db) et les fichiers CSV.
-"""
-
 import sys
 from pathlib import Path
 
@@ -17,7 +10,7 @@ import sqlite3
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
-from src.mercato_nlp import parse_article_full
+from src.mercato_nlp import parse_article_full, is_football_mercato_article
 from src.photo_enricher import resolve_photo_for_article
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -40,14 +33,19 @@ def fix_sqlite():
         FROM articles
     """)
     rows = cursor.fetchall()
-    logger.info("Traitement de %d articles en base SQLite...", len(rows))
+    logger.info("Analyse de %d articles en base SQLite...", len(rows))
 
     updates = []
+    ids_to_delete = []
 
     def process_article(row):
         art_id, title, summary, cur_p, cur_from, cur_to, cur_stat, cur_img, url = row
         title = title or ""
         summary = summary or ""
+
+        # 0. Filtrage Football & Mercato
+        if not is_football_mercato_article(title, summary):
+            return ("DELETE", art_id)
 
         # 1. NLP Parse
         nlp_res = parse_article_full(title, summary)
@@ -65,20 +63,28 @@ def fix_sqlite():
             current_image=cur_img or "",
         )
 
-        return (new_player, new_from, new_to, new_stat, best_img, art_id)
+        return ("UPDATE", new_player, new_from, new_to, new_stat, best_img, art_id)
 
     with ThreadPoolExecutor(max_workers=20) as executor:
         futures = {executor.submit(process_article, row): row for row in rows}
         for f in as_completed(futures):
             res = f.result()
             if res:
-                updates.append(res)
+                if res[0] == "DELETE":
+                    ids_to_delete.append((res[1],))
+                else:
+                    updates.append(res[1:])
 
-    cursor.executemany("""
-        UPDATE articles 
-        SET player_name = ?, from_club = ?, to_club = ?, status = ?, image_url = ?
-        WHERE id = ?
-    """, updates)
+    if ids_to_delete:
+        cursor.executemany("DELETE FROM articles WHERE id = ?", ids_to_delete)
+        logger.info("🗑️ %d articles non-football/non-mercato supprimés de SQLite !", len(ids_to_delete))
+
+    if updates:
+        cursor.executemany("""
+            UPDATE articles 
+            SET player_name = ?, from_club = ?, to_club = ?, status = ?, image_url = ?
+            WHERE id = ?
+        """, updates)
 
     conn.commit()
     conn.close()
@@ -100,11 +106,15 @@ def fix_csvs():
             if df.empty:
                 continue
 
+            valid_rows = []
             for idx, row in df.iterrows():
                 title = str(row.get("title", ""))
                 summary = str(row.get("summary", ""))
                 url = str(row.get("url", ""))
                 cur_img = str(row.get("image_url", ""))
+
+                if not is_football_mercato_article(title, summary):
+                    continue
 
                 nlp_res = parse_article_full(title, summary)
                 p = nlp_res["player_name"]
@@ -120,15 +130,18 @@ def fix_csvs():
                     current_image=cur_img,
                 )
 
-                df.at[idx, "player_name"] = p
-                df.at[idx, "from_club"] = f_c
-                df.at[idx, "to_club"] = t_c
-                df.at[idx, "status"] = st
+                row["player_name"] = p
+                row["from_club"] = f_c
+                row["to_club"] = t_c
+                row["status"] = st
                 if best_img:
-                    df.at[idx, "image_url"] = best_img
+                    row["image_url"] = best_img
 
-            df.to_csv(csv_file, index=False)
-            logger.info("✅ CSV %s mis à jour avec succès !", csv_file.name)
+                valid_rows.append(row)
+
+            df_clean = pd.DataFrame(valid_rows)
+            df_clean.to_csv(csv_file, index=False)
+            logger.info("✅ CSV %s nettoyé et mis à jour (%d articles) !", csv_file.name, len(df_clean))
         except Exception as e:
             logger.error("Erreur sur %s: %s", csv_file, e)
 
