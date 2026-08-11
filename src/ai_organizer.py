@@ -8,10 +8,14 @@ ai_organizer.py — MercatoPulse Football Transfer & Mercato NLP Engine
 from __future__ import annotations
 
 import os
+import sys
 import re
 import unicodedata
 from urllib.parse import unquote
 import pandas as pd
+
+# Standardize sys.path for root imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # ─────────────────────────────────────────────
 # LIGUES & CHAMPIONNATS FOOTBALL
@@ -259,3 +263,33 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     df["status"] = statuses
 
     return df
+
+
+if __name__ == "__main__":
+    BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    in_path = os.path.join(BASE, "data", "output", "articles_raw.csv")
+    out_path = os.path.join(BASE, "data", "output", "organized_articles.csv")
+    verified_path = os.path.join(BASE, "data", "output", "verified_articles.csv")
+
+    if os.path.exists(in_path):
+        df_raw = pd.read_csv(in_path)
+        print(f"📖 Chargement de {len(df_raw)} articles bruts depuis {in_path}...")
+        df_organized = process_dataset(df_raw)
+
+        # Filtre de sécurité football
+        from src.mercato_nlp import is_football_mercato_article
+        keep_mask = []
+        for _, row in df_organized.iterrows():
+            t = str(row.get("title", ""))
+            s = str(row.get("summary", ""))
+            src = str(row.get("source", ""))
+            keep_mask.append(is_football_mercato_article(t, s, source=src))
+        df_organized = df_organized[keep_mask].reset_index(drop=True)
+
+        os.makedirs(os.path.dirname(out_path), exist_ok=True)
+        df_organized.to_csv(out_path, index=False, encoding="utf-8-sig")
+        df_organized.to_csv(verified_path, index=False, encoding="utf-8-sig")
+        print(f"✅ Sauvegardé : {len(df_organized)} articles football validés dans {out_path} et {verified_path}")
+    else:
+        print(f"❌ Fichier d'entrée introuvable : {in_path}")
+
