@@ -79,10 +79,36 @@ def import_csv(db: Session = Depends(get_db)):
     return ingestion.import_csv(csv_path)
 
 
+@router.post("/purge-non-football")
+def purge_non_football(db: Session = Depends(get_db)):
+    from backend.models import Article
+    from src.mercato_nlp import is_football_mercato_article
+
+    all_articles = db.query(Article).all()
+    deleted_count = 0
+    for art in all_articles:
+        if not is_football_mercato_article(art.title or "", art.summary or ""):
+            db.delete(art)
+            deleted_count += 1
+    if deleted_count > 0:
+        db.commit()
+    return {"purged_count": deleted_count, "remaining_count": db.query(Article).count()}
+
+
 @router.post("/trigger-pipeline")
-async def trigger_pipeline():
+async def trigger_pipeline(db: Session = Depends(get_db)):
     from src.scheduler import scheduler_instance
     import asyncio
+    
+    # Purger avant de relancer le pipeline
+    from backend.models import Article
+    from src.mercato_nlp import is_football_mercato_article
+    all_articles = db.query(Article).all()
+    for art in all_articles:
+        if not is_football_mercato_article(art.title or "", art.summary or ""):
+            db.delete(art)
+    db.commit()
+
     asyncio.create_task(scheduler_instance.run_pipeline())
     return {"message": "Pipeline de scraping instantané lancé avec succès en arrière-plan."}
 

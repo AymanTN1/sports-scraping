@@ -35,12 +35,26 @@ async def lifespan(app: FastAPI):
     init_db()
     with SessionLocal() as db:
         try:
+            from backend.models import Article
+            from src.mercato_nlp import is_football_mercato_article
+
+            # Purger immédiatement tous les anciens articles hors-sujet en base
+            all_articles = db.query(Article).all()
+            deleted_count = 0
+            for art in all_articles:
+                if not is_football_mercato_article(art.title or "", art.summary or ""):
+                    db.delete(art)
+                    deleted_count += 1
+            if deleted_count > 0:
+                db.commit()
+                logger.info("Purged %d non-football articles from database on startup", deleted_count)
+
             result = CsvIngestionService(db).bootstrap_if_needed()
             if result:
                 logger.info("Database bootstrapped from %s", result.source_file)
         except Exception as exc:  # pragma: no cover - defensive startup logging
             db.rollback()
-            logger.warning("Database bootstrap skipped: %s", exc)
+            logger.warning("Database startup processing skipped: %s", exc)
 
     try:
         from src.scheduler import scheduler_instance
