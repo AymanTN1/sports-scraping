@@ -1335,7 +1335,8 @@ def parse_rss_feed(source: dict) -> list[dict]:
             summary = clean_html(row["desc"]) if row["desc"] else title
             
             # Filtre strict : éliminer immédiatement les actualités générales (économie, cuisine, tech, etc.)
-            if not is_football_mercato_article(title, summary):
+            # Passe aussi le nom de la source pour bloquer Business Insider, Yahoo Finance, etc.
+            if not is_football_mercato_article(title, summary, source=name):
                 continue
             articles.append({
                 "title": title,

@@ -494,69 +494,120 @@ def parse_article_full(title: str, summary: str = "") -> Dict[str, str]:
 
 
 # ─────────────────────────────────────────────────────────────
-# FILTRAGE STRICT FOOTBALL & MERCATO (Anti-Pollution / Anti-News Générales)
+# FILTRAGE STRICT FOOTBALL & MERCATO — VERSION CORRIGÉE
+# Bug fix: les mots arabes normalisés par clean_text_norm() deviennent ""
+# ce qui rendait "" in any_string = True → tous les articles passaient!
 # ─────────────────────────────────────────────────────────────
-NON_FOOTBALL_KEYWORDS = [
-    # Arabe (Économie, Taxes, Politique)
-    "الضرائب", "صناعات", "مباحثات", "اقتصاد", "استثمار", "بنكية", "مدخيل", "قطاعات", 
-    "انخفاض", "النسبية", "حسابات", "تداول", "عقارات",
-    # English (Non-sports, General news, Food, Tech, Personal)
-    "scrambled eggs", "recipe", "pitch deck", "layoff", "layoffs", "fatherhood", 
-    "shelter", "air fryer", "cruise", "memorabilia", "mortgage", "tax", "inflation", 
-    "macroeconomy", "braid daughter", "colonel sanders", "weeknight", "kitchen", 
-    "bathroom", "grief", "snack", "couch", "animal shelter", "home auction",
-    # French
-    "macroéconomie", "banque & fintech", "cryptomonnaies", "startups & vc", "impôts", 
-    "recette", "cuisine", "immobilier"
+
+# Sources à bloquer systématiquement (non-sportives)
+BLOCKED_SOURCE_DOMAINS = [
+    "business insider", "businessinsider", "yahoo finance", "yahoo news",
+    "bloomberg", "techcrunch", "buzzfeed", "huffpost", "buzzfeed",
+    "new york times", "washington post", "the atlantic", "vox",
+    "insider", "marketwatch", "cnbc", "fox news", "daily mail",
+    "the sun", "the mirror", "express", "people.com", "tmz",
 ]
 
-FOOTBALL_KEYWORDS = [
-    # French
-    "football", "foot", "mercato", "transfert", "joueur", "ligue 1", "la liga", 
-    "premier league", "serie a", "bundesliga", "champions league", "prolongation", 
-    "prêt", "entraîneur", "ballon d'or", "club", "sélection", "buteur", "gardien",
-    # English
-    "football", "soccer", "transfer", "signing", "signed", "loan", "premier league", 
-    "la liga", "serie a", "bundesliga", "champions league", "striker", "midfielder", 
-    "defender", "winger", "free agent", "bid", "contract", "club",
-    # Spanish
-    "fútbol", "futbol", "fichaje", "traspaso", "mercado", "liga", "jugador", "cesión", "club",
-    # Italian
-    "calcio", "calciomercato", "acquisto", "prestito", "giocatore", "società", "club",
-    # German
-    "fußball", "fussball", "wechsel", "transfer", "neuzugang", "ablöse", "spieler", "verein",
-    # Arabic
-    "كرة القدم", "كرة قدم", "ميركاتو", "انتقال", "صفقة", "لاعب", "نادي", "توقيع", "إعارة", "دوري", "فريق"
+# Mots-clés football/sport — ASCII UNIQUEMENT (compatible avec clean_text_norm)
+FOOTBALL_KEYWORDS_ASCII: List[str] = [
+    # Termes mercato transversaux
+    r"\btransfer\b", r"\btransfert\b", r"\bmercato\b", r"\bsigning\b",
+    r"\bsigned\b", r"\bloan\b", r"\bfree agent\b", r"\bcontract\b",
+    r"\bbid\b", r"\boffer\b", r"\bdeal\b",
+    # Football / Soccer
+    r"\bfootball\b", r"\bsoccer\b", r"\bfoot\b",
+    r"\bfutbol\b", r"\bfussball\b", r"\bcalcio\b",
+    # Ligues
+    r"\bpremier league\b", r"\bla liga\b", r"\bserie a\b",
+    r"\bbundesliga\b", r"\bchampions league\b", r"\bligue 1\b",
+    r"\bliga\b", r"\bleague\b",
+    # Postes & rôles
+    r"\bstriker\b", r"\bmidfielder\b", r"\bdefender\b", r"\bwinger\b",
+    r"\bgoalkeeper\b", r"\bbuteur\b", r"\bgardien\b", r"\bjoueur\b",
+    r"\bgiocatore\b", r"\bjugador\b", r"\bspieler\b",
+    # Termes français
+    r"\bprolongation\b", r"\bentraineur\b", r"\bselection\b",
+    r"\bballon d.or\b", r"\bpret\b",
+    # Termes espagnols
+    r"\bfichaje\b", r"\btraspaso\b", r"\bcesion\b",
+    # Termes italiens
+    r"\bcalciomercato\b", r"\bacquisto\b", r"\bprestito\b",
+    # Termes allemands
+    r"\bwechsel\b", r"\bneuzugang\b",
+    # Clubs sans ambiguïté
+    r"\breal madrid\b", r"\bbarcelona\b", r"\bman city\b", r"\bman utd\b",
+    r"\blfc\b", r"\bchelsea fc\b",
+]
+
+# Mots-clés ARABES football — à tester sur le texte BRUT (non normalisé)
+FOOTBALL_KEYWORDS_ARABIC: List[str] = [
+    "كرة القدم", "كرة قدم", "ميركاتو", "انتقال", "صفقة",
+    "لاعب", "نادي", "توقيع", "إعارة", "دوري", "فريق"
+]
+
+# Mots-clés NON-FOOTBALL — ASCII uniquement
+NON_FOOTBALL_PATTERNS: List[str] = [
+    r"\brecipe\b", r"\brecette\b", r"\bscrambled\b", r"\bkitchen\b",
+    r"\bbathroom\b", r"\bmortgage\b", r"\binflation\b",
+    r"\blayoff\b", r"\blayoffs\b", r"\bstartup\b",
+    r"\bcryptocurren", r"\bimmobilier\b", r"\bimpots\b",
+    r"\bcuisine\b", r"\bcolonel sanders\b", r"\bair fryer\b",
+    r"\bscrambleg eggs\b", r"\bweightloss\b", r"\bnutrition\b",
+    r"\bfinancial results\b", r"\bearnings report\b", r"\bstock market\b",
+    r"\bipo\b", r"\bventure capital\b", r"\btech giant\b",
+    r"\bpalm springs\b", r"\bkfc\b", r"\bbraid\b",
 ]
 
 
-def is_football_mercato_article(title: str, summary: str = "") -> bool:
+def is_football_mercato_article(title: str, summary: str = "", source: str = "") -> bool:
     """
     Vérifie si un article est REELLEMENT du football ou du mercato.
-    Élimine toutes les rumeurs polluantes non-sportives (économie, faits divers, cuisine, tech).
+    VERSION CORRIGÉE — les mots arabes sont vérifiés sur le texte brut.
+    LOGIQUE: whitelist stricte, pas de faux positifs tolérés.
     """
-    combined = f"{title} {summary}"
-    norm = clean_text_norm(combined)
+    combined_raw = f"{title} {summary}"  # texte brut pour Arabic + source check
+    norm = clean_text_norm(combined_raw)   # ASCII uniquement pour keywords ASCII
+    
     if not norm:
         return False
 
-    # 1. Si un joueur ou un club est reconnu dans nos bases -> VALIDE IMMEDIATEMENT
-    player_name, _ = detect_player(combined)
+    # 0. Bloquer les sources non-sportives connues
+    source_norm = clean_text_norm(source or title)
+    if any(blocked in source_norm for blocked in BLOCKED_SOURCE_DOMAINS):
+        return False
+
+    # 1. Si un joueur connu est reconnu -> VALIDE IMMÉDIATEMENT
+    player_name, _ = detect_player(combined_raw)
     if player_name:
         return True
-    
-    detected_clubs = detect_clubs_in_text(combined)
+
+    # 2. Si un club de football connu est reconnu -> VALIDE IMMÉDIATEMENT
+    detected_clubs = detect_clubs_in_text(combined_raw)
     if detected_clubs:
         return True
 
-    # 2. Si contient un mot-clé négatif explicite et aucun mot-clé football -> INVALIDE
-    has_negative = any(clean_text_norm(bad) in norm for bad in NON_FOOTBALL_KEYWORDS)
+    # 3. Vérifier les mots-clés positifs FOOTBALL (ASCII avec word boundaries)
+    has_positive_ascii = any(
+        re.search(pat, norm) for pat in FOOTBALL_KEYWORDS_ASCII
+    )
 
-    # 3. Vérifier les mots-clés positifs football
-    has_positive = any(clean_text_norm(good) in norm for good in FOOTBALL_KEYWORDS)
+    # 4. Vérifier les mots-clés ARABES football sur le texte BRUT (non normalisé)
+    has_positive_arabic = any(kw in combined_raw for kw in FOOTBALL_KEYWORDS_ARABIC)
 
-    if has_negative and not has_positive:
+    has_positive = has_positive_ascii or has_positive_arabic
+
+    if not has_positive:
         return False
 
-    return has_positive
+    # 5. Vérifier les mots-clés NÉGATIFS (non-football) — ASCII avec word boundaries
+    has_negative = any(
+        re.search(pat, norm) for pat in NON_FOOTBALL_PATTERNS
+    )
+
+    # Si négatif ET le seul signal positif est très faible (ex: "bid" = trop générique)
+    if has_negative:
+        # Autoriser seulement si signal très fort (joueur/club déjà validé ci-dessus)
+        return False
+
+    return True
 

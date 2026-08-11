@@ -82,17 +82,27 @@ def import_csv(db: Session = Depends(get_db)):
 @router.post("/purge-non-football")
 def purge_non_football(db: Session = Depends(get_db)):
     from backend.models import Article
-    from src.mercato_nlp import is_football_mercato_article
+    from src.mercato_nlp import is_football_mercato_article, BLOCKED_SOURCE_DOMAINS
+    from src.mercato_nlp import clean_text_norm
 
     all_articles = db.query(Article).all()
     deleted_count = 0
     for art in all_articles:
-        if not is_football_mercato_article(art.title or "", art.summary or ""):
+        source = getattr(art, "source", "") or ""
+        title = art.title or ""
+        summary = art.summary or ""
+        
+        # Vérifier si la source est bloquée (Business Insider, etc.)
+        source_norm = clean_text_norm(source)
+        source_blocked = any(blocked in source_norm for blocked in BLOCKED_SOURCE_DOMAINS)
+        
+        if source_blocked or not is_football_mercato_article(title, summary, source=source):
             db.delete(art)
             deleted_count += 1
     if deleted_count > 0:
         db.commit()
-    return {"purged_count": deleted_count, "remaining_count": db.query(Article).count()}
+    remaining = db.query(Article).count()
+    return {"purged_count": deleted_count, "remaining_count": remaining}
 
 
 @router.post("/trigger-pipeline")
