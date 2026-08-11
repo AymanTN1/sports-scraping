@@ -1372,7 +1372,7 @@ def scrape_all_sources() -> pd.DataFrame:
         except Exception:
             return []
 
-    with ThreadPoolExecutor(max_workers=25) as executor:
+    with ThreadPoolExecutor(max_workers=5) as executor:
         future_to_src = {executor.submit(_scrape_safe, src): src for src in SOURCES}
         done_count = 0
         try:
