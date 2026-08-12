@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# MercatoPULSE API v3.1.0
 from __future__ import annotations
 
 import logging
