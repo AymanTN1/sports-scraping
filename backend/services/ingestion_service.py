@@ -91,6 +91,14 @@ class CsvIngestionService:
             article.image_url = img_url or None
             article.image_caption = row.get("image_caption")
             article.credibility_score = row["credibility"]
+            # V2: Import fee_numeric and semantic_hash
+            fee_num = row.get("fee_numeric")
+            try:
+                article.fee_numeric = float(fee_num) if fee_num and str(fee_num) != "nan" else 0
+            except (ValueError, TypeError):
+                article.fee_numeric = 0
+            sem_hash = str(row.get("semantic_hash") or "").strip()
+            article.semantic_hash = sem_hash if sem_hash and sem_hash != "nan" else None
             article.source_id = source.id
 
         self.db.commit()

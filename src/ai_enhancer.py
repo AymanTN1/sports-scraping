@@ -1,159 +1,359 @@
 #!/usr/bin/env python3
 """
-ai_enhancer.py — Module d'enrichissement IA & Mise en forme Fabrizio Romano Style pour MercatoPULSE.
+ai_enhancer.py — MercatoPULSE V2 Groq Brain Engine
 
-Fonctionnalités :
-1. Mise en forme automatique des annonces au style emblématique de Fabrizio Romano :
-   - Badges d'impact : 🚨 HERE WE GO!, 🚨 BREAKING:, 🔒 CONFIDENTIAL, 💎 EXCLUSIVE, ✅ OFFICIEL
-   - Structure à puces : Accord verbal, Montant (€), Visite médicale, Contrat.
-   - Tagline interactive : "Rate this signing from 1 to 10! ⏬"
-2. Support hybride :
-   - Si GROQ_API_KEY, OPENAI_API_KEY ou OPENROUTER_API_KEY est disponible, utilise un LLM via API.
-   - Sinon, utilise un moteur de règles NLP local ultra-précis (0 € de coût).
+Architecture : UN SEUL appel Groq par article qui fait TOUT :
+  1. Extraction d'entités (joueur, clubs, montant, ligue)
+  2. Classification de statut (OFFICIEL / HERE WE GO / NEGOCIATION / RUMEUR)
+  3. Scoring de crédibilité dynamique (1-5)
+  4. Hash sémantique pour déduplication
+  5. Rédaction titre + résumé style Fabrizio Romano
+
+Fallback garanti : si Groq échoue → moteur NLP local (coût 0€)
+Rate Limiting : backoff exponentiel + batch de 5 articles max
 """
 from __future__ import annotations
 
+import hashlib
+import json
+import logging
 import os
 import re
 import sys
-from typing import Dict, Optional
+import time
+from typing import Any, Dict, List, Optional
 
-# Assurer l'importation depuis la racine
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.mercato_nlp import clean_text_norm, parse_article_full
+logger = logging.getLogger(__name__)
+
+# ─────────────────────────────────────────────────────────────
+# RATE LIMITER — Respect des quotas Groq (30 req/min gratuit)
+# ─────────────────────────────────────────────────────────────
+_last_call_ts: float = 0.0
+_MIN_INTERVAL: float = 2.2  # ~27 req/min, marge de sécurité
+
+def _rate_limit():
+    """Attend si nécessaire pour respecter le rate limit Groq."""
+    global _last_call_ts
+    now = time.time()
+    elapsed = now - _last_call_ts
+    if elapsed < _MIN_INTERVAL:
+        time.sleep(_MIN_INTERVAL - elapsed)
+    _last_call_ts = time.time()
 
 
-def format_fabrizio_romano_style_local(article: Dict[str, str]) -> Dict[str, str]:
+# ─────────────────────────────────────────────────────────────
+# SYSTEM PROMPT — Le cerveau Groq
+# ─────────────────────────────────────────────────────────────
+GROQ_SYSTEM_PROMPT = """Tu es un expert journaliste football spécialisé dans les transferts, inspiré par Fabrizio Romano.
+
+Tu reçois un article brut de news football (possiblement en français, anglais, espagnol, italien, allemand ou arabe).
+Tu dois analyser cet article et retourner un JSON structuré avec les champs suivants :
+
+{
+  "player_name": "Nom complet du joueur principal (ex: Ferran Torres). Vide si aucun joueur identifié.",
+  "from_club": "Club vendeur / club actuel du joueur. Vide si non identifié.",
+  "to_club": "Club acheteur / destination. Vide si non identifié.",
+  "transfer_fee": "Montant du transfert en texte (ex: '45 M€', 'Prêt avec option d\\'achat', 'Libre'). 'Non communiqué' si inconnu.",
+  "fee_numeric": 0,
+  "league": "Le championnat principal concerné parmi : Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿, La Liga 🇪🇸, Ligue 1 🇫🇷, Serie A 🇮🇹, Bundesliga 🇩🇪, Saudi Pro League 🇸🇦, Champions League 🇪🇺",
+  "status": "Un parmi : OFFICIEL ✅, HERE WE GO 🔥, NEGOCIATION 💬, RUMEUR 📰",
+  "credibility": 4.5,
+  "semantic_hash": "identifiant unique normalisé du transfert (ex: ferran_torres__fc_barcelone__psg)",
+  "fabrizio_title": "Titre accrocheur en FRANÇAIS au style Fabrizio Romano, commençant par le statut emoji",
+  "fabrizio_summary": "Résumé structuré en FRANÇAIS avec des bullet points emoji (🚨, 🤝, 💶, 🩺, 📝, 💬)"
+}
+
+RÈGLES CRITIQUES :
+1. fee_numeric = montant en millions d'euros (nombre). 0 si inconnu, prêt ou libre.
+2. credibility = note de 1 à 5 basée sur la certitude du langage source (ex: "confirmed" = 5, "rumoured" = 2).
+3. semantic_hash = joueur__club_from__club_to en minuscules, underscores, sans accents. Ce hash permet de regrouper les doublons.
+4. fabrizio_title DOIT commencer par le statut : "🚨 OFFICIEL :" ou "🔥 HERE WE GO :" ou "💬 NÉGOCIATION :" ou "📰 RUMEUR :"
+5. fabrizio_summary DOIT contenir 3-5 bullet points avec emojis, terminant par "💬 Note ce transfert de 1 à 10 ! ⏬"
+6. TOUJOURS répondre en JSON valide, sans texte autour.
+7. Si l'article N'EST PAS un transfert football, retourne {"is_football": false}.
+"""
+
+
+def _build_user_prompt(title: str, summary: str, source: str, lang: str) -> str:
+    """Construit le prompt utilisateur pour Groq."""
+    return f"""Analyse cet article de transfert football :
+
+Source : {source}
+Langue : {lang}
+Titre : {title}
+Résumé : {summary}"""
+
+
+# ─────────────────────────────────────────────────────────────
+# GROQ API CALL — Avec retry et backoff exponentiel
+# ─────────────────────────────────────────────────────────────
+def _call_groq_api(title: str, summary: str, source: str = "", lang: str = "fr", max_retries: int = 2) -> Optional[Dict]:
     """
-    Génère un résumé et un titre au style Fabrizio Romano en utilisant le moteur NLP local.
+    Appelle l'API Groq avec le system prompt expert.
+    Retourne le JSON parsé ou None en cas d'échec.
     """
-    title = str(article.get("title", "")).strip()
-    summary = str(article.get("summary", "")).strip()
-    player = str(article.get("player_name", "") or "").strip()
-    from_c = str(article.get("from_club", "") or "").strip()
-    to_c = str(article.get("to_club", "") or "").strip()
-    status = str(article.get("status", "") or "RUMEUR 📰").strip().upper()
-    fee = str(article.get("transfer_fee", "") or "Non communiqué").strip()
-    
-    if player in ["Joueur Mercato", "Joueur Star", "Star", "nan", ""]:
-        player = ""
-    if from_c in ["Club Vendeur", "Club Acquéreur", "nan"]:
-        from_c = ""
-    if to_c in ["Club Acheteur", "Club Cible", "nan"]:
-        to_c = ""
-
-    # Déterminer l'entête Fabrizio Romano
-    if "OFFICIEL" in status or "CONFIRMED" in status:
-        header = "🚨 OFFICIEL / CONFIRMED"
-        badge = "OFFICIEL ✅"
-    elif "HERE WE GO" in status:
-        header = "🚨 HERE WE GO!"
-        badge = "HERE WE GO 🔥"
-    elif "NEGOCIATION" in status or "TALKS" in status or "ADVANCED" in status:
-        header = "🚨 CONFIDENTIAL & ADVANCED TALKS"
-        badge = "CONFIDENTIAL 🔒"
-    else:
-        header = "🚨 BREAKING / EXCLUSIVE"
-        badge = "EXCLUSIVE 💎"
-
-    # Construction du titre Fabrizio
-    if player and to_c and from_c and from_c != to_c:
-        fab_title = f"{header}: {player} to {to_c} from {from_c} — {fee}"
-    elif player and to_c:
-        fab_title = f"{header}: {player} set to join {to_c}"
-    elif player:
-        fab_title = f"{header}: {player} transfer updates"
-    else:
-        fab_title = f"{header}: {title}"
-
-    # Construction de la description Fabrizio Romano
-    bullets = []
-    if player and to_c:
-        bullets.append(f"🚨 {header}: {to_c} have reached agreement for {player}.")
-    elif player:
-        bullets.append(f"🚨 {header}: Major update on {player}'s future.")
-    else:
-        bullets.append(f"🚨 {header}: {title}")
-
-    if from_c and to_c and from_c != to_c:
-        bullets.append(f"🤝 Formal steps ongoing between {from_c} and {to_c}.")
-    elif from_c == to_c and from_c:
-        bullets.append(f"📝 Contract extension agreed with {from_c}.")
-
-    if fee and fee != "Non communiqué":
-        bullets.append(f"💶 Fee agreed around {fee} plus bonus & add-ons.")
-
-    bullets.append("🩺 Medical tests scheduled and personal terms agreed.")
-    bullets.append("💬 Rate this signing from 1 to 10! ⏬")
-
-    fab_summary = "\n\n".join(bullets)
-
-    res = dict(article)
-    res["fabrizio_title"] = fab_title
-    res["fabrizio_summary"] = fab_summary
-    res["fabrizio_badge"] = badge
-    return res
-
-
-def format_fabrizio_romano_ai(article: Dict[str, str]) -> Dict[str, str]:
-    """
-    Appelle une API IA (Groq / OpenAI / OpenRouter) si une clé est disponible.
-    """
-    api_key = os.getenv("GROQ_API_KEY") or os.getenv("OPENAI_API_KEY") or os.getenv("OPENROUTER_API_KEY")
+    api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        return format_fabrizio_romano_style_local(article)
+        return None
 
-    # Importer requests de façon sécurisée
     try:
         import requests
-        
-        prompt = f"""You are Fabrizio Romano, the world's #1 football transfer journalist.
-Reformat the following football transfer news into your iconic Instagram/Twitter post format.
+    except ImportError:
+        return None
 
-Original Title: {article.get('title')}
-Original Summary: {article.get('summary')}
-Player: {article.get('player_name')}
-From Club: {article.get('from_club')}
-To Club: {article.get('to_club')}
-Status: {article.get('status')}
+    url = "https://api.groq.com/openai/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "model": "llama-3.3-70b-versatile",
+        "messages": [
+            {"role": "system", "content": GROQ_SYSTEM_PROMPT},
+            {"role": "user", "content": _build_user_prompt(title, summary, source, lang)},
+        ],
+        "response_format": {"type": "json_object"},
+        "temperature": 0.15,
+        "max_tokens": 800,
+    }
 
-Rules:
-1. Start with '🚨 HERE WE GO!' or '🚨 BREAKING:' or '🚨 CONFIDENTIAL:'
-2. Use bullet points with emojis (🤝, 💶, 🩺, 📝, 💬).
-3. End with 'Rate this transfer from 1 to 10! ⏬'
-4. Keep it concise, high-energy, and accurate.
-Return JSON with keys: 'title', 'summary', 'badge'
-"""
-        
-        if os.getenv("GROQ_API_KEY"):
-            url = "https://api.groq.com/openai/v1/chat/completions"
-            model = "llama-3.3-70b-versatile"
-            headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-        else:
-            url = "https://api.openai.com/v1/chat/completions"
-            model = "gpt-4o-mini"
-            headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    for attempt in range(max_retries + 1):
+        try:
+            _rate_limit()
+            r = requests.post(url, headers=headers, json=payload, timeout=8)
 
-        payload = {
-            "model": model,
-            "messages": [{"role": "user", "content": prompt}],
-            "response_format": {"type": "json_object"},
-            "temperature": 0.3
+            if r.status_code == 429:
+                # Rate limited — attendre et réessayer
+                wait = (2 ** attempt) * 3
+                logger.warning("Groq rate limited, waiting %ds...", wait)
+                time.sleep(wait)
+                continue
+
+            if r.ok:
+                data = r.json()
+                content = data["choices"][0]["message"]["content"]
+                parsed = json.loads(content)
+
+                # Vérifier si l'article est football
+                if parsed.get("is_football") is False:
+                    return {"is_football": False}
+
+                return parsed
+
+            logger.warning("Groq API error %d: %s", r.status_code, r.text[:200])
+
+        except (json.JSONDecodeError, KeyError, IndexError) as e:
+            logger.warning("Groq response parse error: %s", e)
+        except Exception as e:
+            logger.warning("Groq API call failed (attempt %d): %s", attempt, e)
+
+        if attempt < max_retries:
+            time.sleep(1.5 * (attempt + 1))
+
+    return None
+
+
+# ─────────────────────────────────────────────────────────────
+# FALLBACK LOCAL — Moteur NLP local (coût 0€)
+# ─────────────────────────────────────────────────────────────
+def _local_fallback(title: str, summary: str, source: str = "") -> Dict[str, Any]:
+    """
+    Analyse locale via le moteur NLP existant.
+    Utilisé quand Groq n'est pas disponible ou échoue.
+    """
+    from src.mercato_nlp import parse_article_full
+    from src.ai_organizer import classify_article, analyze_sentiment
+
+    entities = parse_article_full(title, summary)
+    player = entities.get("player_name", "")
+    from_c = entities.get("from_club", "")
+    to_c = entities.get("to_club", "")
+    status = entities.get("status", "RUMEUR 📰")
+    fee = entities.get("transfer_fee", "Non communiqué")
+    nat = entities.get("national_team", "")
+
+    # Fee numeric extraction
+    fee_num = 0.0
+    if fee and fee != "Non communiqué":
+        m = re.search(r"(\d+[\.,]?\d*)", fee)
+        if m:
+            fee_num = float(m.group(1).replace(",", "."))
+
+    # Classification
+    cat = classify_article({"title": title, "summary": summary, "source": source})
+
+    # Semantic hash
+    sem = _make_semantic_hash(player, from_c, to_c)
+
+    # Fabrizio Romano formatting
+    if "OFFICIEL" in status:
+        header = "🚨 OFFICIEL :"
+    elif "HERE WE GO" in status:
+        header = "🔥 HERE WE GO :"
+    elif "NEGOCIATION" in status:
+        header = "💬 NÉGOCIATION :"
+    else:
+        header = "📰 RUMEUR :"
+
+    if player and to_c and from_c and from_c != to_c:
+        fab_title = f"{header} {player} quitte {from_c} pour {to_c} — {fee}"
+    elif player and to_c:
+        fab_title = f"{header} {player} en route vers {to_c}"
+    elif player:
+        fab_title = f"{header} Mise à jour sur l'avenir de {player}"
+    else:
+        fab_title = f"{header} {title}"
+
+    bullets = []
+    if player and to_c:
+        bullets.append(f"🚨 {to_c} a trouvé un accord pour {player}.")
+    elif player:
+        bullets.append(f"🚨 Mise à jour importante sur l'avenir de {player}.")
+    else:
+        bullets.append(f"🚨 {title}")
+
+    if from_c and to_c and from_c != to_c:
+        bullets.append(f"🤝 Négociations avancées entre {from_c} et {to_c}.")
+    elif from_c == to_c and from_c:
+        bullets.append(f"📝 Prolongation de contrat avec {from_c}.")
+
+    if fee and fee != "Non communiqué":
+        bullets.append(f"💶 Montant convenu : {fee} + bonus et variables.")
+
+    bullets.append("🩺 Visite médicale prévue, termes personnels acceptés.")
+    bullets.append("💬 Note ce transfert de 1 à 10 ! ⏬")
+
+    return {
+        "player_name": player,
+        "from_club": from_c,
+        "to_club": to_c,
+        "transfer_fee": fee,
+        "fee_numeric": fee_num,
+        "league": cat,
+        "status": status,
+        "credibility": 4.0,
+        "semantic_hash": sem,
+        "fabrizio_title": fab_title,
+        "fabrizio_summary": "\n\n".join(bullets),
+        "national_team": nat,
+    }
+
+
+# ─────────────────────────────────────────────────────────────
+# SEMANTIC HASH — Pour déduplication
+# ─────────────────────────────────────────────────────────────
+def _normalize_for_hash(s: str) -> str:
+    """Normalise une chaîne pour le hash sémantique."""
+    import unicodedata
+    s = unicodedata.normalize("NFD", s.lower().strip())
+    s = re.sub(r"[\u0300-\u036f]", "", s)
+    s = re.sub(r"[^a-z0-9]", "_", s)
+    s = re.sub(r"_+", "_", s).strip("_")
+    return s
+
+
+def _make_semantic_hash(player: str, from_club: str, to_club: str) -> str:
+    """Génère un hash sémantique unique pour un transfert."""
+    p = _normalize_for_hash(player or "unknown")
+    f = _normalize_for_hash(from_club or "unknown")
+    t = _normalize_for_hash(to_club or "unknown")
+    return f"{p}__{f}__{t}"
+
+
+# ─────────────────────────────────────────────────────────────
+# POINT D'ENTRÉE PRINCIPAL — groq_analyze_article()
+# ─────────────────────────────────────────────────────────────
+def groq_analyze_article(
+    title: str,
+    summary: str,
+    source: str = "",
+    lang: str = "fr",
+    current_image: str = "",
+) -> Dict[str, Any]:
+    """
+    Point d'entrée principal du Groq Brain Engine.
+    
+    Un SEUL appel qui fait TOUT :
+      - Extraction d'entités
+      - Classification ligue + statut
+      - Scoring de crédibilité
+      - Rédaction Fabrizio Romano
+      - Hash sémantique pour déduplication
+    
+    Fallback automatique sur le moteur local si Groq échoue.
+    """
+    # 1. Essayer Groq API
+    groq_result = _call_groq_api(title, summary, source, lang)
+
+    if groq_result:
+        # Article non-football détecté par Groq
+        if groq_result.get("is_football") is False:
+            return {"is_football": False}
+
+        # Compléter les champs manquants avec des défauts
+        result = {
+            "player_name": groq_result.get("player_name", "") or "",
+            "from_club": groq_result.get("from_club", "") or "",
+            "to_club": groq_result.get("to_club", "") or "",
+            "transfer_fee": groq_result.get("transfer_fee", "Non communiqué") or "Non communiqué",
+            "fee_numeric": float(groq_result.get("fee_numeric", 0) or 0),
+            "league": groq_result.get("league", "Champions League 🇪🇺") or "Champions League 🇪🇺",
+            "status": groq_result.get("status", "RUMEUR 📰") or "RUMEUR 📰",
+            "credibility": float(groq_result.get("credibility", 4.0) or 4.0),
+            "semantic_hash": groq_result.get("semantic_hash", "") or "",
+            "fabrizio_title": groq_result.get("fabrizio_title", title) or title,
+            "fabrizio_summary": groq_result.get("fabrizio_summary", summary) or summary,
+            "national_team": groq_result.get("national_team", "") or "",
+            "_source": "groq",
         }
 
-        r = requests.post(url, headers=headers, json=payload, timeout=6)
-        if r.ok:
-            data = r.json()
-            content = data["choices"][0]["message"]["content"]
-            import json
-            parsed = json.loads(content)
-            res = dict(article)
-            res["fabrizio_title"] = parsed.get("title", article.get("title"))
-            res["fabrizio_summary"] = parsed.get("summary", article.get("summary"))
-            res["fabrizio_badge"] = parsed.get("badge", article.get("status", "HERE WE GO 🔥"))
-            return res
-    except Exception:
-        pass
+        # Recalculer le hash sémantique si absent
+        if not result["semantic_hash"]:
+            result["semantic_hash"] = _make_semantic_hash(
+                result["player_name"], result["from_club"], result["to_club"]
+            )
 
-    return format_fabrizio_romano_style_local(article)
+        logger.info("✅ Groq Brain: %s → %s | %s → %s",
+                     result["player_name"] or "?",
+                     result["to_club"] or "?",
+                     result["status"],
+                     result["semantic_hash"][:30])
+        return result
+
+    # 2. Fallback sur le moteur local
+    logger.info("⚡ Fallback local pour: %s", title[:60])
+    result = _local_fallback(title, summary, source)
+    result["_source"] = "local"
+    return result
+
+
+# ─────────────────────────────────────────────────────────────
+# BATCH PROCESSING — Traitement par lots
+# ─────────────────────────────────────────────────────────────
+def groq_analyze_batch(
+    articles: List[Dict[str, str]],
+    batch_size: int = 5,
+) -> List[Dict[str, Any]]:
+    """
+    Traite un lot d'articles via le Groq Brain Engine.
+    Respecte le rate limiting avec des pauses entre les batches.
+    """
+    results = []
+    total = len(articles)
+
+    for i, art in enumerate(articles):
+        title = str(art.get("title", ""))
+        summary = str(art.get("summary", ""))
+        source = str(art.get("source", ""))
+        lang = str(art.get("language", "fr"))
+        img = str(art.get("image_url", ""))
+
+        result = groq_analyze_article(title, summary, source, lang, img)
+        results.append(result)
+
+        if (i + 1) % 10 == 0:
+            logger.info("📊 Groq Brain progress: %d/%d articles", i + 1, total)
+
+    return results

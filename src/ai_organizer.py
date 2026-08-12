@@ -208,12 +208,24 @@ def extract_mercato_entities(title: str, summary: str = "") -> dict:
 
 
 def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
-    """Traite le DataFrame complet en appliquant l'analyse haute fidélité Mercato & l'enrichissement Fabrizio Romano."""
+    """
+    MercatoPULSE V2 — Pipeline d'analyse via Groq Brain Engine.
+    
+    Un SEUL appel Groq par article qui fait TOUT :
+      - Extraction d'entités (joueur, clubs, montant)
+      - Classification (ligue, statut)
+      - Scoring de crédibilité
+      - Rédaction Fabrizio Romano
+      - Hash sémantique pour déduplication
+    
+    Fallback garanti sur le moteur NLP local si Groq échoue.
+    """
     if df.empty:
         return df
 
     from src.photo_enricher import resolve_photo_for_article
-    from src.ai_enhancer import format_fabrizio_romano_ai
+    from src.ai_enhancer import groq_analyze_article
+    from src.deduplicator import deduplicate_dataframe
 
     categories = []
     sentiments = []
@@ -227,45 +239,65 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     fab_titles = []
     fab_summaries = []
     images = []
+    sem_hashes = []
+    credibilities = []
 
-    for _, row in df.iterrows():
+    total = len(df)
+    for idx, (_, row) in enumerate(df.iterrows()):
         title = str(row.get("title", ""))
         summary = str(row.get("summary", ""))
+        source = str(row.get("source", ""))
+        lang = str(row.get("language", "fr"))
         url = str(row.get("url", ""))
         curr_img = str(row.get("image_url") or "")
 
-        entities = extract_mercato_entities(title, summary)
-        cat = classify_article(row.to_dict())
-        sent = analyze_sentiment(title, summary)
+        # ── UN SEUL APPEL — Groq Brain Engine ──
+        result = groq_analyze_article(
+            title=title,
+            summary=summary,
+            source=source,
+            lang=lang,
+            current_image=curr_img,
+        )
 
-        # Montant
-        combined = f"{title} {summary}"
-        fee_str = "Non communiqué"
-        for pat in FEE_PATTERNS:
-            m = re.search(pat, combined, re.IGNORECASE)
-            if m:
-                fee_str = m.group(1).strip()
-                if "gratuit" in fee_str.lower() or "libre" in fee_str.lower():
-                    fee_str = "Free / Gratuit"
-                break
+        # Article non-football détecté → skip
+        if result.get("is_football") is False:
+            categories.append("SKIP")
+            sentiments.append("Neutre")
+            players.append("")
+            national_teams.append("")
+            from_clubs.append("")
+            to_clubs.append("")
+            fees.append("")
+            fee_nums.append(0)
+            statuses.append("SKIP")
+            fab_titles.append("")
+            fab_summaries.append("")
+            images.append("")
+            sem_hashes.append("")
+            credibilities.append(0)
+            continue
 
-        p_name = entities["player_name"]
-        f_club = entities["from_club"]
-        t_club = entities["to_club"]
-        st = entities["status"]
+        p_name = result.get("player_name", "")
+        f_club = result.get("from_club", "")
+        t_club = result.get("to_club", "")
+        st = result.get("status", "RUMEUR 📰")
+        fee_str = result.get("transfer_fee", "Non communiqué")
+        fee_n = float(result.get("fee_numeric", 0) or 0)
+        cat = result.get("league", "Champions League 🇪🇺")
+        nat = result.get("national_team", "")
+        sem = result.get("semantic_hash", "")
+        cred = float(result.get("credibility", 4.0) or 4.0)
 
-        # 1. Formatage Fabrizio Romano (IA ou local)
-        fab_item = format_fabrizio_romano_ai({
-            "title": title,
-            "summary": summary,
-            "player_name": p_name,
-            "from_club": f_club,
-            "to_club": t_club,
-            "status": st,
-            "transfer_fee": fee_str
-        })
+        # Sentiment basé sur le statut
+        if "OFFICIEL" in st or "HERE WE GO" in st:
+            sent = "Positif"
+        elif "NEGOCIATION" in st:
+            sent = "Neutre"
+        else:
+            sent = "Neutre"
 
-        # 2. Résolution photo HD Joueur / Club
+        # Résolution photo HD Joueur / Club
         best_img = resolve_photo_for_article(
             article_url=url,
             player_name=p_name,
@@ -277,15 +309,20 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
         categories.append(cat)
         sentiments.append(sent)
         players.append(p_name)
-        national_teams.append(entities["national_team"])
+        national_teams.append(nat)
         from_clubs.append(f_club)
         to_clubs.append(t_club)
         fees.append(fee_str)
-        fee_nums.append(parse_numeric_fee(fee_str))
+        fee_nums.append(fee_n)
         statuses.append(st)
-        fab_titles.append(fab_item.get("fabrizio_title", title))
-        fab_summaries.append(fab_item.get("fabrizio_summary", summary))
+        fab_titles.append(result.get("fabrizio_title", title))
+        fab_summaries.append(result.get("fabrizio_summary", summary))
         images.append(best_img)
+        sem_hashes.append(sem)
+        credibilities.append(cred)
+
+        if (idx + 1) % 20 == 0:
+            print(f"📊 Groq Brain V2: {idx + 1}/{total} articles traités...")
 
     df["category"] = categories
     df["league"] = categories
@@ -300,7 +337,16 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     df["title"] = fab_titles
     df["summary"] = fab_summaries
     df["image_url"] = images
+    df["semantic_hash"] = sem_hashes
+    df["credibility"] = credibilities
 
+    # Filtrer les articles non-football détectés par Groq
+    df = df[df["status"] != "SKIP"].reset_index(drop=True)
+
+    # Déduplication sémantique
+    df = deduplicate_dataframe(df)
+
+    print(f"✅ Pipeline V2 terminé: {len(df)} articles uniques enrichis.")
     return df
 
 

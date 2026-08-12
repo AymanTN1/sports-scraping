@@ -30,6 +30,8 @@ class Article(Base):
     image_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     image_caption: Mapped[str | None] = mapped_column(Text, nullable=True)
     credibility_score: Mapped[float] = mapped_column(Float, default=0)
+    fee_numeric: Mapped[float | None] = mapped_column(Float, nullable=True, default=0)
+    semantic_hash: Mapped[str | None] = mapped_column(String(128), nullable=True, index=True)
     source_id: Mapped[int] = mapped_column(ForeignKey("sources.id"), index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

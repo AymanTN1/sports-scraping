@@ -30,6 +30,7 @@ class ArticleItem(BaseModel):
     image_url: str | None = None
     image_caption: str | None = None
     credibility: float = 0
+    semantic_hash: str | None = None
 
 
 class ArticleListResponse(BaseModel):

@@ -74,9 +74,9 @@ class ArticleService:
     def _serialize_article(article) -> ArticleItem:
         from src.ai_organizer import parse_numeric_fee, PLAYER_NATIONALITY
         fee_str = getattr(article, "transfer_fee", None) or ""
-        fee_num = parse_numeric_fee(fee_str)
-        player = getattr(article, "player_name", None) or ""
-        nat_team = PLAYER_NATIONALITY.get(player, None)
+        fee_num = float(getattr(article, "fee_numeric", 0) or 0)
+        if fee_num == 0 and fee_str:
+            fee_num = parse_numeric_fee(fee_str)
 
         return ArticleItem(
             id=article.id,
@@ -101,4 +101,5 @@ class ArticleService:
             image_url=article.image_url,
             image_caption=article.image_caption,
             credibility=float(article.credibility_score or 0),
+            semantic_hash=getattr(article, "semantic_hash", None),
         )
