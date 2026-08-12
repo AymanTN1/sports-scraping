@@ -32,7 +32,11 @@ docs_reports = base_dir / "docs" / "reports"
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    try:
+        init_db()
+    except Exception as exc:
+        logger.warning("init_db startup skipped: %s", exc)
+
     with SessionLocal() as db:
         try:
             from backend.models import Article

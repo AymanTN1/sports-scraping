@@ -13,36 +13,30 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, futu
 
 
 def init_db() -> None:
-    from backend.models import article, source  # noqa: F401
-    from sqlalchemy import text
-
-    Base.metadata.create_all(bind=engine)
-
-    # Migrations automatiques V2 (fee_numeric & semantic_hash) avec autocommit direct
     try:
-        raw_conn = engine.raw_connection()
-        try:
-            raw_conn.autocommit = True
-            with raw_conn.cursor() as cursor:
-                if settings.is_sqlite:
-                    cursor.execute("ALTER TABLE articles ADD COLUMN fee_numeric FLOAT DEFAULT 0;")
-                else:
-                    cursor.execute("ALTER TABLE articles ADD COLUMN IF NOT EXISTS fee_numeric DOUBLE PRECISION DEFAULT 0;")
-        except Exception:
-            pass
+        from backend.models import article, source  # noqa: F401
+        from sqlalchemy import text
 
-        try:
-            raw_conn.autocommit = True
-            with raw_conn.cursor() as cursor:
+        Base.metadata.create_all(bind=engine)
+
+        # Migrations automatiques V2 (fee_numeric & semantic_hash)
+        with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
+            try:
                 if settings.is_sqlite:
-                    cursor.execute("ALTER TABLE articles ADD COLUMN semantic_hash VARCHAR(128);")
+                    conn.execute(text("ALTER TABLE articles ADD COLUMN fee_numeric FLOAT DEFAULT 0;"))
                 else:
-                    cursor.execute("ALTER TABLE articles ADD COLUMN IF NOT EXISTS semantic_hash VARCHAR(128);")
-        except Exception:
-            pass
-        finally:
-            raw_conn.close()
-    except Exception:
+                    conn.execute(text("ALTER TABLE articles ADD COLUMN IF NOT EXISTS fee_numeric DOUBLE PRECISION DEFAULT 0;"))
+            except Exception:
+                pass
+
+            try:
+                if settings.is_sqlite:
+                    conn.execute(text("ALTER TABLE articles ADD COLUMN semantic_hash VARCHAR(128);"))
+                else:
+                    conn.execute(text("ALTER TABLE articles ADD COLUMN IF NOT EXISTS semantic_hash VARCHAR(128);"))
+            except Exception:
+                pass
+    except Exception as e:
         pass
 
 
