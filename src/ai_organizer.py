@@ -208,9 +208,12 @@ def extract_mercato_entities(title: str, summary: str = "") -> dict:
 
 
 def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
-    """Traite le DataFrame complet en appliquant l'analyse haute fidélité Mercato."""
+    """Traite le DataFrame complet en appliquant l'analyse haute fidélité Mercato & l'enrichissement Fabrizio Romano."""
     if df.empty:
         return df
+
+    from src.photo_enricher import resolve_photo_for_article
+    from src.ai_enhancer import format_fabrizio_romano_ai
 
     categories = []
     sentiments = []
@@ -221,10 +224,15 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     fees = []
     fee_nums = []
     statuses = []
+    fab_titles = []
+    fab_summaries = []
+    images = []
 
     for _, row in df.iterrows():
         title = str(row.get("title", ""))
         summary = str(row.get("summary", ""))
+        url = str(row.get("url", ""))
+        curr_img = str(row.get("image_url") or "")
 
         entities = extract_mercato_entities(title, summary)
         cat = classify_article(row.to_dict())
@@ -241,15 +249,43 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
                     fee_str = "Free / Gratuit"
                 break
 
+        p_name = entities["player_name"]
+        f_club = entities["from_club"]
+        t_club = entities["to_club"]
+        st = entities["status"]
+
+        # 1. Formatage Fabrizio Romano (IA ou local)
+        fab_item = format_fabrizio_romano_ai({
+            "title": title,
+            "summary": summary,
+            "player_name": p_name,
+            "from_club": f_club,
+            "to_club": t_club,
+            "status": st,
+            "transfer_fee": fee_str
+        })
+
+        # 2. Résolution photo HD Joueur / Club
+        best_img = resolve_photo_for_article(
+            article_url=url,
+            player_name=p_name,
+            to_club=t_club,
+            from_club=f_club,
+            current_image=curr_img
+        )
+
         categories.append(cat)
         sentiments.append(sent)
-        players.append(entities["player_name"])
+        players.append(p_name)
         national_teams.append(entities["national_team"])
-        from_clubs.append(entities["from_club"])
-        to_clubs.append(entities["to_club"])
+        from_clubs.append(f_club)
+        to_clubs.append(t_club)
         fees.append(fee_str)
         fee_nums.append(parse_numeric_fee(fee_str))
-        statuses.append(entities["status"])
+        statuses.append(st)
+        fab_titles.append(fab_item.get("fabrizio_title", title))
+        fab_summaries.append(fab_item.get("fabrizio_summary", summary))
+        images.append(best_img)
 
     df["category"] = categories
     df["league"] = categories
@@ -261,6 +297,9 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     df["transfer_fee"] = fees
     df["fee_numeric"] = fee_nums
     df["status"] = statuses
+    df["title"] = fab_titles
+    df["summary"] = fab_summaries
+    df["image_url"] = images
 
     return df
 

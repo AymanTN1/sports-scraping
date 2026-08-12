@@ -2219,26 +2219,32 @@
         : a.status.includes('NEGOCIATION') ? '#00e5ff'
         : 'rgba(255,255,255,0.2)';
 
-      // Fallback HTML if image fails or is missing
+      // Fallback Graphic Poster HTML if image fails or is missing (Fabrizio Romano Card Style)
+      const statusWatermark = a.status.includes('HERE WE GO') ? 'HERE WE GO'
+        : a.status.includes('OFFICIEL') ? 'OFFICIEL'
+        : a.status.includes('NEGOCIATION') ? 'CONFIDENTIAL'
+        : 'BREAKING';
+
       const fallbackInner = `
-        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 40%, ${glowColor}22 0%, transparent 70%);pointer-events:none;"></div>
-        <div style="font-size:3.5rem;font-weight:900;letter-spacing:-2px;color:white;opacity:0.25;font-family:'Syne',sans-serif;position:absolute;bottom:-8px;right:8px;line-height:1;">${esc(a.to_club || a.from_club || '').split(' ').slice(-1)[0] || 'MERCATO'}</div>
-        <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid ${glowColor};display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:white;letter-spacing:-1px;backdrop-filter:blur(4px);font-family:'Syne',sans-serif;z-index:1;">${playerInitials}</div>
-        <div style="margin-top:0.5rem;font-size:0.75rem;font-weight:800;color:rgba(255,255,255,0.85);letter-spacing:0.5px;z-index:1;">${esc(a.player_name || '')}</div>
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 35%, ${glowColor}28 0%, rgba(9,12,21,0.95) 85%);pointer-events:none;"></div>
+        <div style="font-size:3.8rem;font-weight:900;letter-spacing:-3px;color:rgba(255,255,255,0.08);font-family:'Syne',sans-serif;position:absolute;top:5px;left:10px;line-height:0.9;text-transform:uppercase;user-select:none;pointer-events:none;">${statusWatermark}</div>
+        <div style="font-size:2.8rem;font-weight:900;letter-spacing:-2px;color:rgba(255,255,255,0.12);font-family:'Syne',sans-serif;position:absolute;bottom:0px;right:10px;line-height:1;user-select:none;pointer-events:none;">${esc(a.to_club || a.from_club || '').split(' ').slice(-1)[0] || 'MERCATO'}</div>
+        <div style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.08);border:2px solid ${glowColor};display:flex;align-items:center;justify-content:center;font-size:1.7rem;font-weight:800;color:white;letter-spacing:-1px;backdrop-filter:blur(6px);font-family:'Syne',sans-serif;z-index:2;box-shadow:0 0 25px ${glowColor}44;">${playerInitials}</div>
+        <div style="margin-top:0.6rem;font-size:0.88rem;font-weight:800;color:#FFFFFF;letter-spacing:0.5px;z-index:2;text-shadow:0 2px 8px rgba(0,0,0,0.8);font-family:'Syne',sans-serif;">${esc(a.player_name || '')}</div>
       `;
 
-      // Always show a visual — real image or rich fallback
+      // Always show a visual — real image or rich Fabrizio Romano poster
       const visual = (a.image_url && a.image_url.startsWith('http')) ? `
-        <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;">
+        <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;height:180px;overflow:hidden;">
           <img src="${escA(a.image_url)}" alt="${escA(a.player_name || a.title)}" loading="lazy"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='none';"
-            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;z-index:2;">
-          <div class="card-visual-overlay" style="z-index:3;"></div>
+            onerror="this.style.display='none';"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;z-index:2;transition:transform 0.4s ease;">
+          <div class="card-visual-overlay" style="z-index:3;background:linear-gradient(to top, rgba(9, 12, 21, 0.95) 0%, rgba(9, 12, 21, 0.3) 60%, transparent 100%);"></div>
           ${fallbackInner}
           <div class="card-status-badge ${statusClass}" style="z-index:4;">${esc(a.status)}</div>
         </div>`
       : `
-        <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;min-height:160px;overflow:hidden;">
+        <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;height:180px;overflow:hidden;">
           ${fallbackInner}
           <div class="card-status-badge ${statusClass}" style="z-index:4;">${esc(a.status)}</div>
         </div>`;
@@ -2284,6 +2290,9 @@
         return !isNaN(d) && (Date.now() - d.getTime()) < 2 * 3600000;
       })();
 
+      // Format summary with HTML line breaks for Fabrizio Romano bullet points
+      const formattedSummary = esc(a.summary || '').replace(/\n/g, '<br>');
+
       return `
         <article class="feed-card" style="cursor:pointer" onclick="window.open('${escA(articleUrl)}','_blank')">
           ${visual}
@@ -2298,7 +2307,7 @@
             </div>
 
             <h3 class="card-title">${isNew ? '<span style="background:#ef4444;color:#fff;font-size:0.6rem;font-weight:900;padding:1px 5px;border-radius:4px;letter-spacing:1px;margin-right:5px;vertical-align:middle;">NEW</span>' : ''}${esc(a.title)}</h3>
-            <p class="card-summary">${esc(a.summary)}</p>
+            <p class="card-summary" style="line-height:1.5;white-space:pre-line;">${formattedSummary}</p>
 
             <div class="card-footer">
               <div style="display:flex;align-items:center;gap:0.5rem;flex:1;min-width:0;">

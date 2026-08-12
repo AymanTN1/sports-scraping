@@ -249,42 +249,68 @@ def resolve_photo_for_article(
     """
     Résout la meilleure photo possible pour un article en utilisant l'ordre de priorité :
     1. Photo existante déjà valide
-    2. Photo officielle du joueur / entraîneur (avec cache)
+    2. Photo officielle du joueur / entraîneur (avec cache persistent)
     3. Scraping direct og:image sur la page
     4. Logo officiel du club acheteur ou vendeur
+    5. Recherche Wikipedia logo club en fallback
     """
     # 1. Image courante valide
     valid_current = clean_image_url(current_image)
     if valid_current:
         return valid_current
     
+    # Nettoyage des noms
+    p_clean = (player_name or "").strip()
+    if p_clean in ["Joueur Mercato", "Joueur Star", "Star", "nan", "None"]:
+        p_clean = ""
+
     # 2. Photo Joueur / Entraîneur via cache / web
-    if player_name and player_name not in ["Joueur Mercato", "Joueur Star", "Star"]:
-        cache_key = f"player:{player_name.strip().lower()}"
+    if p_clean and len(p_clean) >= 3:
+        cache_key = f"player:{p_clean.lower()}"
         with _cache_lock:
             cached = PHOTO_CACHE.get(cache_key)
         if cached:
             return cached
         
-        photo = fetch_player_photo_from_web(player_name)
+        photo = fetch_player_photo_from_web(p_clean)
         if photo:
             with _cache_lock:
                 PHOTO_CACHE[cache_key] = photo
+                save_cache(PHOTO_CACHE)
             return photo
-    
-    # 3. Scraping og:image direct de l'article
-    if article_url and "news.google.com" not in article_url:
+
+    # 3. Logo Club (Acheteur prioritaire, puis Vendeur)
+    for c_candidate in [to_club, from_club]:
+        if not c_candidate or c_candidate in ["Club Acheteur", "Club Vendeur", "Club Cible", "Club Acquéreur", "nan"]:
+            continue
+        c_clean = c_candidate.strip()
+        cache_key = f"badge:{c_clean.lower()}"
+        with _cache_lock:
+            cached = PHOTO_CACHE.get(cache_key)
+        if cached:
+            return cached
+        
+        badge = get_club_badge(c_clean)
+        if badge:
+            with _cache_lock:
+                PHOTO_CACHE[cache_key] = badge
+                save_cache(PHOTO_CACHE)
+            return badge
+        
+        # Tentative recherche logo club via web Wikipedia
+        badge_web = fetch_player_photo_from_web(f"{c_clean} FC")
+        if badge_web:
+            with _cache_lock:
+                PHOTO_CACHE[cache_key] = badge_web
+                save_cache(PHOTO_CACHE)
+            return badge_web
+
+    # 4. Scraping og:image direct de l'article si URL valide
+    if article_url and article_url.startswith("http") and "news.google.com" not in article_url:
         page_img = scrape_article_og_image(article_url)
         if page_img:
             return page_img
-    
-    # 4. Logo Club
-    club = to_club if to_club and "Acheteur" not in to_club else from_club
-    if club and "Vendeur" not in club:
-        badge = get_club_badge(club)
-        if badge:
-            return badge
-    
+
     return ""
 
 

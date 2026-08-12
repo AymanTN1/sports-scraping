@@ -108,33 +108,58 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Marca Fichajes",
-        "url": "https://news.google.com/rss/search?q=marca+fichajes+futbol+when:24h&hl=es&gl=ES&ceid=ES:es",
-        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
+        "url": "https://news.google.com/rss/search?q=marca+fichajes+futbol+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.85,
     },
     {
         "name": "Marca Real Madrid",
-        "url": "https://news.google.com/rss/search?q=marca+real+madrid+fichajes+when:24h&hl=es&gl=ES&ceid=ES:es",
-        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
+        "url": "https://news.google.com/rss/search?q=marca+real+madrid+fichajes+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.85,
     },
     {
         "name": "Marca Barcelona",
-        "url": "https://news.google.com/rss/search?q=marca+barcelona+fichajes+when:24h&hl=es&gl=ES&ceid=ES:es",
-        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
+        "url": "https://news.google.com/rss/search?q=marca+barcelona+fichajes+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.85,
     },
     {
         "name": "Sport.es Mercato",
-        "url": "https://news.google.com/rss/search?q=sport.es+fichajes+futbol+barcelona+when:24h&hl=es&gl=ES&ceid=ES:es",
-        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.75,
+        "url": "https://news.google.com/rss/search?q=sport.es+fichajes+futbol+barcelona+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
     },
     {
         "name": "AS Fichajes",
         "url": "https://as.com/rss/futbol/mercado-de-fichajes/",
+        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
+    },
+    {
+        "name": "Football España",
+        "url": "https://www.football-espana.net/feed",
+        "lang": "en", "category_default": "La Liga 🇪🇸", "credibility": 0.85,
+    },
+    {
+        "name": "Fichajes.net Global",
+        "url": "https://www.fichajes.net/feed",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.75,
     },
     {
+        "name": "Barça & PSG Mercato Global",
+        "url": "https://news.google.com/rss/search?q=Barcelona+OR+PSG+fichajes+mercato+transfert+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
+    },
+    {
+        "name": "Spanish Star Mercato (Ferran, Rodri, Romero)",
+        "url": "https://news.google.com/rss/search?q=Ferran+Torres+OR+Rodri+OR+Cuti+Romero+OR+Ansu+Fati+fichajes+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
+    },
+    {
+        "name": "Fabrizio Romano Live Updates",
+        "url": "https://news.google.com/rss/search?q=Fabrizio+Romano+here+we+go+OR+transfer+when:48h&hl=en&gl=US&ceid=US:en",
+        "lang": "en", "category_default": "Champions League 🇪🇺", "credibility": 0.95,
+    },
+    {
         "name": "Google News Fichajes ES",
-        "url": "https://news.google.com/rss/search?q=fichajes+futbol+when:24h&hl=es&gl=ES&ceid=ES:es",
-        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.65,
+        "url": "https://news.google.com/rss/search?q=fichajes+futbol+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.70,
     },
 
     # ══════════════════════════════════════════════════════════

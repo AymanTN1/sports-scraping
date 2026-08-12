@@ -191,6 +191,23 @@ PLAYER_REGISTRY: Dict[str, Dict[str, str]] = {
     "José Mourinho": {"current_club": "Fenerbahçe", "nat": "Portugal 🇵🇹", "alias": ["Mourinho"]},
     "Luis Enrique": {"current_club": "PSG", "nat": "Espagne 🇪🇸", "alias": []},
     "Diego Simeone": {"current_club": "Atlético de Madrid", "nat": "Argentine 🇦🇷", "alias": ["Simeone"]},
+    "Ferran Torres": {"current_club": "FC Barcelone", "nat": "Espagne 🇪🇸", "alias": ["Ferran"]},
+    "Matteo Ruggeri": {"current_club": "Aston Villa", "nat": "Italie 🇮🇹", "alias": ["Ruggeri"]},
+    "Paul Pogba": {"current_club": "AS Monaco", "nat": "France 🇫🇷", "alias": ["Pogba"]},
+    "Cristian Romero": {"current_club": "Tottenham", "nat": "Argentine 🇦🇷", "alias": ["Cuti Romero", "Romero"]},
+    "Ansu Fati": {"current_club": "FC Barcelone", "nat": "Espagne 🇪🇸", "alias": ["Fati"]},
+    "Vitor Roque": {"current_club": "Real Betis", "nat": "Brésil 🇧🇷", "alias": ["Roque"]},
+    "Arda Güler": {"current_club": "Real Madrid", "nat": "Turquie 🇹🇷", "alias": ["Arda Guler", "Güler"]},
+    "Savinho": {"current_club": "Manchester City", "nat": "Brésil 🇧🇷", "alias": ["Sávio"]},
+    "Joshua Zirkzee": {"current_club": "Manchester United", "nat": "Pays-Bas 🇳🇱", "alias": ["Zirkzee"]},
+    "Mikel Merino": {"current_club": "Arsenal", "nat": "Espagne 🇪🇸", "alias": ["Merino"]},
+    "Conor Gallagher": {"current_club": "Atlético de Madrid", "nat": "Angleterre 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "alias": ["Gallagher"]},
+    "Federico Chiesa": {"current_club": "Liverpool", "nat": "Italie 🇮🇹", "alias": ["Chiesa"]},
+    "Wojciech Szczęsny": {"current_club": "FC Barcelone", "nat": "Pologne 🇵🇱", "alias": ["Szczesny", "Szczęsny"]},
+    "Alexander Sørloth": {"current_club": "Atlético de Madrid", "nat": "Norvège 🇳🇴", "alias": ["Sorloth", "Sørloth"]},
+    "Robin Le Normand": {"current_club": "Atlético de Madrid", "nat": "Espagne 🇪🇸", "alias": ["Le Normand"]},
+    "Marc Guéhi": {"current_club": "Crystal Palace", "nat": "Angleterre 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "alias": ["Guehi", "Guéhi"]},
+    "Fermín López": {"current_club": "FC Barcelone", "nat": "Espagne 🇪🇸", "alias": ["Fermin", "Fermín"]},
 }
 
 # ─────────────────────────────────────────────────────────────
