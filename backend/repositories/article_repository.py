@@ -58,7 +58,7 @@ class ArticleRepository:
             select(Article)
             .join(Source)
             .options(joinedload(Article.source))
-            .order_by(Article.published_at.is_(None), Article.published_at.desc(), Article.created_at.desc())
+            .order_by(Article.published_at.desc().nullslast(), Article.created_at.desc())
             .offset((page - 1) * page_size)
             .limit(page_size)
         )
