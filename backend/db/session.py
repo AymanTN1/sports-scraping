@@ -14,8 +14,29 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, futu
 
 def init_db() -> None:
     from backend.models import article, source  # noqa: F401
+    from sqlalchemy import text
 
     Base.metadata.create_all(bind=engine)
+
+    # Migrations automatiques pour les colonnes V2
+    with engine.connect() as conn:
+        try:
+            if settings.is_sqlite:
+                conn.execute(text("ALTER TABLE articles ADD COLUMN fee_numeric FLOAT DEFAULT 0;"))
+            else:
+                conn.execute(text("ALTER TABLE articles ADD COLUMN IF NOT EXISTS fee_numeric DOUBLE PRECISION DEFAULT 0;"))
+            conn.commit()
+        except Exception:
+            pass
+
+        try:
+            if settings.is_sqlite:
+                conn.execute(text("ALTER TABLE articles ADD COLUMN semantic_hash VARCHAR(128);"))
+            else:
+                conn.execute(text("ALTER TABLE articles ADD COLUMN IF NOT EXISTS semantic_hash VARCHAR(128);"))
+            conn.commit()
+        except Exception:
+            pass
 
 
 def get_db():
