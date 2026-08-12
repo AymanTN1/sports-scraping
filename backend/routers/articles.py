@@ -28,16 +28,19 @@ def list_articles(
     search: str | None = None,
     service: ArticleService = Depends(get_article_service),
 ):
-    return service.list_articles(
-        page=page,
-        page_size=page_size,
-        category=category,
-        league=league,
-        club=club,
-        status=status,
-        source_name=source,
-        search=search,
-    )
+    try:
+        return service.list_articles(
+            page=page,
+            page_size=page_size,
+            category=category,
+            league=league,
+            club=club,
+            status=status,
+            source_name=source,
+            search=search,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database query error: {str(e)}")
 
 
 @router.get("/categories", response_model=list[str])
