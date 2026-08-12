@@ -77,6 +77,8 @@ class ArticleService:
         fee_num = float(getattr(article, "fee_numeric", 0) or 0)
         if fee_num == 0 and fee_str:
             fee_num = parse_numeric_fee(fee_str)
+        player = getattr(article, "player_name", None) or ""
+        nat_team = PLAYER_NATIONALITY.get(player, None)
 
         return ArticleItem(
             id=article.id,
