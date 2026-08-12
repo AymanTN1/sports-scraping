@@ -18,22 +18,30 @@ def init_db() -> None:
 
     Base.metadata.create_all(bind=engine)
 
-    # Migrations automatiques V2 (fee_numeric & semantic_hash)
+    # Migrations automatiques V2 (fee_numeric & semantic_hash) avec autocommit direct
     try:
-        with engine.begin() as conn:
-            if settings.is_sqlite:
-                conn.execute(text("ALTER TABLE articles ADD COLUMN fee_numeric FLOAT DEFAULT 0;"))
-            else:
-                conn.execute(text("ALTER TABLE articles ADD COLUMN IF NOT EXISTS fee_numeric DOUBLE PRECISION DEFAULT 0;"))
-    except Exception:
-        pass
+        raw_conn = engine.raw_connection()
+        try:
+            raw_conn.autocommit = True
+            with raw_conn.cursor() as cursor:
+                if settings.is_sqlite:
+                    cursor.execute("ALTER TABLE articles ADD COLUMN fee_numeric FLOAT DEFAULT 0;")
+                else:
+                    cursor.execute("ALTER TABLE articles ADD COLUMN IF NOT EXISTS fee_numeric DOUBLE PRECISION DEFAULT 0;")
+        except Exception:
+            pass
 
-    try:
-        with engine.begin() as conn:
-            if settings.is_sqlite:
-                conn.execute(text("ALTER TABLE articles ADD COLUMN semantic_hash VARCHAR(128);"))
-            else:
-                conn.execute(text("ALTER TABLE articles ADD COLUMN IF NOT EXISTS semantic_hash VARCHAR(128);"))
+        try:
+            raw_conn.autocommit = True
+            with raw_conn.cursor() as cursor:
+                if settings.is_sqlite:
+                    cursor.execute("ALTER TABLE articles ADD COLUMN semantic_hash VARCHAR(128);")
+                else:
+                    cursor.execute("ALTER TABLE articles ADD COLUMN IF NOT EXISTS semantic_hash VARCHAR(128);")
+        except Exception:
+            pass
+        finally:
+            raw_conn.close()
     except Exception:
         pass
 
