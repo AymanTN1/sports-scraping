@@ -1,0 +1,52 @@
+repos:
+  # ────────────────────────────────────────────────────────
+  # 1. Formatage automatique (Black)
+  # ────────────────────────────────────────────────────────
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        language_version: python3.11
+
+  # ────────────────────────────────────────────────────────
+  # 2. Lint Python (Ruff — remplace flake8, isort, pylint)
+  # ────────────────────────────────────────────────────────
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+
+  # ────────────────────────────────────────────────────────
+  # 3. Détection de secrets (Gitleaks)
+  # ────────────────────────────────────────────────────────
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks
+        name: "Gitleaks — detect secrets"
+
+  # ────────────────────────────────────────────────────────
+  # 4. Analyse SAST (Bandit)
+  # ────────────────────────────────────────────────────────
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.8
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml", "-r", "backend", "src"]
+        language_version: python3.11
+
+  # ────────────────────────────────────────────────────────
+  # 5. Hooks Généraux (trailing spaces, YAML, JSON...)
+  # ────────────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: debug-statements

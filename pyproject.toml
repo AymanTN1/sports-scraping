@@ -1,0 +1,63 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+    "--cov=backend",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=xml:coverage.xml",
+    "--cov-fail-under=50",
+]
+markers = [
+    "unit: Unit tests (fast, no external dependencies)",
+    "integration: Integration tests (requires DB or network)",
+    "slow: Slow tests (>5s)",
+]
+
+[tool.coverage.run]
+source = ["backend", "src"]
+omit = [
+    "*/__pycache__/*",
+    "*/migrations/*",
+    "*/tests/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@abstractmethod",
+]
+
+[tool.bandit]
+targets = ["backend", "src"]
+severity = "medium"
+confidence = "medium"
+skips = ["B101"]  # Skip 'assert' warnings in test code
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "mercatopulse"
+version = "3.1.0"
+description = "Real-time football transfer intelligence platform with AI analysis"
+requires-python = ">=3.10"
+readme = "README.md"
+license = { text = "MIT" }
+
+keywords = [
+    "football",
+    "transfer",
+    "scraping",
+    "fastapi",
+    "groq",
+    "ai",
+    "nlp",
+    "sports-analytics",
+]

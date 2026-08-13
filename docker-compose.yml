@@ -1,0 +1,111 @@
+version: "3.9"
+
+services:
+  # ──────────────────────────────────────────────
+  # API Application FastAPI
+  # ──────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: mercatopulse_api
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./data/sportpulse.db}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - SCRAPE_INTERVAL_MINUTES=${SCRAPE_INTERVAL_MINUTES:-15}
+      - PYTHONIOENCODING=utf-8
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - mercato_net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/api/v1/health').raise_for_status()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ──────────────────────────────────────────────
+  # NGINX Reverse Proxy (Rate Limiting + Compression)
+  # ──────────────────────────────────────────────
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: mercatopulse_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./web:/usr/share/nginx/html:ro
+    depends_on:
+      - api
+    networks:
+      - mercato_net
+
+  # ──────────────────────────────────────────────
+  # Redis Cache (API Response Caching + Rate Limiting)
+  # ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: mercatopulse_redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    networks:
+      - mercato_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ──────────────────────────────────────────────
+  # SonarQube — Code Quality Analysis (dev only)
+  # ──────────────────────────────────────────────
+  sonarqube:
+    image: sonarqube:10-community
+    container_name: mercatopulse_sonarqube
+    profiles: ["quality"]       # Activé uniquement avec: docker compose --profile quality up
+    environment:
+      - SONAR_JDBC_URL=jdbc:postgresql://sonar_db:5432/sonar
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
+    ports:
+      - "9000:9000"
+    depends_on:
+      - sonar_db
+    networks:
+      - mercato_net
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+
+  sonar_db:
+    image: postgres:15-alpine
+    container_name: sonar_db
+    profiles: ["quality"]
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonar
+    volumes:
+      - sonar_db_data:/var/lib/postgresql/data
+    networks:
+      - mercato_net
+
+networks:
+  mercato_net:
+    driver: bridge
+
+volumes:
+  sonarqube_data:
+  sonarqube_logs:
+  sonar_db_data:
