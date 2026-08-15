@@ -15,12 +15,12 @@ if load_dotenv is not None:
 
 
 class Settings:
-    project_name: str = "MarketPulse API"
-    project_version: str = "3.0.0"
+    project_name: str = "MercatoPULSE API"
+    project_version: str = "3.1.0"
     api_prefix: str = "/api/v1"
     docs_url: str = "/api/docs"
     openapi_url: str = "/api/openapi.json"
-    default_database_path: Path = BASE_DIR / "data" / "sportpulse.db"
+    default_database_path: Path = BASE_DIR / "data" / "mercatopulse.db"
     _raw_db_url: str = os.getenv(
         "DATABASE_URL",
         f"sqlite:///{default_database_path.as_posix()}",
