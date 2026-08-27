@@ -273,67 +273,30 @@ def _make_semantic_hash(player: str, from_club: str, to_club: str) -> str:
     return f"{p}__{f}__{t}"
 
 
-def _validate_club_direction(result: Dict[str, Any]) -> Dict[str, Any]:
+def _validate_club_direction(result: Dict[str, Any], title: str = "", summary: str = "") -> Dict[str, Any]:
     """
-    Post-validation des clubs from/to en utilisant la base PLAYER_REGISTRY.
-    Si on connaît le club actuel du joueur et qu'il est mis en to_club au lieu de from_club,
-    on corrige l'inversion.
+    Valide et garantit la direction exacte d'un transfert (club vendeur -> club acheteur)
+    en s'appuyant sur le moteur d'analyse grammaticale multilingue.
     """
     player_name = result.get("player_name", "")
     from_club = result.get("from_club", "")
     to_club = result.get("to_club", "")
 
-    if not player_name or not from_club or not to_club:
-        return result
-
-    # Prolongation : pas d'inversion possible
-    if from_club == to_club:
-        return result
-
-    try:
-        from src.mercato_nlp import PLAYER_REGISTRY, clean_text_norm
-
-        # Chercher le joueur dans le registre
-        known_current_club = None
-        p_norm = clean_text_norm(player_name)
-
-        for reg_name, reg_data in PLAYER_REGISTRY.items():
-            reg_norm = clean_text_norm(reg_name)
-            if reg_norm == p_norm:
-                known_current_club = reg_data.get("current_club")
-                break
-            # Check aliases
-            for alias in reg_data.get("alias", []):
-                if clean_text_norm(alias) == p_norm:
-                    known_current_club = reg_data.get("current_club")
-                    break
-            if known_current_club:
-                break
-
-        if known_current_club:
-            known_norm = clean_text_norm(known_current_club)
-            from_norm = clean_text_norm(from_club)
-            to_norm = clean_text_norm(to_club)
-
-            # Cas 1 : Le club actuel connu est dans to_club → INVERSION !
-            if known_norm in to_norm or to_norm in known_norm:
-                if known_norm not in from_norm and from_norm not in known_norm:
-                    logger.warning(
-                        "🔄 Correction inversion clubs pour %s: %s ↔ %s (club actuel connu: %s)",
-                        player_name, from_club, to_club, known_current_club,
-                    )
-                    result["from_club"], result["to_club"] = to_club, from_club
-
-            # Cas 2 : from_club ne match pas du tout le club connu, mais to_club non plus
-            # → remplir from_club avec le club connu si vide
-            elif known_norm not in from_norm and from_norm not in known_norm:
-                if not from_club or from_club == to_club:
-                    result["from_club"] = known_current_club
-
-    except ImportError:
-        pass
-    except Exception as e:
-        logger.warning("Club direction validation error: %s", e)
+    text_to_check = f"{title} {summary} {result.get('fabrizio_title', '')} {result.get('fabrizio_summary', '')}".strip()
+    if text_to_check:
+        try:
+            from src.mercato_nlp import resolve_mercato_direction, PLAYER_REGISTRY
+            p_data = PLAYER_REGISTRY.get(player_name)
+            correct_from, correct_to = resolve_mercato_direction(text_to_check, "", player_name, p_data)
+            if correct_from and correct_to and correct_from != correct_to:
+                result["from_club"] = correct_from
+                result["to_club"] = correct_to
+            elif correct_to and not to_club:
+                result["to_club"] = correct_to
+            elif correct_from and not from_club:
+                result["from_club"] = correct_from
+        except Exception as e:
+            logger.warning("Club direction validation error: %s", e)
 
     return result
 

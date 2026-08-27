@@ -6,14 +6,30 @@ Sources : 15+ sources spécialisées en Transferts & Football (Foot Mercato, Sky
 from __future__ import annotations
 
 import os
+import sys
 import random
 import time
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
+from pathlib import Path
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+
+# Ensure project root is in sys.path
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+try:
+    from src.mercato_nlp import is_football_mercato_article
+except ImportError:
+    try:
+        from mercato_nlp import is_football_mercato_article
+    except ImportError:
+        def is_football_mercato_article(t, s="", source=""):
+            return True
 
 HEADERS = {
     "User-Agent": (
@@ -1257,15 +1273,14 @@ def extract_image_from_rss_item(item, description_text: str, article_url: str) -
         if url and url.startswith("http"):
             return url
 
-    # ── Strategy 5: Fetch og:image from the article page (max 1 attempt, timeout 5s) ──
-    if article_url and article_url.startswith("http"):
+    # ── Strategy 5: Fetch og:image from the article page (skip Google News redirects) ──
+    if article_url and article_url.startswith("http") and "news.google.com" not in article_url:
         try:
-            r = requests.get(article_url, headers=HEADERS, timeout=5, stream=True)
-            # Only read the first 50KB to avoid downloading full pages
+            r = requests.get(article_url, headers=HEADERS, timeout=1.5, stream=True)
             content = b""
             for chunk in r.iter_content(8192):
                 content += chunk
-                if len(content) > 51200:
+                if len(content) > 32768:
                     break
             soup = BeautifulSoup(content, "html.parser")
             # Try og:image
@@ -1348,8 +1363,6 @@ def parse_rss_feed(source: dict) -> list[dict]:
                     "pub_date": pub_val,
                     "img_url": img_url
                 })
-
-        from src.mercato_nlp import is_football_mercato_article
 
         for row in items_data:
             title = row["title"]

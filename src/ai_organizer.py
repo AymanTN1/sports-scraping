@@ -227,23 +227,8 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
     from src.ai_enhancer import groq_analyze_article
     from src.deduplicator import deduplicate_dataframe
 
-    categories = []
-    sentiments = []
-    players = []
-    national_teams = []
-    from_clubs = []
-    to_clubs = []
-    fees = []
-    fee_nums = []
-    statuses = []
-    fab_titles = []
-    fab_summaries = []
-    images = []
-    sem_hashes = []
-    credibilities = []
-
-    total = len(df)
-    for idx, (_, row) in enumerate(df.iterrows()):
+    def _process_one_row(row_tuple):
+        _, row = row_tuple
         title = str(row.get("title", ""))
         summary = str(row.get("summary", ""))
         source = str(row.get("source", ""))
@@ -251,7 +236,6 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
         url = str(row.get("url", ""))
         curr_img = str(row.get("image_url") or "")
 
-        # ── UN SEUL APPEL — Groq Brain Engine ──
         result = groq_analyze_article(
             title=title,
             summary=summary,
@@ -260,23 +244,8 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
             current_image=curr_img,
         )
 
-        # Article non-football détecté → skip
         if result.get("is_football") is False:
-            categories.append("SKIP")
-            sentiments.append("Neutre")
-            players.append("")
-            national_teams.append("")
-            from_clubs.append("")
-            to_clubs.append("")
-            fees.append("")
-            fee_nums.append(0)
-            statuses.append("SKIP")
-            fab_titles.append("")
-            fab_summaries.append("")
-            images.append("")
-            sem_hashes.append("")
-            credibilities.append(0)
-            continue
+            return None
 
         p_name = result.get("player_name", "")
         f_club = result.get("from_club", "")
@@ -289,7 +258,6 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
         sem = result.get("semantic_hash", "")
         cred = float(result.get("credibility", 4.0) or 4.0)
 
-        # Sentiment basé sur le statut
         if "OFFICIEL" in st or "HERE WE GO" in st:
             sent = "Positif"
         elif "NEGOCIATION" in st:
@@ -297,7 +265,6 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
         else:
             sent = "Neutre"
 
-        # Résolution photo HD Joueur / Club
         best_img = resolve_photo_for_article(
             article_url=url,
             player_name=p_name,
@@ -306,42 +273,45 @@ def process_dataset(df: pd.DataFrame) -> pd.DataFrame:
             current_image=curr_img
         )
 
-        categories.append(cat)
-        sentiments.append(sent)
-        players.append(p_name)
-        national_teams.append(nat)
-        from_clubs.append(f_club)
-        to_clubs.append(t_club)
-        fees.append(fee_str)
-        fee_nums.append(fee_n)
-        statuses.append(st)
-        fab_titles.append(result.get("fabrizio_title", title))
-        fab_summaries.append(result.get("fabrizio_summary", summary))
-        images.append(best_img)
-        sem_hashes.append(sem)
-        credibilities.append(cred)
+        return {
+            "title": result.get("fabrizio_title", title),
+            "url": url,
+            "raw_date": row.get("raw_date", ""),
+            "published_at": row.get("published_at", ""),
+            "language": lang,
+            "summary": result.get("fabrizio_summary", summary),
+            "image_url": best_img,
+            "category": cat,
+            "source": source,
+            "player_name": p_name,
+            "from_club": f_club,
+            "to_club": t_club,
+            "transfer_fee": fee_str,
+            "fee_numeric": fee_n,
+            "league": cat,
+            "national_team": nat,
+            "status": st,
+            "sentiment": sent,
+            "semantic_hash": sem,
+            "credibility": cred,
+        }
 
-        if (idx + 1) % 20 == 0:
-            print(f"📊 Groq Brain V2: {idx + 1}/{total} articles traités...")
+    from concurrent.futures import ThreadPoolExecutor
 
-    df["category"] = categories
-    df["league"] = categories
-    df["sentiment"] = sentiments
-    df["player_name"] = players
-    df["national_team"] = national_teams
-    df["from_club"] = from_clubs
-    df["to_club"] = to_clubs
-    df["transfer_fee"] = fees
-    df["fee_numeric"] = fee_nums
-    df["status"] = statuses
-    df["title"] = fab_titles
-    df["summary"] = fab_summaries
-    df["image_url"] = images
-    df["semantic_hash"] = sem_hashes
-    df["credibility"] = credibilities
+    row_tuples = list(df.iterrows())
+    total = len(row_tuples)
+    print(f"🧠 Lancement de l'analyse IA parallèle sur {total} articles avec 25 workers...")
 
-    # Filtrer les articles non-football détectés par Groq
-    df = df[df["status"] != "SKIP"].reset_index(drop=True)
+    processed_rows = []
+    with ThreadPoolExecutor(max_workers=25) as executor:
+        for item in executor.map(_process_one_row, row_tuples):
+            if item is not None:
+                processed_rows.append(item)
+
+    if not processed_rows:
+        return pd.DataFrame()
+
+    df = pd.DataFrame(processed_rows)
 
     # Déduplication sémantique
     df = deduplicate_dataframe(df)

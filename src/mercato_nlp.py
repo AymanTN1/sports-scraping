@@ -198,7 +198,7 @@ PLAYER_REGISTRY: Dict[str, Dict[str, str]] = {
     "Ansu Fati": {"current_club": "FC Barcelone", "nat": "Espagne 🇪🇸", "alias": ["Fati"]},
     "Vitor Roque": {"current_club": "Real Betis", "nat": "Brésil 🇧🇷", "alias": ["Roque"]},
     "Arda Güler": {"current_club": "Real Madrid", "nat": "Turquie 🇹🇷", "alias": ["Arda Guler", "Güler"]},
-    "Savinho": {"current_club": "Manchester City", "nat": "Brésil 🇧🇷", "alias": ["Sávio"]},
+    "Savinho": {"current_club": "Manchester City", "nat": "Brésil 🇧🇷", "alias": ["Sávio", "Savio"]},
     "Joshua Zirkzee": {"current_club": "Manchester United", "nat": "Pays-Bas 🇳🇱", "alias": ["Zirkzee"]},
     "Mikel Merino": {"current_club": "Arsenal", "nat": "Espagne 🇪🇸", "alias": ["Merino"]},
     "Conor Gallagher": {"current_club": "Atlético de Madrid", "nat": "Angleterre 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "alias": ["Gallagher"]},
@@ -208,6 +208,32 @@ PLAYER_REGISTRY: Dict[str, Dict[str, str]] = {
     "Robin Le Normand": {"current_club": "Atlético de Madrid", "nat": "Espagne 🇪🇸", "alias": ["Le Normand"]},
     "Marc Guéhi": {"current_club": "Crystal Palace", "nat": "Angleterre 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "alias": ["Guehi", "Guéhi"]},
     "Fermín López": {"current_club": "FC Barcelone", "nat": "Espagne 🇪🇸", "alias": ["Fermin", "Fermín"]},
+    "Ayyoub Bouaddi": {"current_club": "LOSC Lille", "nat": "France 🇫🇷", "alias": ["Bouaddi"]},
+    "Curtis Jones": {"current_club": "Liverpool", "nat": "Angleterre 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "alias": ["Jones"]},
+    "Carlos Baleba": {"current_club": "Brighton", "nat": "Cameroun 🇨🇲", "alias": ["Baleba"]},
+    "Pape Matar Sarr": {"current_club": "Tottenham", "nat": "Sénégal 🇸🇳", "alias": ["Pape Matar", "Pape Sarr", "Matar Sarr"]},
+    "Emiliano Martínez": {"current_club": "Aston Villa", "nat": "Argentine 🇦🇷", "alias": ["Dibu Martinez", "Emiliano Martinez", "Emi Martinez"]},
+    "Pedro Neto": {"current_club": "Chelsea", "nat": "Portugal 🇵🇹", "alias": ["Neto"]},
+    "Crysencio Summerville": {"current_club": "West Ham", "nat": "Pays-Bas 🇳🇱", "alias": ["Summerville"]},
+    "Omar Marmoush": {"current_club": "Manchester City", "nat": "Égypte 🇪🇬", "alias": ["Marmoush"]},
+    "Elye Wahi": {"current_club": "OGC Nice", "nat": "France 🇫🇷", "alias": ["Wahi"]},
+    "Jonathan David": {"current_club": "Juventus", "nat": "Canada 🇨🇦", "alias": ["David"]},
+    "Amine Gouiri": {"current_club": "Olympique de Marseille", "nat": "Algérie 🇩🇿", "alias": ["Gouiri"]},
+    "João Palhinha": {"current_club": "Bayern Munich", "nat": "Portugal 🇵🇹", "alias": ["Palhinha"]},
+    "Viktor Tsygankov": {"current_club": "Girona", "nat": "Ukraine 🇺🇦", "alias": ["Tsygankov"]},
+    "Troy Parrott": {"current_club": "Real Betis", "nat": "Irlande 🇮🇪", "alias": ["Parrott"]},
+    "Melvin Bard": {"current_club": "OGC Nice", "nat": "France 🇫🇷", "alias": ["Bard"]},
+    "Nico González": {"current_club": "FC Porto", "nat": "Espagne 🇪🇸", "alias": ["Nico Gonzalez"]},
+    "Exequiel Palacios": {"current_club": "Bayer Leverkusen", "nat": "Argentine 🇦🇷", "alias": ["Palacios"]},
+    "Michele Di Gregorio": {"current_club": "Juventus", "nat": "Italie 🇮🇹", "alias": ["Di Gregorio"]},
+    "Andrea Pinamonti": {"current_club": "SS Lazio", "nat": "Italie 🇮🇹", "alias": ["Pinamonti"]},
+    "Dilane Bakwa": {"current_club": "LOSC Lille", "nat": "France 🇫🇷", "alias": ["Bakwa"]},
+    "Davide Calabria": {"current_club": "Torino", "nat": "Italie 🇮🇹", "alias": ["Calabria"]},
+    "Francesco Acerbi": {"current_club": "Inter Milan", "nat": "Italie 🇮🇹", "alias": ["Acerbi"]},
+    "Aaron Wan-Bissaka": {"current_club": "West Ham", "nat": "Angleterre 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "alias": ["Wan-Bissaka"]},
+    "Gabriel Martinelli": {"current_club": "Arsenal", "nat": "Brésil 🇧🇷", "alias": ["Martinelli"]},
+    "Noussair Mazraoui": {"current_club": "Manchester United", "nat": "Maroc 🇲🇦", "alias": ["Mazraoui"]},
+    "Manuel Ugarte": {"current_club": "Manchester United", "nat": "Uruguay 🇺🇾", "alias": ["Ugarte"]},
 }
 
 # ─────────────────────────────────────────────────────────────
@@ -215,76 +241,78 @@ PLAYER_REGISTRY: Dict[str, Dict[str, str]] = {
 # ─────────────────────────────────────────────────────────────
 CLUB_CANONICAL: Dict[str, str] = {
     # La Liga
-    "real madrid": "Real Madrid", "los blancos": "Real Madrid", "merengue": "Real Madrid",
-    "barcelona": "FC Barcelone", "fc barcelona": "FC Barcelone", "barca": "FC Barcelone", "barça": "FC Barcelone", "blaugrana": "FC Barcelone",
-    "atletico madrid": "Atlético de Madrid", "atletico": "Atlético de Madrid", "atlético": "Atlético de Madrid", "colchoneros": "Atlético de Madrid",
-    "sevilla": "FC Séville", "seville": "FC Séville", "sevilla fc": "FC Séville",
-    "real betis": "Real Betis", "betis": "Real Betis",
+    "real madrid": "Real Madrid", "real": "Real Madrid", "los blancos": "Real Madrid", "merengue": "Real Madrid", "merengues": "Real Madrid",
+    "barcelona": "FC Barcelone", "fc barcelona": "FC Barcelone", "barcelone": "FC Barcelone", "fc barcelone": "FC Barcelone", "barca": "FC Barcelone", "barça": "FC Barcelone", "blaugrana": "FC Barcelone", "blaugranas": "FC Barcelone",
+    "atletico madrid": "Atlético de Madrid", "atletico": "Atlético de Madrid", "atlético": "Atlético de Madrid", "colchoneros": "Atlético de Madrid", "atleti": "Atlético de Madrid",
+    "sevilla": "FC Séville", "seville": "FC Séville", "sevilla fc": "FC Séville", "fc seville": "FC Séville",
+    "real betis": "Real Betis", "betis": "Real Betis", "betis seville": "Real Betis",
     "villarreal": "Villarreal", "villareal": "Villarreal",
-    "real sociedad": "Real Sociedad", "la real": "Real Sociedad",
-    "athletic bilbao": "Athletic Bilbao", "athletic club": "Athletic Bilbao", "bilbao": "Athletic Bilbao",
-    "girona": "Girona", "girone": "Girona", "valencia": "Valence CF", "valence": "Valence CF",
+    "real sociedad": "Real Sociedad", "la real": "Real Sociedad", "sociedad": "Real Sociedad",
+    "athletic bilbao": "Athletic Bilbao", "athletic club": "Athletic Bilbao", "bilbao": "Athletic Bilbao", "athletic": "Athletic Bilbao",
+    "girona": "Girona", "girone": "Girona", "valencia": "Valence CF", "valence": "Valence CF", "celta vigo": "Celta Vigo", "celta": "Celta Vigo", "mallorca": "RCD Majorque", "majorque": "RCD Majorque", "espanyol": "Espanyol Barcelone", "osasuna": "Osasuna", "getafe": "Getafe",
 
     # Premier League
-    "manchester city": "Manchester City", "man city": "Manchester City", "citizens": "Manchester City",
-    "liverpool": "Liverpool", "lfc": "Liverpool",
+    "manchester city": "Manchester City", "man city": "Manchester City", "citizens": "Manchester City", "city": "Manchester City",
+    "liverpool": "Liverpool", "lfc": "Liverpool", "reds": "Liverpool",
     "arsenal": "Arsenal", "gunners": "Arsenal",
-    "chelsea": "Chelsea",
-    "manchester united": "Manchester United", "man utd": "Manchester United", "red devils": "Manchester United",
+    "chelsea": "Chelsea", "blues": "Chelsea",
+    "manchester united": "Manchester United", "man utd": "Manchester United", "red devils": "Manchester United", "united": "Manchester United",
     "tottenham": "Tottenham", "spurs": "Tottenham", "tottenham hotspur": "Tottenham",
     "newcastle": "Newcastle", "newcastle united": "Newcastle", "magpies": "Newcastle",
-    "aston villa": "Aston Villa",
+    "aston villa": "Aston Villa", "villa": "Aston Villa",
     "west ham": "West Ham", "hammers": "West Ham",
     "brighton": "Brighton", "brentford": "Brentford", "everton": "Everton", "wolves": "Wolverhampton", "wolverhampton": "Wolverhampton",
-    "crystal palace": "Crystal Palace", "fulham": "Fulham", "nottingham forest": "Nottingham Forest", "bournemouth": "Bournemouth",
+    "crystal palace": "Crystal Palace", "palace": "Crystal Palace", "fulham": "Fulham", "nottingham forest": "Nottingham Forest", "forest": "Nottingham Forest", "bournemouth": "Bournemouth", "leicester": "Leicester City", "leicester city": "Leicester City", "southampton": "Southampton", "ipswich": "Ipswich Town",
 
     # Ligue 1
-    "psg": "PSG", "paris saint-germain": "PSG", "paris sg": "PSG",
-    "marseille": "Olympique de Marseille", "olympique de marseille": "Olympique de Marseille",
-    "lyon": "Olympique Lyonnais", "olympique lyonnais": "Olympique Lyonnais",
+    "psg": "PSG", "paris saint-germain": "PSG", "paris sg": "PSG", "paris": "PSG",
+    "marseille": "Olympique de Marseille", "olympique de marseille": "Olympique de Marseille", "om": "Olympique de Marseille",
+    "lyon": "Olympique Lyonnais", "olympique lyonnais": "Olympique Lyonnais", "ol": "Olympique Lyonnais",
     "monaco": "AS Monaco", "as monaco": "AS Monaco", "asm": "AS Monaco",
-    "lille": "LOSC Lille", "losc": "LOSC Lille",
-    "rennes": "Stade Rennais", "stade rennais": "Stade Rennais",
-    "ogc nice": "OGC Nice",
-    "lens": "RC Lens", "rc lens": "RC Lens",
-    "strasbourg": "RC Strasbourg", "nantes": "FC Nantes", "toulouse": "Toulouse FC",
+    "lille": "LOSC Lille", "losc": "LOSC Lille", "losc lille": "LOSC Lille",
+    "rennes": "Stade Rennais", "stade rennais": "Stade Rennais", "srfc": "Stade Rennais",
+    "nice": "OGC Nice", "ogc nice": "OGC Nice", "aiglons": "OGC Nice",
+    "lens": "RC Lens", "rc lens": "RC Lens", "sang et or": "RC Lens",
+    "strasbourg": "RC Strasbourg", "rc strasbourg": "RC Strasbourg", "nantes": "FC Nantes", "fc nantes": "FC Nantes", "toulouse": "Toulouse FC", "toulouse fc": "Toulouse FC", "reims": "Stade de Reims", "brest": "Stade Brestois", "montpellier": "Montpellier HSC", "auxerre": "AJ Auxerre", "saint-etienne": "AS Saint-Étienne", "asse": "AS Saint-Étienne", "le havre": "Le Havre AC", "angers": "Angers SCO",
 
     # Serie A
-    "inter milan": "Inter Milan", "nerazzurri": "Inter Milan", "internazionale": "Inter Milan",
-    "ac milan": "AC Milan", "rossoneri": "AC Milan",
+    "inter milan": "Inter Milan", "inter": "Inter Milan", "nerazzurri": "Inter Milan", "internazionale": "Inter Milan",
+    "ac milan": "AC Milan", "milan ac": "AC Milan", "rossoneri": "AC Milan",
     "juventus": "Juventus", "juve": "Juventus", "bianconeri": "Juventus",
     "napoli": "Napoli", "naples": "Napoli", "partenopei": "Napoli",
     "as roma": "AS Roma", "roma": "AS Roma", "giallorossi": "AS Roma",
     "lazio": "SS Lazio", "lazio rome": "SS Lazio", "biancocelesti": "SS Lazio",
-    "atalanta": "Atalanta", "fiorentina": "Fiorentina", "bologna": "Bologne", "torino": "Torino",
+    "atalanta": "Atalanta", "fiorentina": "Fiorentina", "bologna": "Bologne", "bologne": "Bologne", "torino": "Torino", "udinese": "Udinese", "genoa": "Genoa", "monza": "Monza", "parma": "Parme", "verona": "Hellas Vérone", "como": "Como", "côme": "Como", "empoli": "Empoli", "cagliari": "Cagliari", "lecce": "Lecce", "venezia": "Venise",
 
     # Bundesliga
-    "bayern munich": "Bayern Munich", "bayern": "Bayern Munich", "fc bayern": "Bayern Munich",
+    "bayern munich": "Bayern Munich", "bayern": "Bayern Munich", "fc bayern": "Bayern Munich", "munich": "Bayern Munich",
     "borussia dortmund": "Borussia Dortmund", "dortmund": "Borussia Dortmund", "bvb": "Borussia Dortmund",
-    "bayer leverkusen": "Bayer Leverkusen", "leverkusen": "Bayer Leverkusen",
+    "bayer leverkusen": "Bayer Leverkusen", "leverkusen": "Bayer Leverkusen", "bayer": "Bayer Leverkusen",
     "rb leipzig": "RB Leipzig", "leipzig": "RB Leipzig",
-    "eintracht frankfurt": "Eintracht Francfort", "frankfurt": "Eintracht Francfort",
-    "stuttgart": "VfB Stuttgart",
+    "eintracht frankfurt": "Eintracht Francfort", "eintracht francfort": "Eintracht Francfort", "frankfurt": "Eintracht Francfort", "francfort": "Eintracht Francfort",
+    "stuttgart": "VfB Stuttgart", "vfb stuttgart": "VfB Stuttgart", "wolfsburg": "VfL Wolfsburg", "monchengladbach": "Borussia M'gladbach", "gladbach": "Borussia M'gladbach", "freiburg": "SC Fribourg", "fribourg": "SC Fribourg", "hoffenheim": "TSG Hoffenheim", "werder bremen": "Werder Brême", "bremen": "Werder Brême", "augsburg": "FC Augsbourg", "mainz": "FSV Mayence", "heidenheim": "FC Heidenheim", "union berlin": "Union Berlin", "st pauli": "FC St. Pauli", "bochum": "VfL Bochum", "kiel": "Holstein Kiel",
 
     # Saudi Pro League
     "al-nassr": "Al-Nassr", "al nassr": "Al-Nassr", "nassr": "Al-Nassr",
     "al-hilal": "Al-Hilal", "al hilal": "Al-Hilal", "hilal": "Al-Hilal",
     "al-ittihad": "Al-Ittihad", "al ittihad": "Al-Ittihad", "ittihad": "Al-Ittihad",
-    "al-ahli": "Al-Ahli", "al ahli": "Al-Ahli", "ahli": "Al-Ahli",
+    "al-ahli": "Al-Ahli", "al ahli": "Al-Ahli", "ahli": "Al-Ahli", "al-shabab": "Al-Shabab", "al shabab": "Al-Shabab", "al-qadsiah": "Al-Qadsiah", "al qadsiah": "Al-Qadsiah", "al-ettifaq": "Al-Ettifaq", "al ettifaq": "Al-Ettifaq", "neom": "NEOM SC", "neom sc": "NEOM SC",
 
     # Portugal & Other Europe
-    "sporting cp": "Sporting CP", "sporting lisbon": "Sporting CP", "sporting lisbonne": "Sporting CP",
+    "sporting cp": "Sporting CP", "sporting": "Sporting CP", "sporting lisbon": "Sporting CP", "sporting lisbonne": "Sporting CP",
     "benfica": "SL Benfica", "sl benfica": "SL Benfica",
-    "porto": "FC Porto", "fc porto": "FC Porto",
+    "porto": "FC Porto", "fc porto": "FC Porto", "braga": "SC Braga",
     "galatasaray": "Galatasaray", "fenerbahce": "Fenerbahçe", "fenerbahçe": "Fenerbahçe", "besiktas": "Beşiktaş", "beşiktaş": "Beşiktaş", "trabzonspor": "Trabzonspor",
+    "ajax": "Ajax Amsterdam", "ajax amsterdam": "Ajax Amsterdam", "psv": "PSV Eindhoven", "psv eindhoven": "PSV Eindhoven", "feyenoord": "Feyenoord",
+    "celtic": "Celtic Glasgow", "rangers": "Rangers FC", "anderlecht": "RSC Anderlecht", "club brugge": "Club Bruges", "bruges": "Club Bruges",
 
     # MLS & Americas
-    "inter miami": "Inter Miami",
+    "inter miami": "Inter Miami", "miami": "Inter Miami",
     "la galaxy": "LA Galaxy", "los angeles galaxy": "LA Galaxy", "galaxy": "LA Galaxy",
     "los angeles fc": "Los Angeles FC", "lafc": "Los Angeles FC",
     "san diego fc": "San Diego FC", "san diego": "San Diego FC",
-    "palmeiras": "Palmeiras", "flamengo": "Flamengo", "botafogo": "Botafogo", "santos": "Santos",
-    "river plate": "River Plate", "boca juniors": "Boca Juniors",
+    "palmeiras": "Palmeiras", "flamengo": "Flamengo", "botafogo": "Botafogo", "santos": "Santos", "corinthians": "Corinthians", "gremio": "Grêmio", "fluminense": "Fluminense",
+    "river plate": "River Plate", "boca juniors": "Boca Juniors", "boca": "Boca Juniors",
 }
 
 
@@ -320,11 +348,22 @@ def detect_player(text: str) -> Tuple[Optional[str], Optional[Dict[str, str]]]:
     return None, None
 
 
+def get_club_pattern(canonical: str) -> str:
+    """Génère un pattern regex capturant tous les alias et variations d'un club canonique."""
+    aliases = [k for k, v in CLUB_CANONICAL.items() if v == canonical]
+    if not aliases:
+        aliases = [canonical]
+    aliases.sort(key=lambda x: len(x), reverse=True)
+    cleaned = [re.escape(clean_text_norm(a)) for a in aliases if clean_text_norm(a)]
+    return "(?:" + "|".join(cleaned) + ")" if cleaned else re.escape(clean_text_norm(canonical))
+
+
 def detect_clubs_in_text(text: str) -> List[Tuple[str, int]]:
     """Détecte tous les clubs mentionnés dans le texte et leurs positions d'apparition."""
     norm = clean_text_norm(text)
     found_clubs: List[Tuple[str, int]] = []
     seen_canonical = set()
+    matched_spans: List[Tuple[int, int]] = []
 
     # Trier les clés de clubs par longueur décroissante pour matcher 'manchester city' avant 'city'
     sorted_keys = sorted(CLUB_CANONICAL.keys(), key=lambda x: len(x), reverse=True)
@@ -335,10 +374,16 @@ def detect_clubs_in_text(text: str) -> List[Tuple[str, int]]:
         
         # Regex avec frontières de mots
         pattern = r"\b" + re.escape(club_key) + r"\b"
-        match = re.search(pattern, norm)
-        if match:
-            found_clubs.append((canon, match.start()))
+        for match in re.finditer(pattern, norm):
+            m_start, m_end = match.start(), match.end()
+            # Empêcher les sous-mots chevauchants (ex: 'city' dans 'manchester city')
+            if any(max(m_start, s) < min(m_end, e) for s, e in matched_spans):
+                continue
+            
+            found_clubs.append((canon, m_start))
             seen_canonical.add(canon)
+            matched_spans.append((m_start, m_end))
+            break
 
     # Trier par ordre d'apparition dans le texte
     found_clubs.sort(key=lambda x: x[1])
@@ -375,173 +420,181 @@ def resolve_mercato_direction(
     if len(club_names) >= 2:
         c1, c2 = club_names[0], club_names[1]
 
-        # ── Règles Syntaxiques Directionnelles Multilingues ──
-        c1_norm = clean_text_norm(c1)
-        c2_norm = clean_text_norm(c2)
+        # ── Règles Syntaxiques Directionnelles Multilingues avec Alias Complets ──
+        c1_pat = get_club_pattern(c1)
+        c2_pat = get_club_pattern(c2)
 
         # Règle 1 : Patterns explicites d'ORIGINE / VENDEUR (from_club)
         from_patterns_c2 = [
-            r"en provenance de\s+" + re.escape(c2_norm),
-            r"en provenance du\s+" + re.escape(c2_norm),
-            r"depuis\s+" + re.escape(c2_norm),
-            r"quitte\s+" + re.escape(c2_norm),
-            r"part de\s+" + re.escape(c2_norm),
-            r"leaves\s+" + re.escape(c2_norm),
-            r"from\s+" + re.escape(c2_norm),
-            r"departing\s+" + re.escape(c2_norm),
-            r"procedente de\s+" + re.escape(c2_norm),
-            r"deja\s+" + re.escape(c2_norm),
-            r"lascia\s+" + re.escape(c2_norm),
-            r"in uscita da\s+" + re.escape(c2_norm),
-            r"proveniente da\s+" + re.escape(c2_norm),
-            r"von\s+" + re.escape(c2_norm),
-            r"vom\s+" + re.escape(c2_norm),
-            r"verlasst\s+" + re.escape(c2_norm),
+            r"en provenance de\s+" + c2_pat,
+            r"en provenance du\s+" + c2_pat,
+            r"depuis\s+" + c2_pat,
+            r"quitte\s+" + c2_pat,
+            r"part de\s+" + c2_pat,
+            r"leaves\s+" + c2_pat,
+            r"from\s+" + c2_pat,
+            r"departing\s+" + c2_pat,
+            r"procedente de\s+" + c2_pat,
+            r"deja\s+" + c2_pat,
+            r"lascia\s+" + c2_pat,
+            r"in uscita da\s+" + c2_pat,
+            r"proveniente da\s+" + c2_pat,
+            r"von\s+" + c2_pat,
+            r"vom\s+" + c2_pat,
+            r"verlasst\s+" + c2_pat,
         ]
         if any(re.search(pat, norm) for pat in from_patterns_c2):
             return c2, c1  # Vendeur=c2, Acheteur=c1
 
         from_patterns_c1 = [
-            r"en provenance de\s+" + re.escape(c1_norm),
-            r"en provenance du\s+" + re.escape(c1_norm),
-            r"depuis\s+" + re.escape(c1_norm),
-            r"quitte\s+" + re.escape(c1_norm),
-            r"part de\s+" + re.escape(c1_norm),
-            r"leaves\s+" + re.escape(c1_norm),
-            r"from\s+" + re.escape(c1_norm),
-            r"departing\s+" + re.escape(c1_norm),
-            r"procedente de\s+" + re.escape(c1_norm),
-            r"deja\s+" + re.escape(c1_norm),
-            r"lascia\s+" + re.escape(c1_norm),
-            r"in uscita da\s+" + re.escape(c1_norm),
-            r"proveniente da\s+" + re.escape(c1_norm),
-            r"von\s+" + re.escape(c1_norm),
-            r"vom\s+" + re.escape(c1_norm),
-            r"verlasst\s+" + re.escape(c1_norm),
+            r"en provenance de\s+" + c1_pat,
+            r"en provenance du\s+" + c1_pat,
+            r"depuis\s+" + c1_pat,
+            r"quitte\s+" + c1_pat,
+            r"part de\s+" + c1_pat,
+            r"leaves\s+" + c1_pat,
+            r"from\s+" + c1_pat,
+            r"departing\s+" + c1_pat,
+            r"procedente de\s+" + c1_pat,
+            r"deja\s+" + c1_pat,
+            r"lascia\s+" + c1_pat,
+            r"in uscita da\s+" + c1_pat,
+            r"proveniente da\s+" + c1_pat,
+            r"von\s+" + c1_pat,
+            r"vom\s+" + c1_pat,
+            r"verlasst\s+" + c1_pat,
         ]
         if any(re.search(pat, norm) for pat in from_patterns_c1):
             return c1, c2  # Vendeur=c1, Acheteur=c2
 
         # Règle 2 : Patterns explicites de DESTINATION / ACHETEUR (to_club)
         to_patterns_c1 = [
-            r"signe au\s+" + re.escape(c1_norm),
-            r"signe a\s+" + re.escape(c1_norm),
-            r"signe avec\s+" + re.escape(c1_norm),
-            r"s engage avec\s+" + re.escape(c1_norm),
-            r"s engage a\s+" + re.escape(c1_norm),
-            r"s engage au\s+" + re.escape(c1_norm),
-            r"rejoint\s+" + re.escape(c1_norm),
-            r"arrive a\s+" + re.escape(c1_norm),
-            r"arrive au\s+" + re.escape(c1_norm),
-            r"passe a\s+" + re.escape(c1_norm),
-            r"passe au\s+" + re.escape(c1_norm),
-            r"vers\s+" + re.escape(c1_norm),
-            r"direction\s+" + re.escape(c1_norm),
-            r"en route vers\s+" + re.escape(c1_norm),
-            r"signs for\s+" + re.escape(c1_norm),
-            r"joins\s+" + re.escape(c1_norm),
-            r"moves to\s+" + re.escape(c1_norm),
-            r"heads to\s+" + re.escape(c1_norm),
-            r"to\s+" + re.escape(c1_norm),
-            r"transfers to\s+" + re.escape(c1_norm),
-            r"ficha por\s+" + re.escape(c1_norm),
-            r"llega al\s+" + re.escape(c1_norm),
-            r"llega a\s+" + re.escape(c1_norm),
-            r"passa al\s+" + re.escape(c1_norm),
-            r"passa ai\s+" + re.escape(c1_norm),
-            r"passa alla\s+" + re.escape(c1_norm),
-            r"para o\s+" + re.escape(c1_norm),
-            r"vai para\s+" + re.escape(c1_norm),
-            r"wechselt zu\s+" + re.escape(c1_norm),
-            r"unterschreibt bei\s+" + re.escape(c1_norm),
-            r"proposta do\s+" + re.escape(c1_norm),
-            r"offre de\s+" + re.escape(c1_norm),
-            r"bid from\s+" + re.escape(c1_norm),
+            r"signe au\s+" + c1_pat,
+            r"signe a\s+" + c1_pat,
+            r"signe avec\s+" + c1_pat,
+            r"transfere au\s+" + c1_pat,
+            r"transfere a\s+" + c1_pat,
+            r"prete au\s+" + c1_pat,
+            r"prete a\s+" + c1_pat,
+            r"s engage avec\s+" + c1_pat,
+            r"s engage a\s+" + c1_pat,
+            r"s engage au\s+" + c1_pat,
+            r"rejoint\s+" + c1_pat,
+            r"arrive a\s+" + c1_pat,
+            r"arrive au\s+" + c1_pat,
+            r"passe a\s+" + c1_pat,
+            r"passe au\s+" + c1_pat,
+            r"vers\s+" + c1_pat,
+            r"direction\s+" + c1_pat,
+            r"en route vers\s+" + c1_pat,
+            r"signs for\s+" + c1_pat,
+            r"joins\s+" + c1_pat,
+            r"moves to\s+" + c1_pat,
+            r"heads to\s+" + c1_pat,
+            r"to\s+" + c1_pat,
+            r"transfers to\s+" + c1_pat,
+            r"ficha por\s+" + c1_pat,
+            r"llega al\s+" + c1_pat,
+            r"llega a\s+" + c1_pat,
+            r"passa al\s+" + c1_pat,
+            r"passa ai\s+" + c1_pat,
+            r"passa alla\s+" + c1_pat,
+            r"para o\s+" + c1_pat,
+            r"vai para\s+" + c1_pat,
+            r"wechselt zu\s+" + c1_pat,
+            r"unterschreibt bei\s+" + c1_pat,
+            r"proposta do\s+" + c1_pat,
+            r"offre de\s+" + c1_pat,
+            r"bid from\s+" + c1_pat,
         ]
         if any(re.search(pat, norm) for pat in to_patterns_c1):
             return c2, c1  # Vendeur=c2, Acheteur=c1
 
         to_patterns_c2 = [
-            r"signe au\s+" + re.escape(c2_norm),
-            r"signe a\s+" + re.escape(c2_norm),
-            r"signe avec\s+" + re.escape(c2_norm),
-            r"s engage avec\s+" + re.escape(c2_norm),
-            r"s engage a\s+" + re.escape(c2_norm),
-            r"s engage au\s+" + re.escape(c2_norm),
-            r"rejoint\s+" + re.escape(c2_norm),
-            r"arrive a\s+" + re.escape(c2_norm),
-            r"arrive au\s+" + re.escape(c2_norm),
-            r"passe a\s+" + re.escape(c2_norm),
-            r"passe au\s+" + re.escape(c2_norm),
-            r"vers\s+" + re.escape(c2_norm),
-            r"direction\s+" + re.escape(c2_norm),
-            r"en route vers\s+" + re.escape(c2_norm),
-            r"signs for\s+" + re.escape(c2_norm),
-            r"joins\s+" + re.escape(c2_norm),
-            r"moves to\s+" + re.escape(c2_norm),
-            r"heads to\s+" + re.escape(c2_norm),
-            r"to\s+" + re.escape(c2_norm),
-            r"transfers to\s+" + re.escape(c2_norm),
-            r"ficha por\s+" + re.escape(c2_norm),
-            r"llega al\s+" + re.escape(c2_norm),
-            r"llega a\s+" + re.escape(c2_norm),
-            r"passa al\s+" + re.escape(c2_norm),
-            r"passa ai\s+" + re.escape(c2_norm),
-            r"passa alla\s+" + re.escape(c2_norm),
-            r"para o\s+" + re.escape(c2_norm),
-            r"vai para\s+" + re.escape(c2_norm),
-            r"wechselt zu\s+" + re.escape(c2_norm),
-            r"unterschreibt bei\s+" + re.escape(c2_norm),
-            r"proposta do\s+" + re.escape(c2_norm),
-            r"offre de\s+" + re.escape(c2_norm),
-            r"bid from\s+" + re.escape(c2_norm),
+            r"signe au\s+" + c2_pat,
+            r"signe a\s+" + c2_pat,
+            r"signe avec\s+" + c2_pat,
+            r"transfere au\s+" + c2_pat,
+            r"transfere a\s+" + c2_pat,
+            r"prete au\s+" + c2_pat,
+            r"prete a\s+" + c2_pat,
+            r"s engage avec\s+" + c2_pat,
+            r"s engage a\s+" + c2_pat,
+            r"s engage au\s+" + c2_pat,
+            r"rejoint\s+" + c2_pat,
+            r"arrive a\s+" + c2_pat,
+            r"arrive au\s+" + c2_pat,
+            r"passe a\s+" + c2_pat,
+            r"passe au\s+" + c2_pat,
+            r"vers\s+" + c2_pat,
+            r"direction\s+" + c2_pat,
+            r"en route vers\s+" + c2_pat,
+            r"signs for\s+" + c2_pat,
+            r"joins\s+" + c2_pat,
+            r"moves to\s+" + c2_pat,
+            r"heads to\s+" + c2_pat,
+            r"to\s+" + c2_pat,
+            r"transfers to\s+" + c2_pat,
+            r"ficha por\s+" + c2_pat,
+            r"llega al\s+" + c2_pat,
+            r"llega a\s+" + c2_pat,
+            r"passa al\s+" + c2_pat,
+            r"passa ai\s+" + c2_pat,
+            r"passa alla\s+" + c2_pat,
+            r"para o\s+" + c2_pat,
+            r"vai para\s+" + c2_pat,
+            r"wechselt zu\s+" + c2_pat,
+            r"unterschreibt bei\s+" + c2_pat,
+            r"proposta do\s+" + c2_pat,
+            r"offre de\s+" + c2_pat,
+            r"bid from\s+" + c2_pat,
         ]
         if any(re.search(pat, norm) for pat in to_patterns_c2):
             return c1, c2  # Vendeur=c1, Acheteur=c2
 
         # Règle 3 : Offre payée au club vendeur
         pay_seller_patterns_c2 = [
-            r"pagar ao\s+" + re.escape(c2_norm),
-            r"paga ao\s+" + re.escape(c2_norm),
-            r"proposta ao\s+" + re.escape(c2_norm),
-            r"offre a\s+" + re.escape(c2_norm),
-            r"offre au\s+" + re.escape(c2_norm),
-            r"bid to\s+" + re.escape(c2_norm),
-            r"offer to\s+" + re.escape(c2_norm),
+            r"pagar ao\s+" + c2_pat,
+            r"paga ao\s+" + c2_pat,
+            r"proposta ao\s+" + c2_pat,
+            r"offre a\s+" + c2_pat,
+            r"offre au\s+" + c2_pat,
+            r"bid to\s+" + c2_pat,
+            r"offer to\s+" + c2_pat,
         ]
         if any(re.search(pat, norm) for pat in pay_seller_patterns_c2):
             return c2, c1  # Vendeur=c2, Acheteur=c1
 
         pay_seller_patterns_c1 = [
-            r"pagar ao\s+" + re.escape(c1_norm),
-            r"paga ao\s+" + re.escape(c1_norm),
-            r"proposta ao\s+" + re.escape(c1_norm),
-            r"offre a\s+" + re.escape(c1_norm),
-            r"offre au\s+" + re.escape(c1_norm),
-            r"bid to\s+" + re.escape(c1_norm),
-            r"offer to\s+" + re.escape(c1_norm),
+            r"pagar ao\s+" + c1_pat,
+            r"paga ao\s+" + c1_pat,
+            r"proposta ao\s+" + c1_pat,
+            r"offre a\s+" + c1_pat,
+            r"offre au\s+" + c1_pat,
+            r"bid to\s+" + c1_pat,
+            r"offer to\s+" + c1_pat,
         ]
         if any(re.search(pat, norm) for pat in pay_seller_patterns_c1):
             return c1, c2  # Vendeur=c1, Acheteur=c2
 
         # Règle 4 : Club sujet acheteur (ex: "Arsenal cible / recrute / s'offre...")
         buyer_subject_c1 = [
-            r"\b" + re.escape(c1_norm) + r"\s+(?:s offre|recrute|attire|veut|vise|cible|fonce sur|proche de|signs|targets|wants|bids for)\b",
+            r"\b" + c1_pat + r"\s+(?:s offre|recrute|attire|veut|vise|cible|fonce sur|proche de|signs|targets|wants|bids for|anuncia el fichaje)\b",
         ]
         if any(re.search(pat, norm) for pat in buyer_subject_c1):
             return c2, c1  # Vendeur=c2, Acheteur=c1
 
         buyer_subject_c2 = [
-            r"\b" + re.escape(c2_norm) + r"\s+(?:s offre|recrute|attire|veut|vise|cible|fonce sur|proche de|signs|targets|wants|bids for)\b",
+            r"\b" + c2_pat + r"\s+(?:s offre|recrute|attire|veut|vise|cible|fonce sur|proche de|signs|targets|wants|bids for|anuncia el fichaje)\b",
         ]
         if any(re.search(pat, norm) for pat in buyer_subject_c2):
             return c1, c2  # Vendeur=c1, Acheteur=c2
 
         # Règle 5 : Utilisation de current_club comme ancre par défaut si syntaxe neutre
         if current_club:
-            if clean_text_norm(current_club) in c1_norm:
+            if c1 == current_club:
                 return c1, c2
-            elif clean_text_norm(current_club) in c2_norm:
+            elif c2 == current_club:
                 return c2, c1
 
         # Règle 6 : Par défaut, c1 -> c2

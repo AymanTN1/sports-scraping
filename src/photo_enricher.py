@@ -269,15 +269,13 @@ def resolve_photo_for_article(
     if p_clean and len(p_clean) >= 3:
         cache_key = f"player:{p_clean.lower()}"
         with _cache_lock:
-            cached = PHOTO_CACHE.get(cache_key)
-        if cached:
-            return cached
+            if cache_key in PHOTO_CACHE:
+                return PHOTO_CACHE[cache_key]
         
         photo = fetch_player_photo_from_web(p_clean)
+        with _cache_lock:
+            PHOTO_CACHE[cache_key] = photo or ""
         if photo:
-            with _cache_lock:
-                PHOTO_CACHE[cache_key] = photo
-                save_cache(PHOTO_CACHE)
             return photo
 
     # 3. Logo Club (Acheteur prioritaire, puis Vendeur)
@@ -287,26 +285,21 @@ def resolve_photo_for_article(
         c_clean = c_candidate.strip()
         cache_key = f"badge:{c_clean.lower()}"
         with _cache_lock:
-            cached = PHOTO_CACHE.get(cache_key)
-        if cached:
-            return cached
+            if cache_key in PHOTO_CACHE:
+                cached = PHOTO_CACHE[cache_key]
+                if cached:
+                    return cached
         
         badge = get_club_badge(c_clean)
-        if badge:
-            with _cache_lock:
-                PHOTO_CACHE[cache_key] = badge
-                save_cache(PHOTO_CACHE)
-            return badge
+        if not badge:
+            badge = fetch_player_photo_from_web(f"{c_clean} FC")
         
-        # Tentative recherche logo club via web Wikipedia
-        badge_web = fetch_player_photo_from_web(f"{c_clean} FC")
-        if badge_web:
-            with _cache_lock:
-                PHOTO_CACHE[cache_key] = badge_web
-                save_cache(PHOTO_CACHE)
-            return badge_web
+        with _cache_lock:
+            PHOTO_CACHE[cache_key] = badge or ""
+        if badge:
+            return badge
 
-    # 4. Scraping og:image direct de l'article si URL valide
+    # 4. Scraping og:image direct de l'article si URL valide (skip Google News)
     if article_url and article_url.startswith("http") and "news.google.com" not in article_url:
         page_img = scrape_article_og_image(article_url)
         if page_img:
