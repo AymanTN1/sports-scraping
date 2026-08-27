@@ -38,10 +38,6 @@ class CsvIngestionService:
         return None
 
     def bootstrap_if_needed(self) -> CsvImportResponse | None:
-        if not settings.bootstrap_from_csv:
-            return None
-        if self.article_repository.count() > 0:
-            return None
         csv_path = self.get_default_csv_path()
         if not csv_path:
             return None

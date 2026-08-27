@@ -2372,13 +2372,13 @@
         <div style="margin-top:0.6rem;font-size:0.88rem;font-weight:800;color:#FFFFFF;letter-spacing:0.5px;z-index:2;text-shadow:0 2px 8px rgba(0,0,0,0.8);font-family:'Syne',sans-serif;">${esc(a.player_name || '')}</div>
       `;
 
-      // Clean and sanitize image URL — route Wikimedia through backend proxy
+      // Clean and sanitize image URL — route ALL external images through backend proxy
       const rawImg = (a.image_url || '').trim();
       let cleanImg = rawImg;
-      if (rawImg.includes('upload.wikimedia.org') || rawImg.includes('thesportsdb.com')) {
-        // Use backend image proxy to bypass browser CORS/OpaqueResponseBlocking
+      if (rawImg.startsWith('http://') || rawImg.startsWith('https://')) {
+        // Use backend image proxy to bypass browser CORS/OpaqueResponseBlocking and thumbnail errors
         const proxyBase = API_BASE + '/api/v1/image-proxy?url=';
-        cleanImg = proxyBase + encodeURIComponent(rawImg.split('?')[0]);
+        cleanImg = proxyBase + encodeURIComponent(rawImg);
       }
 
       // Always show a visual — real image via proxy or rich Fabrizio Romano poster
@@ -2890,15 +2890,18 @@
     async function triggerLiveScrape() {
       const btn = document.getElementById('btnScrapeNow');
       btn.disabled = true;
-      btn.textContent = '⏳ Scraping en cours...';
+      btn.textContent = '⏳ Synchronisation & Scraping...';
       try {
-        await fetch(`${API_BASE}/api/v1/scrape/run`, { method: 'POST' });
-        setTimeout(async () => {
-          await loadData();
-          btn.disabled = false;
-          btn.textContent = '🔄 Actualiser les flux Mercato';
-        }, 4000);
+        // 1. Sync DB with latest verified articles immediately
+        await fetch(`${API_BASE}/api/v1/admin/sync-db`, { method: 'POST' }).catch(() => {});
+        // 2. Trigger live scrape in background
+        await fetch(`${API_BASE}/api/v1/scrape/run`, { method: 'POST' }).catch(() => {});
+        // 3. Reload data immediately
+        await loadData();
+        btn.disabled = false;
+        btn.textContent = '🔄 Actualiser les flux Mercato';
       } catch (err) {
+        await loadData();
         btn.disabled = false;
         btn.textContent = '🔄 Actualiser les flux Mercato';
       }
