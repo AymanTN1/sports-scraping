@@ -67,9 +67,12 @@ class CsvIngestionService:
             self.db.flush()
 
         source_id_map = {s.name: s.id for s in self.db.query(Source).all() if s.name}
+        default_source_id = next(iter(source_id_map.values())) if source_id_map else 1
 
         # 2. Existing articles external keys
-        existing_articles = {a.external_key: a for a in self.db.query(Article).all() if a.external_key}
+        existing_keys = {
+            row[0] for row in self.db.query(Article.external_key).all() if row[0]
+        }
 
         inserted = 0
         updated = 0
@@ -85,51 +88,57 @@ class CsvIngestionService:
                 continue
 
             ext_key = self._build_external_key(source=src_name, title=title, raw_date=raw_date or "", url=url or "")
-            src_id = source_id_map.get(src_name)
+            src_id = source_id_map.get(src_name) or default_source_id
 
-            art = existing_articles.get(ext_key)
-            if not art:
-                art = Article(external_key=ext_key, source_id=src_id)
-                to_insert.append(art)
-                existing_articles[ext_key] = art
-                inserted += 1
-            else:
+            if ext_key in existing_keys:
                 updated += 1
-
-            art.title = title
-            art.url = url
-            art.raw_date = raw_date
-            art.published_at = self._parse_date(raw_date)
-            art.language = str(row.get("language") or "fr")
-            art.category = str(row.get("league") or row.get("category") or "Général 🌍")
-            art.sentiment = str(row.get("sentiment") or "Neutre")
-            art.player_name = str(row.get("player_name") or "") or None
-            art.from_club = str(row.get("from_club") or "") or None
-            art.to_club = str(row.get("to_club") or "") or None
-            art.league = str(row.get("league") or row.get("category") or "Général 🌍")
-            art.transfer_fee = str(row.get("transfer_fee") or "Non communiqué") or None
-            art.status = str(row.get("status") or "RUMEUR 📰")
-            art.summary = str(row.get("summary") or title)
+                continue
 
             img_url = str(row.get("image_url") or "").strip()
             if not img_url or img_url == "nan" or not img_url.startswith("http"):
                 img_url = None
-            art.image_url = img_url
 
+            fee_num = 0.0
             try:
-                art.fee_numeric = float(row.get("fee_numeric")) if row.get("fee_numeric") is not None else 0.0
+                if row.get("fee_numeric") is not None:
+                    fee_num = float(row.get("fee_numeric"))
             except Exception:
-                art.fee_numeric = 0.0
+                fee_num = 0.0
 
             sem_hash = str(row.get("semantic_hash") or "").strip()
-            art.semantic_hash = sem_hash if sem_hash and sem_hash != "nan" else None
-            art.credibility_score = float(row.get("credibility") or 4.0)
-            art.source_id = src_id
+            to_insert.append({
+                "external_key": ext_key,
+                "title": title,
+                "url": url,
+                "raw_date": raw_date,
+                "published_at": self._parse_date(raw_date),
+                "language": str(row.get("language") or "fr"),
+                "category": str(row.get("league") or row.get("category") or "Général 🌍"),
+                "sentiment": str(row.get("sentiment") or "Neutre"),
+                "player_name": str(row.get("player_name") or "") or None,
+                "from_club": str(row.get("from_club") or "") or None,
+                "to_club": str(row.get("to_club") or "") or None,
+                "league": str(row.get("league") or row.get("category") or "Général 🌍"),
+                "transfer_fee": str(row.get("transfer_fee") or "Non communiqué") or None,
+                "status": str(row.get("status") or "RUMEUR 📰"),
+                "summary": str(row.get("summary") or title),
+                "image_url": img_url,
+                "fee_numeric": fee_num,
+                "semantic_hash": sem_hash if sem_hash and sem_hash != "nan" else None,
+                "credibility_score": float(row.get("credibility") or 4.0),
+                "source_id": src_id,
+            })
+            existing_keys.add(ext_key)
+            inserted += 1
 
         if to_insert:
-            self.db.add_all(to_insert)
+            # Batch insert in chunks of 500 for maximum PostgreSQL throughput
+            chunk_size = 500
+            for i in range(0, len(to_insert), chunk_size):
+                chunk = to_insert[i : i + chunk_size]
+                self.db.bulk_insert_mappings(Article, chunk)
+                self.db.commit()
 
-        self.db.commit()
         return CsvImportResponse(
             source_file=str(path),
             inserted_articles=inserted,

@@ -53,10 +53,10 @@ class ArticleRepository:
                 Article.to_club.ilike(term)
             ))
 
-        total_stmt = select(func.count(Article.id)).join(Source)
+        total_stmt = select(func.count(Article.id)).outerjoin(Source, Article.source_id == Source.id)
         items_stmt = (
             select(Article)
-            .join(Source)
+            .outerjoin(Source, Article.source_id == Source.id)
             .options(joinedload(Article.source))
             .order_by(Article.published_at.desc().nullslast(), Article.created_at.desc())
             .offset((page - 1) * page_size)
