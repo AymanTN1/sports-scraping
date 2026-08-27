@@ -15,6 +15,7 @@ if load_dotenv is not None:
 
 
 class Settings:
+    base_dir: Path = BASE_DIR
     project_name: str = "MercatoPULSE API"
     project_version: str = "3.1.0"
     api_prefix: str = "/api/v1"

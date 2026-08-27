@@ -23,10 +23,10 @@ class CsvIngestionService:
     @staticmethod
     def get_default_csv_path() -> Path | None:
         candidates_dirs = [
-            settings.default_database_path.parent / "output",
-            settings.BASE_DIR / "data" / "output",
-            Path.cwd() / "data" / "output",
             Path(__file__).resolve().parents[2] / "data" / "output",
+            Path.cwd() / "data" / "output",
+            settings.base_dir / "data" / "output",
+            Path("/opt/render/project/src/data/output"),
         ]
         for c_dir in candidates_dirs:
             if not c_dir.exists():
