@@ -22,11 +22,19 @@ class CsvIngestionService:
 
     @staticmethod
     def get_default_csv_path() -> Path | None:
-        output_dir = settings.default_database_path.parent / "output"
-        for file_name in ("verified_articles.csv", "organized_articles.csv", "articles.csv"):
-            candidate = output_dir / file_name
-            if candidate.exists():
-                return candidate
+        candidates_dirs = [
+            settings.default_database_path.parent / "output",
+            settings.BASE_DIR / "data" / "output",
+            Path.cwd() / "data" / "output",
+            Path(__file__).resolve().parents[2] / "data" / "output",
+        ]
+        for c_dir in candidates_dirs:
+            if not c_dir.exists():
+                continue
+            for file_name in ("verified_articles.csv", "organized_articles.csv", "articles.csv"):
+                candidate = c_dir / file_name
+                if candidate.exists():
+                    return candidate
         return None
 
     def bootstrap_if_needed(self) -> CsvImportResponse | None:

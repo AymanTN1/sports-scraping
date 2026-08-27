@@ -1,10 +1,26 @@
 {
-  "outputDirectory": "web",
-  "cleanUrls": true,
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "https://mercatopulse-api.onrender.com/api/:path*"
+      "src": "backend/main.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": ["web/**", "data/**"]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/main.py"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/web/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "backend/main.py"
     }
   ]
 }
