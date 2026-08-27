@@ -57,9 +57,16 @@ class CsvIngestionService:
         existing_sources = {s.name: s for s in self.db.query(Source).all() if s.name}
         unique_sources = set(df["source"].dropna().unique())
         new_sources = []
+        now = datetime.utcnow()
         for src_name in unique_sources:
             if src_name not in existing_sources:
-                src_obj = Source(name=src_name, credibility_score=4.0)
+                src_obj = Source(
+                    name=src_name,
+                    credibility_score=4.0,
+                    active=True,
+                    created_at=now,
+                    updated_at=now,
+                )
                 new_sources.append(src_obj)
                 existing_sources[src_name] = src_obj
         if new_sources:
@@ -123,10 +130,13 @@ class CsvIngestionService:
                 "status": str(row.get("status") or "RUMEUR 📰"),
                 "summary": str(row.get("summary") or title),
                 "image_url": img_url,
+                "image_caption": None,
                 "fee_numeric": fee_num,
                 "semantic_hash": sem_hash if sem_hash and sem_hash != "nan" else None,
                 "credibility_score": float(row.get("credibility") or 4.0),
                 "source_id": src_id,
+                "created_at": now,
+                "updated_at": now,
             })
             existing_keys.add(ext_key)
             inserted += 1

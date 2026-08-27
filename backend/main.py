@@ -211,20 +211,25 @@ async def image_proxy(url: str = Query(..., description="URL of the image to pro
 @app.api_route("/api/v1/admin/sync-db", methods=["GET", "POST"])
 async def sync_database_endpoint():
     """Force re-synchronisation de la base de données depuis verified_articles.csv."""
-    with SessionLocal() as db:
-        csv_service = CsvIngestionService(db)
-        csv_path = csv_service.get_default_csv_path()
-        if not csv_path:
-            raise HTTPException(status_code=404, detail="Fichier CSV introuvable")
-        result = csv_service.import_csv(csv_path)
-        total = csv_service.article_repository.count()
-        return {
-            "status": "success",
-            "source_file": csv_path.name,
-            "inserted": result.inserted_count,
-            "updated": result.updated_count,
-            "total_articles": total,
-        }
+    import traceback
+    try:
+        with SessionLocal() as db:
+            csv_service = CsvIngestionService(db)
+            csv_path = csv_service.get_default_csv_path()
+            if not csv_path:
+                return {"status": "error", "message": "Fichier CSV introuvable"}
+            result = csv_service.import_csv(csv_path)
+            total = csv_service.article_repository.count()
+            return {
+                "status": "success",
+                "source_file": csv_path.name,
+                "inserted": result.inserted_count,
+                "updated": result.updated_count,
+                "total_articles": total,
+            }
+    except Exception as e:
+        logger.exception("Error during sync_database_endpoint")
+        return {"status": "error", "error": str(e), "traceback": traceback.format_exc()}
 
 
 @app.post("/api/v1/scrape/run")
