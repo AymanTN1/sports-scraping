@@ -41,7 +41,13 @@ skips = ["B101"]  # Skip 'assert' warnings in test code
 
 [build-system]
 requires = ["setuptools>=68"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["backend*", "src*"]
+
+
 
 [project]
 name = "mercatopulse"
