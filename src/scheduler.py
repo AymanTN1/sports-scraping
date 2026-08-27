@@ -142,11 +142,20 @@ class ScraperScheduler:
             return
 
         raw_count = len(df_raw)
-        self._log(f"✅ {raw_count} articles bruts collectés.")
+        self._log(f"✅ {raw_count} articles bruts collectés lors de cette passe.")
 
-        # Sauvegarder le CSV brut
+        # Accumuler et fusionner avec le CSV brut existant
         raw_path = output_dir / "articles_raw.csv"
-        df_raw.to_csv(raw_path, index=False, encoding="utf-8-sig")
+        if raw_path.exists():
+            try:
+                df_prev_raw = pd.read_csv(raw_path)
+                df_raw_all = pd.concat([df_raw, df_prev_raw], ignore_index=True)
+                df_raw_all = df_raw_all.drop_duplicates(subset=["title"]).reset_index(drop=True)
+            except Exception:
+                df_raw_all = df_raw
+        else:
+            df_raw_all = df_raw
+        df_raw_all.to_csv(raw_path, index=False, encoding="utf-8-sig")
 
         # ═══════════════════════════════════════════
         # ÉTAPE 2 : Enrichissement AI (Groq + NLP local)
@@ -171,14 +180,29 @@ class ScraperScheduler:
             self._log(f"⚠️ Enrichissement AI échoué ({e}), utilisation des données brutes.")
             df_enriched = df_raw
 
-        enriched_count = len(df_enriched)
-        self._log(f"✅ {enriched_count} articles enrichis et validés.")
-
-        # Sauvegarder les CSV enrichis
+        # Sauvegarder et accumuler les CSV enrichis
         organized_path = output_dir / "organized_articles.csv"
         verified_path = output_dir / "verified_articles.csv"
-        df_enriched.to_csv(organized_path, index=False, encoding="utf-8-sig")
-        df_enriched.to_csv(verified_path, index=False, encoding="utf-8-sig")
+
+        if verified_path.exists():
+            try:
+                df_prev = pd.read_csv(verified_path)
+                combined = pd.concat([df_enriched, df_prev], ignore_index=True)
+                if "semantic_hash" in combined.columns:
+                    combined["_dedup_key"] = combined["semantic_hash"].fillna(combined["title"])
+                else:
+                    combined["_dedup_key"] = combined["title"]
+                df_final = combined.drop_duplicates(subset=["_dedup_key"]).drop(columns=["_dedup_key"], errors="ignore").reset_index(drop=True)
+            except Exception:
+                df_final = df_enriched
+        else:
+            df_final = df_enriched
+
+        df_final.to_csv(organized_path, index=False, encoding="utf-8-sig")
+        df_final.to_csv(verified_path, index=False, encoding="utf-8-sig")
+
+        enriched_count = len(df_final)
+        self._log(f"✅ {enriched_count} articles cumulés validés dans le catalogue.")
 
         # ═══════════════════════════════════════════
         # ÉTAPE 3 : Import dans la base de données

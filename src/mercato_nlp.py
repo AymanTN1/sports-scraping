@@ -376,74 +376,175 @@ def resolve_mercato_direction(
         c1, c2 = club_names[0], club_names[1]
 
         # ── Règles Syntaxiques Directionnelles Multilingues ──
-        
-        # Règle A : "Club A paga ao Club B" / "Club A pays Club B" / "Club A offre à Club B"
-        # -> Club A est l'ACHETEUR, Club B est le VENDEUR
-        pay_seller_patterns = [
-            r"pagar ao " + re.escape(clean_text_norm(c2)),
-            r"paga ao " + re.escape(clean_text_norm(c2)),
-            r"ao " + re.escape(clean_text_norm(c2)) + r" por",
-            r"proposta ao " + re.escape(clean_text_norm(c2)),
-            r"offre a " + re.escape(clean_text_norm(c2)),
-            r"bid to " + re.escape(clean_text_norm(c2)),
-            r"offer to " + re.escape(clean_text_norm(c2)),
+        c1_norm = clean_text_norm(c1)
+        c2_norm = clean_text_norm(c2)
+
+        # Règle 1 : Patterns explicites d'ORIGINE / VENDEUR (from_club)
+        from_patterns_c2 = [
+            r"en provenance de\s+" + re.escape(c2_norm),
+            r"en provenance du\s+" + re.escape(c2_norm),
+            r"depuis\s+" + re.escape(c2_norm),
+            r"quitte\s+" + re.escape(c2_norm),
+            r"part de\s+" + re.escape(c2_norm),
+            r"leaves\s+" + re.escape(c2_norm),
+            r"from\s+" + re.escape(c2_norm),
+            r"departing\s+" + re.escape(c2_norm),
+            r"procedente de\s+" + re.escape(c2_norm),
+            r"deja\s+" + re.escape(c2_norm),
+            r"lascia\s+" + re.escape(c2_norm),
+            r"in uscita da\s+" + re.escape(c2_norm),
+            r"proveniente da\s+" + re.escape(c2_norm),
+            r"von\s+" + re.escape(c2_norm),
+            r"vom\s+" + re.escape(c2_norm),
+            r"verlasst\s+" + re.escape(c2_norm),
         ]
-        if any(re.search(pat, norm) for pat in pay_seller_patterns):
+        if any(re.search(pat, norm) for pat in from_patterns_c2):
             return c2, c1  # Vendeur=c2, Acheteur=c1
 
-        pay_seller_patterns_inv = [
-            r"pagar ao " + re.escape(clean_text_norm(c1)),
-            r"paga ao " + re.escape(clean_text_norm(c1)),
-            r"ao " + re.escape(clean_text_norm(c1)) + r" por",
-            r"proposta ao " + re.escape(clean_text_norm(c1)),
-            r"offre a " + re.escape(clean_text_norm(c1)),
-            r"bid to " + re.escape(clean_text_norm(c1)),
-            r"offer to " + re.escape(clean_text_norm(c1)),
+        from_patterns_c1 = [
+            r"en provenance de\s+" + re.escape(c1_norm),
+            r"en provenance du\s+" + re.escape(c1_norm),
+            r"depuis\s+" + re.escape(c1_norm),
+            r"quitte\s+" + re.escape(c1_norm),
+            r"part de\s+" + re.escape(c1_norm),
+            r"leaves\s+" + re.escape(c1_norm),
+            r"from\s+" + re.escape(c1_norm),
+            r"departing\s+" + re.escape(c1_norm),
+            r"procedente de\s+" + re.escape(c1_norm),
+            r"deja\s+" + re.escape(c1_norm),
+            r"lascia\s+" + re.escape(c1_norm),
+            r"in uscita da\s+" + re.escape(c1_norm),
+            r"proveniente da\s+" + re.escape(c1_norm),
+            r"von\s+" + re.escape(c1_norm),
+            r"vom\s+" + re.escape(c1_norm),
+            r"verlasst\s+" + re.escape(c1_norm),
         ]
-        if any(re.search(pat, norm) for pat in pay_seller_patterns_inv):
+        if any(re.search(pat, norm) for pat in from_patterns_c1):
             return c1, c2  # Vendeur=c1, Acheteur=c2
 
-        # Règle B : "proposta do Club A" (offre de Club A) -> Club A est ACHETEUR
-        if re.search(r"proposta do " + re.escape(clean_text_norm(c1)), norm):
-            return c2, c1
-        if re.search(r"proposta do " + re.escape(clean_text_norm(c2)), norm):
-            return c1, c2
-
-        # Règle C : "passa ai / para o / vers / to Club" -> Club est ACHETEUR
-        to_patterns_c2 = [
-            r"para o " + re.escape(clean_text_norm(c2)),
-            r"ao " + re.escape(clean_text_norm(c2)),
-            r"passa ai " + re.escape(clean_text_norm(c2)),
-            r"passa al " + re.escape(clean_text_norm(c2)),
-            r"vers " + re.escape(clean_text_norm(c2)),
-            r"to " + re.escape(clean_text_norm(c2)),
-            r"joins " + re.escape(clean_text_norm(c2)),
-            r"rejoint " + re.escape(clean_text_norm(c2)),
-        ]
-        if any(re.search(pat, norm) for pat in to_patterns_c2):
-            return c1, c2
-
+        # Règle 2 : Patterns explicites de DESTINATION / ACHETEUR (to_club)
         to_patterns_c1 = [
-            r"para o " + re.escape(clean_text_norm(c1)),
-            r"ao " + re.escape(clean_text_norm(c1)),
-            r"passa ai " + re.escape(clean_text_norm(c1)),
-            r"passa al " + re.escape(clean_text_norm(c1)),
-            r"vers " + re.escape(clean_text_norm(c1)),
-            r"to " + re.escape(clean_text_norm(c1)),
-            r"joins " + re.escape(clean_text_norm(c1)),
-            r"rejoint " + re.escape(clean_text_norm(c1)),
+            r"signe au\s+" + re.escape(c1_norm),
+            r"signe a\s+" + re.escape(c1_norm),
+            r"signe avec\s+" + re.escape(c1_norm),
+            r"s engage avec\s+" + re.escape(c1_norm),
+            r"s engage a\s+" + re.escape(c1_norm),
+            r"s engage au\s+" + re.escape(c1_norm),
+            r"rejoint\s+" + re.escape(c1_norm),
+            r"arrive a\s+" + re.escape(c1_norm),
+            r"arrive au\s+" + re.escape(c1_norm),
+            r"passe a\s+" + re.escape(c1_norm),
+            r"passe au\s+" + re.escape(c1_norm),
+            r"vers\s+" + re.escape(c1_norm),
+            r"direction\s+" + re.escape(c1_norm),
+            r"en route vers\s+" + re.escape(c1_norm),
+            r"signs for\s+" + re.escape(c1_norm),
+            r"joins\s+" + re.escape(c1_norm),
+            r"moves to\s+" + re.escape(c1_norm),
+            r"heads to\s+" + re.escape(c1_norm),
+            r"to\s+" + re.escape(c1_norm),
+            r"transfers to\s+" + re.escape(c1_norm),
+            r"ficha por\s+" + re.escape(c1_norm),
+            r"llega al\s+" + re.escape(c1_norm),
+            r"llega a\s+" + re.escape(c1_norm),
+            r"passa al\s+" + re.escape(c1_norm),
+            r"passa ai\s+" + re.escape(c1_norm),
+            r"passa alla\s+" + re.escape(c1_norm),
+            r"para o\s+" + re.escape(c1_norm),
+            r"vai para\s+" + re.escape(c1_norm),
+            r"wechselt zu\s+" + re.escape(c1_norm),
+            r"unterschreibt bei\s+" + re.escape(c1_norm),
+            r"proposta do\s+" + re.escape(c1_norm),
+            r"offre de\s+" + re.escape(c1_norm),
+            r"bid from\s+" + re.escape(c1_norm),
         ]
         if any(re.search(pat, norm) for pat in to_patterns_c1):
-            return c2, c1
+            return c2, c1  # Vendeur=c2, Acheteur=c1
 
-        # Règle D : Utilisation de current_club comme ancre de vérité
+        to_patterns_c2 = [
+            r"signe au\s+" + re.escape(c2_norm),
+            r"signe a\s+" + re.escape(c2_norm),
+            r"signe avec\s+" + re.escape(c2_norm),
+            r"s engage avec\s+" + re.escape(c2_norm),
+            r"s engage a\s+" + re.escape(c2_norm),
+            r"s engage au\s+" + re.escape(c2_norm),
+            r"rejoint\s+" + re.escape(c2_norm),
+            r"arrive a\s+" + re.escape(c2_norm),
+            r"arrive au\s+" + re.escape(c2_norm),
+            r"passe a\s+" + re.escape(c2_norm),
+            r"passe au\s+" + re.escape(c2_norm),
+            r"vers\s+" + re.escape(c2_norm),
+            r"direction\s+" + re.escape(c2_norm),
+            r"en route vers\s+" + re.escape(c2_norm),
+            r"signs for\s+" + re.escape(c2_norm),
+            r"joins\s+" + re.escape(c2_norm),
+            r"moves to\s+" + re.escape(c2_norm),
+            r"heads to\s+" + re.escape(c2_norm),
+            r"to\s+" + re.escape(c2_norm),
+            r"transfers to\s+" + re.escape(c2_norm),
+            r"ficha por\s+" + re.escape(c2_norm),
+            r"llega al\s+" + re.escape(c2_norm),
+            r"llega a\s+" + re.escape(c2_norm),
+            r"passa al\s+" + re.escape(c2_norm),
+            r"passa ai\s+" + re.escape(c2_norm),
+            r"passa alla\s+" + re.escape(c2_norm),
+            r"para o\s+" + re.escape(c2_norm),
+            r"vai para\s+" + re.escape(c2_norm),
+            r"wechselt zu\s+" + re.escape(c2_norm),
+            r"unterschreibt bei\s+" + re.escape(c2_norm),
+            r"proposta do\s+" + re.escape(c2_norm),
+            r"offre de\s+" + re.escape(c2_norm),
+            r"bid from\s+" + re.escape(c2_norm),
+        ]
+        if any(re.search(pat, norm) for pat in to_patterns_c2):
+            return c1, c2  # Vendeur=c1, Acheteur=c2
+
+        # Règle 3 : Offre payée au club vendeur
+        pay_seller_patterns_c2 = [
+            r"pagar ao\s+" + re.escape(c2_norm),
+            r"paga ao\s+" + re.escape(c2_norm),
+            r"proposta ao\s+" + re.escape(c2_norm),
+            r"offre a\s+" + re.escape(c2_norm),
+            r"offre au\s+" + re.escape(c2_norm),
+            r"bid to\s+" + re.escape(c2_norm),
+            r"offer to\s+" + re.escape(c2_norm),
+        ]
+        if any(re.search(pat, norm) for pat in pay_seller_patterns_c2):
+            return c2, c1  # Vendeur=c2, Acheteur=c1
+
+        pay_seller_patterns_c1 = [
+            r"pagar ao\s+" + re.escape(c1_norm),
+            r"paga ao\s+" + re.escape(c1_norm),
+            r"proposta ao\s+" + re.escape(c1_norm),
+            r"offre a\s+" + re.escape(c1_norm),
+            r"offre au\s+" + re.escape(c1_norm),
+            r"bid to\s+" + re.escape(c1_norm),
+            r"offer to\s+" + re.escape(c1_norm),
+        ]
+        if any(re.search(pat, norm) for pat in pay_seller_patterns_c1):
+            return c1, c2  # Vendeur=c1, Acheteur=c2
+
+        # Règle 4 : Club sujet acheteur (ex: "Arsenal cible / recrute / s'offre...")
+        buyer_subject_c1 = [
+            r"\b" + re.escape(c1_norm) + r"\s+(?:s offre|recrute|attire|veut|vise|cible|fonce sur|proche de|signs|targets|wants|bids for)\b",
+        ]
+        if any(re.search(pat, norm) for pat in buyer_subject_c1):
+            return c2, c1  # Vendeur=c2, Acheteur=c1
+
+        buyer_subject_c2 = [
+            r"\b" + re.escape(c2_norm) + r"\s+(?:s offre|recrute|attire|veut|vise|cible|fonce sur|proche de|signs|targets|wants|bids for)\b",
+        ]
+        if any(re.search(pat, norm) for pat in buyer_subject_c2):
+            return c1, c2  # Vendeur=c1, Acheteur=c2
+
+        # Règle 5 : Utilisation de current_club comme ancre par défaut si syntaxe neutre
         if current_club:
-            if current_club == c1:
+            if clean_text_norm(current_club) in c1_norm:
                 return c1, c2
-            elif current_club == c2:
+            elif clean_text_norm(current_club) in c2_norm:
                 return c2, c1
 
-        # Règle E : Par défaut, c1 -> c2
+        # Règle 6 : Par défaut, c1 -> c2
         return c1, c2
 
     # Cas 2 : 1 seul club détecté dans l'article

@@ -1861,7 +1861,10 @@
        MercatoIQ Engine & Data Intelligence v4.0
     ═══════════════════════════════════════════════════════ */
 
-    const API = '/api/v1/articles?page=1&page_size=5000';
+    const API_BASE = window.location.hostname.includes('vercel.app')
+      ? 'https://mercatopulse-api.onrender.com'
+      : '';
+    const API = `${API_BASE}/api/v1/articles?page=1&page_size=5000`;
     let allArticles = [];
     let filtered = [];
     let charts = {};
@@ -2369,14 +2372,19 @@
         <div style="margin-top:0.6rem;font-size:0.88rem;font-weight:800;color:#FFFFFF;letter-spacing:0.5px;z-index:2;text-shadow:0 2px 8px rgba(0,0,0,0.8);font-family:'Syne',sans-serif;">${esc(a.player_name || '')}</div>
       `;
 
-      // Clean and sanitize image URL
+      // Clean and sanitize image URL — route Wikimedia through backend proxy
       const rawImg = (a.image_url || '').trim();
-      const cleanImg = (rawImg.includes('upload.wikimedia.org') && rawImg.includes('?')) ? rawImg.split('?')[0] : rawImg;
+      let cleanImg = rawImg;
+      if (rawImg.includes('upload.wikimedia.org') || rawImg.includes('thesportsdb.com')) {
+        // Use backend image proxy to bypass browser CORS/OpaqueResponseBlocking
+        const proxyBase = API_BASE + '/api/v1/image-proxy?url=';
+        cleanImg = proxyBase + encodeURIComponent(rawImg.split('?')[0]);
+      }
 
-      // Always show a visual — real image with no-referrer or rich Fabrizio Romano poster
-      const visual = (cleanImg && cleanImg.startsWith('http')) ? `
+      // Always show a visual — real image via proxy or rich Fabrizio Romano poster
+      const visual = (cleanImg && (cleanImg.startsWith('http') || cleanImg.startsWith('/api'))) ? `
         <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;height:180px;overflow:hidden;">
-          <img src="${escA(cleanImg)}" referrerpolicy="no-referrer" alt="${escA(a.player_name || a.title)}" loading="lazy"
+          <img src="${escA(cleanImg)}" alt="${escA(a.player_name || a.title)}" loading="lazy"
             onerror="this.style.display='none';"
             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;z-index:2;transition:transform 0.4s ease;">
           <div class="card-visual-overlay" style="z-index:3;background:var(--card-overlay);"></div>
@@ -2884,12 +2892,12 @@
       btn.disabled = true;
       btn.textContent = '⏳ Scraping en cours...';
       try {
-        await fetch('/api/v1/articles/trigger-pipeline', { method: 'POST' });
+        await fetch(`${API_BASE}/api/v1/scrape/run`, { method: 'POST' });
         setTimeout(async () => {
           await loadData();
           btn.disabled = false;
           btn.textContent = '🔄 Actualiser les flux Mercato';
-        }, 3000);
+        }, 4000);
       } catch (err) {
         btn.disabled = false;
         btn.textContent = '🔄 Actualiser les flux Mercato';

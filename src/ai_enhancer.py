@@ -53,26 +53,37 @@ Tu dois analyser cet article et retourner un JSON structuré avec les champs sui
 
 {
   "player_name": "Nom complet du joueur principal (ex: Ferran Torres). Vide si aucun joueur identifié.",
-  "from_club": "Club vendeur / club actuel du joueur. Vide si non identifié.",
-  "to_club": "Club acheteur / destination. Vide si non identifié.",
-  "transfer_fee": "Montant du transfert en texte (ex: '45 M€', 'Prêt avec option d\\'achat', 'Libre'). 'Non communiqué' si inconnu.",
+  "from_club": "Le club VENDEUR = le club ACTUEL du joueur, celui qu'il QUITTE. Vide si non identifié.",
+  "to_club": "Le club ACHETEUR = la DESTINATION du joueur, celui qui le RECRUTE. Vide si non identifié.",
+  "transfer_fee": "Montant du transfert en texte (ex: '45 M€', 'Prêt avec option d'achat', 'Libre'). 'Non communiqué' si inconnu.",
   "fee_numeric": 0,
   "league": "Le championnat principal concerné parmi : Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿, La Liga 🇪🇸, Ligue 1 🇫🇷, Serie A 🇮🇹, Bundesliga 🇩🇪, Saudi Pro League 🇸🇦, Champions League 🇪🇺",
   "status": "Un parmi : OFFICIEL ✅, HERE WE GO 🔥, NEGOCIATION 💬, RUMEUR 📰",
   "credibility": 4.5,
+  "national_team": "Sélection nationale du joueur si connue (ex: France 🇫🇷). Vide sinon.",
   "semantic_hash": "identifiant unique normalisé du transfert (ex: ferran_torres__fc_barcelone__psg)",
   "fabrizio_title": "Titre accrocheur en FRANÇAIS au style Fabrizio Romano, commençant par le statut emoji",
   "fabrizio_summary": "Résumé structuré en FRANÇAIS avec des bullet points emoji (🚨, 🤝, 💶, 🩺, 📝, 💬)"
 }
 
-RÈGLES CRITIQUES :
-1. fee_numeric = montant en millions d'euros (nombre). 0 si inconnu, prêt ou libre.
-2. credibility = note de 1 à 5 basée sur la certitude du langage source (ex: "confirmed" = 5, "rumoured" = 2).
-3. semantic_hash = joueur__club_from__club_to en minuscules, underscores, sans accents. Ce hash permet de regrouper les doublons.
-4. fabrizio_title DOIT commencer par le statut : "🚨 OFFICIEL :" ou "🔥 HERE WE GO :" ou "💬 NÉGOCIATION :" ou "📰 RUMEUR :"
-5. fabrizio_summary DOIT contenir 3-5 bullet points avec emojis, terminant par "💬 Note ce transfert de 1 à 10 ! ⏬"
-6. TOUJOURS répondre en JSON valide, sans texte autour.
-7. Si l'article N'EST PAS un transfert football, retourne {"is_football": false}.
+RÈGLES CRITIQUES — DIRECTION DU TRANSFERT (NE PAS INVERSER !) :
+1. from_club = le club ACTUEL du joueur, d'où il PART. C'est le VENDEUR.
+   Exemples : "Kevin De Bruyne quitte Manchester City" → from_club = "Manchester City"
+              "Le PSG vend Neymar" → from_club = "PSG"
+              "Hakimi prolonge au PSG" → from_club = "PSG", to_club = "PSG" (prolongation)
+2. to_club = le club de DESTINATION, celui qui ACHÈTE/RECRUTE le joueur.
+   Exemples : "Kevin De Bruyne signe au Bayern Munich" → to_club = "Bayern Munich"
+              "Le Real Madrid recrute Florian Wirtz" → to_club = "Real Madrid"
+3. Si l'article dit "X rejoint Y" ou "X signe à Y" → from_club = club actuel de X, to_club = Y.
+4. Si l'article dit "Y recrute X" ou "Y s'offre X" → to_club = Y, from_club = club actuel de X.
+5. Pour une PROLONGATION : from_club = to_club = le même club.
+6. fee_numeric = montant en millions d'euros (nombre). 0 si inconnu, prêt ou libre.
+7. credibility = note de 1 à 5 basée sur la certitude du langage source (ex: "confirmed" = 5, "rumoured" = 2).
+8. semantic_hash = joueur__club_from__club_to en minuscules, underscores, sans accents. Ce hash permet de regrouper les doublons.
+9. fabrizio_title DOIT commencer par le statut : "🚨 OFFICIEL :" ou "🔥 HERE WE GO :" ou "💬 NÉGOCIATION :" ou "📰 RUMEUR :"
+10. fabrizio_summary DOIT contenir 3-5 bullet points avec emojis, terminant par "💬 Note ce transfert de 1 à 10 ! ⏬"
+11. TOUJOURS répondre en JSON valide, sans texte autour.
+12. Si l'article N'EST PAS un transfert football, retourne {"is_football": false}.
 """
 
 
@@ -262,6 +273,70 @@ def _make_semantic_hash(player: str, from_club: str, to_club: str) -> str:
     return f"{p}__{f}__{t}"
 
 
+def _validate_club_direction(result: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Post-validation des clubs from/to en utilisant la base PLAYER_REGISTRY.
+    Si on connaît le club actuel du joueur et qu'il est mis en to_club au lieu de from_club,
+    on corrige l'inversion.
+    """
+    player_name = result.get("player_name", "")
+    from_club = result.get("from_club", "")
+    to_club = result.get("to_club", "")
+
+    if not player_name or not from_club or not to_club:
+        return result
+
+    # Prolongation : pas d'inversion possible
+    if from_club == to_club:
+        return result
+
+    try:
+        from src.mercato_nlp import PLAYER_REGISTRY, clean_text_norm
+
+        # Chercher le joueur dans le registre
+        known_current_club = None
+        p_norm = clean_text_norm(player_name)
+
+        for reg_name, reg_data in PLAYER_REGISTRY.items():
+            reg_norm = clean_text_norm(reg_name)
+            if reg_norm == p_norm:
+                known_current_club = reg_data.get("current_club")
+                break
+            # Check aliases
+            for alias in reg_data.get("alias", []):
+                if clean_text_norm(alias) == p_norm:
+                    known_current_club = reg_data.get("current_club")
+                    break
+            if known_current_club:
+                break
+
+        if known_current_club:
+            known_norm = clean_text_norm(known_current_club)
+            from_norm = clean_text_norm(from_club)
+            to_norm = clean_text_norm(to_club)
+
+            # Cas 1 : Le club actuel connu est dans to_club → INVERSION !
+            if known_norm in to_norm or to_norm in known_norm:
+                if known_norm not in from_norm and from_norm not in known_norm:
+                    logger.warning(
+                        "🔄 Correction inversion clubs pour %s: %s ↔ %s (club actuel connu: %s)",
+                        player_name, from_club, to_club, known_current_club,
+                    )
+                    result["from_club"], result["to_club"] = to_club, from_club
+
+            # Cas 2 : from_club ne match pas du tout le club connu, mais to_club non plus
+            # → remplir from_club avec le club connu si vide
+            elif known_norm not in from_norm and from_norm not in known_norm:
+                if not from_club or from_club == to_club:
+                    result["from_club"] = known_current_club
+
+    except ImportError:
+        pass
+    except Exception as e:
+        logger.warning("Club direction validation error: %s", e)
+
+    return result
+
 # ─────────────────────────────────────────────────────────────
 # POINT D'ENTRÉE PRINCIPAL — groq_analyze_article()
 # ─────────────────────────────────────────────────────────────
@@ -308,6 +383,10 @@ def groq_analyze_article(
             "national_team": groq_result.get("national_team", "") or "",
             "_source": "groq",
         }
+
+        # ── POST-VALIDATION : Corriger l'inversion from_club ↔ to_club ──
+        # Utiliser la base PLAYER_REGISTRY pour vérifier que from_club = club actuel du joueur
+        result = _validate_club_direction(result)
 
         # Recalculer le hash sémantique si absent
         if not result["semantic_hash"]:

@@ -35,12 +35,12 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Foot Mercato",
-        "url": "https://news.google.com/rss/search?q=footmercato+OR+mercato+ligue1+when:24h&hl=fr&gl=FR&ceid=FR:fr",
+        "url": "https://news.google.com/rss/search?q=footmercato+OR+mercato+ligue1+when:7d&hl=fr&gl=FR&ceid=FR:fr",
         "lang": "fr", "category_default": "Ligue 1 🇫🇷", "credibility": 0.75,
     },
     {
         "name": "L'Équipe Mercato",
-        "url": "https://news.google.com/rss/search?q=lequipe+football+mercato+transfert+when:24h&hl=fr&gl=FR&ceid=FR:fr",
+        "url": "https://news.google.com/rss/search?q=lequipe+football+mercato+transfert+when:7d&hl=fr&gl=FR&ceid=FR:fr",
         "lang": "fr", "category_default": "Ligue 1 🇫🇷", "credibility": 0.85,
     },
     {
@@ -55,7 +55,7 @@ SOURCES = [
     },
     {
         "name": "Maxifoot Mercato",
-        "url": "https://news.google.com/rss/search?q=mercato+ligue1+transfert+when:24h&hl=fr&gl=FR&ceid=FR:fr",
+        "url": "https://news.google.com/rss/search?q=mercato+ligue1+transfert+when:7d&hl=fr&gl=FR&ceid=FR:fr",
         "lang": "fr", "category_default": "Ligue 1 🇫🇷", "credibility": 0.65,
     },
     {
@@ -99,7 +99,7 @@ SOURCES = [
     },
     {
         "name": "Google News Premier League",
-        "url": "https://news.google.com/rss/search?q=Premier+League+transfer+signing+when:24h&hl=en-GB&gl=GB&ceid=GB:en",
+        "url": "https://news.google.com/rss/search?q=Premier+League+transfer+signing+when:7d&hl=en-GB&gl=GB&ceid=GB:en",
         "lang": "en", "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "credibility": 0.70,
     },
 
@@ -108,22 +108,22 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Marca Fichajes",
-        "url": "https://news.google.com/rss/search?q=marca+fichajes+futbol+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=marca+fichajes+futbol+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.85,
     },
     {
         "name": "Marca Real Madrid",
-        "url": "https://news.google.com/rss/search?q=marca+real+madrid+fichajes+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=marca+real+madrid+fichajes+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.85,
     },
     {
         "name": "Marca Barcelona",
-        "url": "https://news.google.com/rss/search?q=marca+barcelona+fichajes+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=marca+barcelona+fichajes+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.85,
     },
     {
         "name": "Sport.es Mercato",
-        "url": "https://news.google.com/rss/search?q=sport.es+fichajes+futbol+barcelona+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=sport.es+fichajes+futbol+barcelona+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
     },
     {
@@ -143,22 +143,22 @@ SOURCES = [
     },
     {
         "name": "Barça & PSG Mercato Global",
-        "url": "https://news.google.com/rss/search?q=Barcelona+OR+PSG+fichajes+mercato+transfert+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=Barcelona+OR+PSG+fichajes+mercato+transfert+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
     },
     {
         "name": "Spanish Star Mercato (Ferran, Rodri, Romero)",
-        "url": "https://news.google.com/rss/search?q=Ferran+Torres+OR+Rodri+OR+Cuti+Romero+OR+Ansu+Fati+fichajes+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=Ferran+Torres+OR+Rodri+OR+Cuti+Romero+OR+Ansu+Fati+fichajes+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
     },
     {
         "name": "Fabrizio Romano Live Updates",
-        "url": "https://news.google.com/rss/search?q=Fabrizio+Romano+here+we+go+OR+transfer+when:48h&hl=en&gl=US&ceid=US:en",
+        "url": "https://news.google.com/rss/search?q=Fabrizio+Romano+here+we+go+OR+transfer+when:7d&hl=en&gl=US&ceid=US:en",
         "lang": "en", "category_default": "Champions League 🇪🇺", "credibility": 0.95,
     },
     {
         "name": "Google News Fichajes ES",
-        "url": "https://news.google.com/rss/search?q=fichajes+futbol+when:48h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=fichajes+futbol+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.70,
     },
 
@@ -177,22 +177,22 @@ SOURCES = [
     },
     {
         "name": "CalcioMercato.com",
-        "url": "https://news.google.com/rss/search?q=calciomercato.com+serie+a+when:24h&hl=it&gl=IT&ceid=IT:it",
+        "url": "https://news.google.com/rss/search?q=calciomercato.com+serie+a+when:7d&hl=it&gl=IT&ceid=IT:it",
         "lang": "it", "category_default": "Serie A 🇮🇹", "credibility": 0.70,
     },
     {
         "name": "TuttoMercatoWeb Serie A",
-        "url": "https://news.google.com/rss/search?q=tuttomercatoweb+calciomercato+when:24h&hl=it&gl=IT&ceid=IT:it",
+        "url": "https://news.google.com/rss/search?q=tuttomercatoweb+calciomercato+when:7d&hl=it&gl=IT&ceid=IT:it",
         "lang": "it", "category_default": "Serie A 🇮🇹", "credibility": 0.70,
     },
     {
         "name": "Corriere dello Sport Mercato",
-        "url": "https://news.google.com/rss/search?q=corriere+dello+sport+calciomercato+when:24h&hl=it&gl=IT&ceid=IT:it",
+        "url": "https://news.google.com/rss/search?q=corriere+dello+sport+calciomercato+when:7d&hl=it&gl=IT&ceid=IT:it",
         "lang": "it", "category_default": "Serie A 🇮🇹", "credibility": 0.80,
     },
     {
         "name": "Google News Calciomercato IT",
-        "url": "https://news.google.com/rss/search?q=calciomercato+Serie+A+when:24h&hl=it&gl=IT&ceid=IT:it",
+        "url": "https://news.google.com/rss/search?q=calciomercato+Serie+A+when:7d&hl=it&gl=IT&ceid=IT:it",
         "lang": "it", "category_default": "Serie A 🇮🇹", "credibility": 0.65,
     },
     {
@@ -202,7 +202,7 @@ SOURCES = [
     },
     {
         "name": "Sky Sport IT Mercato",
-        "url": "https://news.google.com/rss/search?q=calciomercato+sky+sport+italia+when:24h&hl=it&gl=IT&ceid=IT:it",
+        "url": "https://news.google.com/rss/search?q=calciomercato+sky+sport+italia+when:7d&hl=it&gl=IT&ceid=IT:it",
         "lang": "it", "category_default": "Serie A 🇮🇹", "credibility": 0.90,
     },
 
@@ -211,12 +211,12 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Saudi Pro League News (EN)",
-        "url": "https://news.google.com/rss/search?q=Saudi+Pro+League+transfer+OR+signing+when:24h&hl=en&gl=US&ceid=US:en",
+        "url": "https://news.google.com/rss/search?q=Saudi+Pro+League+transfer+OR+signing+when:7d&hl=en&gl=US&ceid=US:en",
         "lang": "en", "category_default": "Saudi Pro League 🇸🇦", "credibility": 0.75,
     },
     {
         "name": "Arab News Saudi Football",
-        "url": "https://news.google.com/rss/search?q=arabnews+Saudi+football+transfer+when:24h&hl=en&gl=SA&ceid=SA:ar",
+        "url": "https://news.google.com/rss/search?q=arabnews+Saudi+football+transfer+when:7d&hl=en&gl=SA&ceid=SA:ar",
         "lang": "en", "category_default": "Saudi Pro League 🇸🇦", "credibility": 0.80,
     },
     {
@@ -226,12 +226,12 @@ SOURCES = [
     },
     {
         "name": "Google News Al-Nassr Al-Hilal",
-        "url": "https://news.google.com/rss/search?q=Al-Nassr+OR+Al-Hilal+OR+Al-Ittihad+transfer+when:24h&hl=en&gl=US&ceid=US:en",
+        "url": "https://news.google.com/rss/search?q=Al-Nassr+OR+Al-Hilal+OR+Al-Ittihad+transfer+when:7d&hl=en&gl=US&ceid=US:en",
         "lang": "en", "category_default": "Saudi Pro League 🇸🇦", "credibility": 0.75,
     },
     {
         "name": "Google News SPL Transferts AR",
-        "url": "https://news.google.com/rss/search?q=%D8%B5%D9%81%D9%82%D8%A7%D8%AA+%D8%A7%D9%84%D8%AF%D9%88%D8%B1%D9%8A+%D8%A7%D9%84%D8%B3%D8%B9%D9%88%D8%AF%D9%8A+when:24h&hl=ar&gl=SA&ceid=SA:ar",
+        "url": "https://news.google.com/rss/search?q=%D8%B5%D9%81%D9%82%D8%A7%D8%AA+%D8%A7%D9%84%D8%AF%D9%88%D8%B1%D9%8A+%D8%A7%D9%84%D8%B3%D8%B9%D9%88%D8%AF%D9%8A+when:7d&hl=ar&gl=SA&ceid=SA:ar",
         "lang": "ar", "category_default": "Saudi Pro League 🇸🇦", "credibility": 0.70,
     },
     {
@@ -245,12 +245,12 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Kicker Transfermarkt",
-        "url": "https://news.google.com/rss/search?q=kicker+Bundesliga+Transfermarkt+when:24h&hl=de&gl=DE&ceid=DE:de",
+        "url": "https://news.google.com/rss/search?q=kicker+Bundesliga+Transfermarkt+when:7d&hl=de&gl=DE&ceid=DE:de",
         "lang": "de", "category_default": "Bundesliga 🇩🇪", "credibility": 0.90,
     },
     {
         "name": "Google News Bundesliga Transfers",
-        "url": "https://news.google.com/rss/search?q=Bundesliga+transfer+signing+when:24h&hl=de&gl=DE&ceid=DE:de",
+        "url": "https://news.google.com/rss/search?q=Bundesliga+transfer+signing+when:7d&hl=de&gl=DE&ceid=DE:de",
         "lang": "de", "category_default": "Bundesliga 🇩🇪", "credibility": 0.70,
     },
     {
@@ -264,7 +264,7 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Goal.com Mercato",
-        "url": "https://news.google.com/rss/search?q=goal.com+football+transfer+signing+when:24h&hl=en&gl=US&ceid=US:en",
+        "url": "https://news.google.com/rss/search?q=goal.com+football+transfer+signing+when:7d&hl=en&gl=US&ceid=US:en",
         "lang": "en", "category_default": "Champions League 🇪🇺", "credibility": 0.80,
     },
     {
@@ -288,17 +288,17 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "GE Globo Mercado da Bola",
-        "url": "https://news.google.com/rss/search?q=globo+esporte+mercado+da+bola+transferencia+when:24h&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+        "url": "https://news.google.com/rss/search?q=globo+esporte+mercado+da+bola+transferencia+when:7d&hl=pt-BR&gl=BR&ceid=BR:pt-419",
         "lang": "pt", "category_default": "Brésil 🇧🇷", "credibility": 0.85,
     },
     {
         "name": "Google News Mercado Bola BR",
-        "url": "https://news.google.com/rss/search?q=mercado+da+bola+transferencia+when:24h&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+        "url": "https://news.google.com/rss/search?q=mercado+da+bola+transferencia+when:7d&hl=pt-BR&gl=BR&ceid=BR:pt-419",
         "lang": "pt", "category_default": "Brésil 🇧🇷", "credibility": 0.75,
     },
     {
         "name": "Ole Mercado de Pases AR",
-        "url": "https://news.google.com/rss/search?q=ole.com.ar+mercado+de+pases+when:24h&hl=es&gl=AR&ceid=AR:es-419",
+        "url": "https://news.google.com/rss/search?q=ole.com.ar+mercado+de+pases+when:7d&hl=es&gl=AR&ceid=AR:es-419",
         "lang": "es", "category_default": "Argentine 🇦🇷", "credibility": 0.85,
     },
 
@@ -307,12 +307,12 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Le360 Sport Maroc",
-        "url": "https://news.google.com/rss/search?q=le360+sport+football+maroc+when:24h&hl=fr&gl=MA&ceid=MA:fr",
+        "url": "https://news.google.com/rss/search?q=le360+sport+football+maroc+when:7d&hl=fr&gl=MA&ceid=MA:fr",
         "lang": "fr", "category_default": "Maroc 🇲🇦", "credibility": 0.85,
     },
     {
         "name": "Google News Football Maroc",
-        "url": "https://news.google.com/rss/search?q=football+maroc+transfert+when:24h&hl=fr&gl=MA&ceid=MA:fr",
+        "url": "https://news.google.com/rss/search?q=football+maroc+transfert+when:7d&hl=fr&gl=MA&ceid=MA:fr",
         "lang": "fr", "category_default": "Maroc 🇲🇦", "credibility": 0.75,
     },
     {
@@ -331,22 +331,22 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Google News Mercato FR",
-        "url": "https://news.google.com/rss/search?q=mercato+OR+transfert+football+when:24h&hl=fr&gl=FR&ceid=FR:fr",
+        "url": "https://news.google.com/rss/search?q=mercato+OR+transfert+football+when:7d&hl=fr&gl=FR&ceid=FR:fr",
         "lang": "fr", "category_default": "Ligue 1 🇫🇷", "credibility": 0.60,
     },
     {
         "name": "Google News Transfer EN",
-        "url": "https://news.google.com/rss/search?q=football+transfer+signed+when:24h&hl=en-GB&gl=GB&ceid=GB:en",
+        "url": "https://news.google.com/rss/search?q=football+transfer+signed+when:7d&hl=en-GB&gl=GB&ceid=GB:en",
         "lang": "en", "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "credibility": 0.60,
     },
     {
         "name": "Google News Fichajes Global ES",
-        "url": "https://news.google.com/rss/search?q=fichajes+futbol+when:24h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=fichajes+futbol+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.55,
     },
     {
         "name": "Google News Calciomercato IT",
-        "url": "https://news.google.com/rss/search?q=calciomercato+when:24h&hl=it&gl=IT&ceid=IT:it",
+        "url": "https://news.google.com/rss/search?q=calciomercato+when:7d&hl=it&gl=IT&ceid=IT:it",
         "lang": "it", "category_default": "Serie A 🇮🇹", "credibility": 0.55,
     },
 
@@ -355,17 +355,17 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Liverpool Echo Transfers",
-        "url": "https://news.google.com/rss/search?q=Liverpool+FC+transfer+signing+when:24h&hl=en-GB&gl=GB&ceid=GB:en",
+        "url": "https://news.google.com/rss/search?q=Liverpool+FC+transfer+signing+when:7d&hl=en-GB&gl=GB&ceid=GB:en",
         "lang": "en", "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "credibility": 0.80,
     },
     {
         "name": "Man United Transfer News",
-        "url": "https://news.google.com/rss/search?q=Manchester+United+transfer+when:24h&hl=en-GB&gl=GB&ceid=GB:en",
+        "url": "https://news.google.com/rss/search?q=Manchester+United+transfer+when:7d&hl=en-GB&gl=GB&ceid=GB:en",
         "lang": "en", "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "credibility": 0.75,
     },
     {
         "name": "Man City Transfer News",
-        "url": "https://news.google.com/rss/search?q=Manchester+City+transfer+signing+when:24h&hl=en-GB&gl=GB&ceid=GB:en",
+        "url": "https://news.google.com/rss/search?q=Manchester+City+transfer+signing+when:7d&hl=en-GB&gl=GB&ceid=GB:en",
         "lang": "en", "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "credibility": 0.75,
     },
     {
@@ -380,7 +380,7 @@ SOURCES = [
     },
     {
         "name": "Newcastle United Transfers",
-        "url": "https://news.google.com/rss/search?q=Newcastle+United+transfer+signing+when:24h&hl=en-GB&gl=GB&ceid=GB:en",
+        "url": "https://news.google.com/rss/search?q=Newcastle+United+transfer+signing+when:7d&hl=en-GB&gl=GB&ceid=GB:en",
         "lang": "en", "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "credibility": 0.80,
     },
     {
@@ -429,12 +429,12 @@ SOURCES = [
     },
     {
         "name": "FirenzeViola Fiorentina",
-        "url": "https://news.google.com/rss/search?q=Fiorentina+calciomercato+when:24h&hl=it&gl=IT&ceid=IT:it",
+        "url": "https://news.google.com/rss/search?q=Fiorentina+calciomercato+when:7d&hl=it&gl=IT&ceid=IT:it",
         "lang": "it", "category_default": "Serie A 🇮🇹", "credibility": 0.70,
     },
     {
         "name": "TuttoAtalanta",
-        "url": "https://news.google.com/rss/search?q=Atalanta+calciomercato+when:24h&hl=it&gl=IT&ceid=IT:it",
+        "url": "https://news.google.com/rss/search?q=Atalanta+calciomercato+when:7d&hl=it&gl=IT&ceid=IT:it",
         "lang": "it", "category_default": "Serie A 🇮🇹", "credibility": 0.75,
     },
     {
@@ -468,12 +468,12 @@ SOURCES = [
     },
     {
         "name": "Superdeporte Valencia",
-        "url": "https://news.google.com/rss/search?q=Valencia+CF+fichajes+when:24h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=Valencia+CF+fichajes+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
     },
     {
         "name": "EstadioDeportivo Sevilla",
-        "url": "https://news.google.com/rss/search?q=Sevilla+FC+OR+Betis+fichajes+when:24h&hl=es&gl=ES&ceid=ES:es",
+        "url": "https://news.google.com/rss/search?q=Sevilla+FC+OR+Betis+fichajes+when:7d&hl=es&gl=ES&ceid=ES:es",
         "lang": "es", "category_default": "La Liga 🇪🇸", "credibility": 0.80,
     },
     {
@@ -487,17 +487,17 @@ SOURCES = [
     # ══════════════════════════════════════════════════════════
     {
         "name": "Sky Sport DE Transfers",
-        "url": "https://news.google.com/rss/search?q=Bundesliga+Transfermarkt+when:24h&hl=de&gl=DE&ceid=DE:de",
+        "url": "https://news.google.com/rss/search?q=Bundesliga+Transfermarkt+when:7d&hl=de&gl=DE&ceid=DE:de",
         "lang": "de", "category_default": "Bundesliga 🇩🇪", "credibility": 0.85,
     },
     {
         "name": "RevierSport Ruhr",
-        "url": "https://news.google.com/rss/search?q=Borussia+Dortmund+OR+Schalke+transfer+when:24h&hl=de&gl=DE&ceid=DE:de",
+        "url": "https://news.google.com/rss/search?q=Borussia+Dortmund+OR+Schalke+transfer+when:7d&hl=de&gl=DE&ceid=DE:de",
         "lang": "de", "category_default": "Bundesliga 🇩🇪", "credibility": 0.80,
     },
     {
         "name": "FCBInside Bayern Munich",
-        "url": "https://news.google.com/rss/search?q=Bayern+Munich+transfer+Transfermarkt+when:24h&hl=de&gl=DE&ceid=DE:de",
+        "url": "https://news.google.com/rss/search?q=Bayern+Munich+transfer+Transfermarkt+when:7d&hl=de&gl=DE&ceid=DE:de",
         "lang": "de", "category_default": "Bundesliga 🇩🇪", "credibility": 0.75,
     },
 
@@ -511,12 +511,12 @@ SOURCES = [
     },
     {
         "name": "Google News Eredivisie Transfers",
-        "url": "https://news.google.com/rss/search?q=Eredivisie+transfer+when:24h&hl=nl&gl=NL&ceid=NL:nl",
+        "url": "https://news.google.com/rss/search?q=Eredivisie+transfer+when:7d&hl=nl&gl=NL&ceid=NL:nl",
         "lang": "nl", "category_default": "Eredivisie 🇳🇱", "credibility": 0.70,
     },
     {
         "name": "Walfoot BE Transferts",
-        "url": "https://news.google.com/rss/search?q=Pro+League+Belgique+transfert+when:24h&hl=fr&gl=BE&ceid=BE:fr",
+        "url": "https://news.google.com/rss/search?q=Pro+League+Belgique+transfert+when:7d&hl=fr&gl=BE&ceid=BE:fr",
         "lang": "fr", "category_default": "Pro League 🇧🇪", "credibility": 0.75,
     },
     {
@@ -531,7 +531,7 @@ SOURCES = [
     },
     {
         "name": "ZeroZero Portugal Data",
-        "url": "https://news.google.com/rss/search?q=Benfica+OR+Porto+OR+Sporting+transferencia+when:24h&hl=pt-PT&gl=PT&ceid=PT:pt-150",
+        "url": "https://news.google.com/rss/search?q=Benfica+OR+Porto+OR+Sporting+transferencia+when:7d&hl=pt-PT&gl=PT&ceid=PT:pt-150",
         "lang": "pt", "category_default": "Liga Portugal 🇵🇹", "credibility": 0.85,
     },
     {
@@ -541,7 +541,7 @@ SOURCES = [
     },
     {
         "name": "Google News Süper Lig Transfer",
-        "url": "https://news.google.com/rss/search?q=Süper+Lig+transfer+when:24h&hl=tr&gl=TR&ceid=TR:tr",
+        "url": "https://news.google.com/rss/search?q=Süper+Lig+transfer+when:7d&hl=tr&gl=TR&ceid=TR:tr",
         "lang": "tr", "category_default": "Süper Lig 🇹🇷", "credibility": 0.60,
     },
 
@@ -555,7 +555,7 @@ SOURCES = [
     },
     {
         "name": "Arriyadiyah Transfers",
-        "url": "https://news.google.com/rss/search?q=site:arriyadiyah.com+transfer+when:24h&hl=ar&gl=SA&ceid=SA:ar",
+        "url": "https://news.google.com/rss/search?q=site:arriyadiyah.com+transfer+when:7d&hl=ar&gl=SA&ceid=SA:ar",
         "lang": "ar", "category_default": "Saudi Pro League 🇸🇦", "credibility": 0.95,
     },
     {
@@ -565,22 +565,22 @@ SOURCES = [
     },
     {
         "name": "Al-Hilal News",
-        "url": "https://news.google.com/rss/search?q=Al-Hilal+Saudi+transfer+signing+when:24h&hl=en&gl=SA&ceid=SA:ar",
+        "url": "https://news.google.com/rss/search?q=Al-Hilal+Saudi+transfer+signing+when:7d&hl=en&gl=SA&ceid=SA:ar",
         "lang": "en", "category_default": "Saudi Pro League 🇸🇦", "credibility": 0.90,
     },
     {
         "name": "Al-Ittihad News",
-        "url": "https://news.google.com/rss/search?q=Al-Ittihad+Saudi+transfer+signing+when:24h&hl=en&gl=US&ceid=US:en",
+        "url": "https://news.google.com/rss/search?q=Al-Ittihad+Saudi+transfer+signing+when:7d&hl=en&gl=US&ceid=US:en",
         "lang": "en", "category_default": "Saudi Pro League 🇸🇦", "credibility": 0.90,
     },
     {
         "name": "Al-Ahli Saudi News",
-        "url": "https://news.google.com/rss/search?q=Al-Ahli+Saudi+transfer+signing+when:24h&hl=en&gl=US&ceid=US:en",
+        "url": "https://news.google.com/rss/search?q=Al-Ahli+Saudi+transfer+signing+when:7d&hl=en&gl=US&ceid=US:en",
         "lang": "en", "category_default": "Saudi Pro League 🇸🇦", "credibility": 0.90,
     },
     {
         "name": "Kooora Saudi",
-        "url": "https://news.google.com/rss/search?q=kooora+saudi+league+transfer+when:24h&hl=ar&gl=SA&ceid=SA:ar",
+        "url": "https://news.google.com/rss/search?q=kooora+saudi+league+transfer+when:7d&hl=ar&gl=SA&ceid=SA:ar",
         "lang": "ar", "category_default": "Saudi Pro League 🇸🇦", "credibility": 0.90,
     },
 
@@ -599,7 +599,7 @@ SOURCES = [
     },
     {
         "name": "Google News Copa Libertadores Transfers",
-        "url": "https://news.google.com/rss/search?q=Copa+Libertadores+transfer+signing+when:24h&hl=es&gl=AR&ceid=AR:es-419",
+        "url": "https://news.google.com/rss/search?q=Copa+Libertadores+transfer+signing+when:7d&hl=es&gl=AR&ceid=AR:es-419",
         "lang": "es", "category_default": "Argentine 🇦🇷", "credibility": 0.70,
     },
 
@@ -613,7 +613,7 @@ SOURCES = [
     },
     {
         "name": "Hespress Sport Maroc",
-        "url": "https://news.google.com/rss/search?q=hespress+sport+football+when:24h&hl=fr&gl=MA&ceid=MA:fr",
+        "url": "https://news.google.com/rss/search?q=hespress+sport+football+when:7d&hl=fr&gl=MA&ceid=MA:fr",
         "lang": "fr", "category_default": "Maroc 🇲🇦", "credibility": 0.85,
     },
     {
@@ -623,12 +623,12 @@ SOURCES = [
     },
     {
         "name": "Google News Transferts Afrique",
-        "url": "https://news.google.com/rss/search?q=transfert+football+afrique+when:24h&hl=fr&gl=SN&ceid=SN:fr",
+        "url": "https://news.google.com/rss/search?q=transfert+football+afrique+when:7d&hl=fr&gl=SN&ceid=SN:fr",
         "lang": "fr", "category_default": "Afrique 🌍", "credibility": 0.70,
     },
     {
         "name": "ElBotola Maroc",
-        "url": "https://news.google.com/rss/search?q=elbotola+Botola+transfert+when:24h&hl=fr&gl=MA&ceid=MA:fr",
+        "url": "https://news.google.com/rss/search?q=elbotola+Botola+transfert+when:7d&hl=fr&gl=MA&ceid=MA:fr",
         "lang": "fr", "category_default": "Maroc 🇲🇦", "credibility": 0.80,
     },
 
@@ -647,17 +647,17 @@ SOURCES = [
     },
     {
         "name": "Google News MLS Transfers",
-        "url": "https://news.google.com/rss/search?q=MLS+transfer+signing+when:24h&hl=en&gl=US&ceid=US:en",
+        "url": "https://news.google.com/rss/search?q=MLS+transfer+signing+when:7d&hl=en&gl=US&ceid=US:en",
         "lang": "en", "category_default": "MLS 🇺🇸", "credibility": 0.70,
     },
     {
         "name": "Google News J-League Transfers",
-        "url": "https://news.google.com/rss/search?q=J-League+transfer+signing+when:24h&hl=ja&gl=JP&ceid=JP:ja",
+        "url": "https://news.google.com/rss/search?q=J-League+transfer+signing+when:7d&hl=ja&gl=JP&ceid=JP:ja",
         "lang": "ja", "category_default": "J-League 🇯🇵", "credibility": 0.70,
     },
     {
         "name": "Google News Chinese Super League",
-        "url": "https://news.google.com/rss/search?q=Chinese+Super+League+transfer+when:24h&hl=en&gl=US&ceid=US:en",
+        "url": "https://news.google.com/rss/search?q=Chinese+Super+League+transfer+when:7d&hl=en&gl=US&ceid=US:en",
         "lang": "en", "category_default": "Asie 🌏", "credibility": 0.65,
     },
     {
@@ -744,7 +744,7 @@ try:
             
             for lang_code, param_str, tag in configs:
                 kw = TRANSFER_KEYWORDS.get(lang_code, TRANSFER_KEYWORDS["fr"])
-                query = f"{names_query} {kw} when:24h"
+                query = f"{names_query} {kw} when:7d"
                 url = f"https://news.google.com/rss/search?q={urllib.parse.quote(query)}&{param_str}"
                 SOURCES.append({
                     "name": f"{tag} ({chunk[0][0]}...)",
@@ -760,7 +760,7 @@ try:
             names_query = f"({' OR '.join(names)})"
             
             # Recherche bilingue Entraîneurs (FR + EN)
-            query_fr = f"{names_query} {TRANSFER_KEYWORDS['fr']} when:24h"
+            query_fr = f"{names_query} {TRANSFER_KEYWORDS['fr']} when:7d"
             SOURCES.append({
                 "name": f"Coach Search FR ({chunk[0][0]}...)",
                 "url": f"https://news.google.com/rss/search?q={urllib.parse.quote(query_fr)}&hl=fr&gl=FR&ceid=FR:fr",
@@ -768,7 +768,7 @@ try:
                 "category_default": "Entraîneurs 👔",
                 "credibility": 0.85
             })
-            query_en = f"{names_query} {TRANSFER_KEYWORDS['en']} when:24h"
+            query_en = f"{names_query} {TRANSFER_KEYWORDS['en']} when:7d"
             SOURCES.append({
                 "name": f"Coach Search EN ({chunk[0][0]}...)",
                 "url": f"https://news.google.com/rss/search?q={urllib.parse.quote(query_en)}&hl=en-GB&gl=GB&ceid=GB:en",
@@ -1397,7 +1397,7 @@ def scrape_all_sources() -> pd.DataFrame:
         except Exception:
             return []
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=15) as executor:
         future_to_src = {executor.submit(_scrape_safe, src): src for src in SOURCES}
         done_count = 0
         try:

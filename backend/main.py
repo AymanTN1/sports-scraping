@@ -11,9 +11,9 @@ base_dir = Path(__file__).resolve().parent.parent
 if str(base_dir) not in sys.path:
     sys.path.insert(0, str(base_dir))
 
-from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
+from fastapi.responses import FileResponse, HTMLResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from backend.core import settings
@@ -102,6 +102,81 @@ app.include_router(articles_router)
 @app.get("/api/v1/health")
 async def health_check():
     return {"status": "ok", "service": "MercatoPULSE API", "version": settings.project_version}
+
+
+# ═══════════════════════════════════════════════════════════
+# IMAGE PROXY — Résout définitivement le blocage Wikimedia
+# Le navigateur bloque les images Wikimedia cross-origin
+# (OpaqueResponseBlocking / NS_BINDING_ABORTED).
+# Ce proxy fetch l'image côté serveur et la renvoie au client.
+# ═══════════════════════════════════════════════════════════
+import hashlib as _img_hashlib
+from functools import lru_cache as _lru_cache
+
+_IMG_PROXY_HEADERS = {
+    "User-Agent": "MercatoPulseApp/2.0 (https://mercatopulse.live) requests/2.31.0"
+}
+
+# Simple in-memory cache (up to 200 images, ~100MB max)
+_image_cache: dict = {}
+_IMAGE_CACHE_MAX = 200
+
+
+@app.get("/api/v1/image-proxy")
+async def image_proxy(url: str = Query(..., description="URL of the image to proxy")):
+    """Proxy an external image through the server to avoid CORS/OpaqueResponseBlocking."""
+    import requests as _requests
+
+    if not url or not url.startswith("http"):
+        raise HTTPException(status_code=400, detail="Invalid URL")
+
+    # Only allow wikimedia and thesportsdb domains for security
+    allowed_domains = ["upload.wikimedia.org", "www.thesportsdb.com", "thesportsdb.com"]
+    from urllib.parse import urlparse
+    parsed = urlparse(url)
+    if parsed.hostname not in allowed_domains:
+        raise HTTPException(status_code=403, detail="Domain not allowed")
+
+    # Strip tracking query params from wikimedia URLs
+    clean_url = url.split("?")[0] if "upload.wikimedia.org" in url else url
+
+    # Check cache
+    cache_key = _img_hashlib.md5(clean_url.encode()).hexdigest()
+    if cache_key in _image_cache:
+        cached = _image_cache[cache_key]
+        return Response(
+            content=cached["data"],
+            media_type=cached["content_type"],
+            headers={"Cache-Control": "public, max-age=86400", "X-Image-Proxy": "hit"},
+        )
+
+    # Fetch from origin
+    try:
+        r = _requests.get(clean_url, headers=_IMG_PROXY_HEADERS, timeout=8, stream=True)
+        if not r.ok:
+            raise HTTPException(status_code=r.status_code, detail="Upstream error")
+
+        content_type = r.headers.get("Content-Type", "image/jpeg")
+        data = r.content
+
+        # Cache if not too large (max 2MB per image)
+        if len(data) < 2 * 1024 * 1024:
+            if len(_image_cache) >= _IMAGE_CACHE_MAX:
+                # Evict oldest entry
+                oldest_key = next(iter(_image_cache))
+                del _image_cache[oldest_key]
+            _image_cache[cache_key] = {"data": data, "content_type": content_type}
+
+        return Response(
+            content=data,
+            media_type=content_type,
+            headers={"Cache-Control": "public, max-age=86400", "X-Image-Proxy": "miss"},
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.warning("Image proxy error for %s: %s", clean_url[:80], e)
+        raise HTTPException(status_code=502, detail="Failed to fetch image")
 
 
 @app.post("/api/v1/scrape/run")
