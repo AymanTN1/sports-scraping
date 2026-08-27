@@ -13,14 +13,15 @@
 
   <style>
     /* ═══════════════════════════════════════════════════════
-       DESIGN SYSTEM — MercatoPulse Terminal Ultra Dark Mode
+       DESIGN SYSTEM — MercatoPulse Multi-Theme Tokens (Dark & Light)
     ═══════════════════════════════════════════════════════ */
-    :root {
-      --bg-deepest: #04060A;
-      --bg: #090C15;
-      --bg-elevated: #101623;
-      --bg-surface: #151D2D;
-      --bg-surface-hover: #1E283C;
+    :root,
+    [data-theme="dark"] {
+      --bg-deepest: #050811;
+      --bg: #090E1A;
+      --bg-elevated: #101827;
+      --bg-surface: #172235;
+      --bg-surface-hover: #1F2D44;
 
       --border: rgba(255, 255, 255, 0.08);
       --border-subtle: rgba(255, 255, 255, 0.04);
@@ -29,20 +30,20 @@
 
       --pitch-green: #00FF87;
       --pitch-green-dim: #05B863;
-      --pitch-green-bg: rgba(0, 255, 135, 0.08);
-      --pitch-green-glow: rgba(0, 255, 135, 0.2);
+      --pitch-green-bg: rgba(0, 255, 135, 0.09);
+      --pitch-green-glow: rgba(0, 255, 135, 0.22);
 
       --gold: #FFC700;
-      --gold-bg: rgba(255, 199, 0, 0.1);
+      --gold-bg: rgba(255, 199, 0, 0.12);
 
       --cyan: #00E5FF;
-      --cyan-bg: rgba(0, 229, 255, 0.1);
+      --cyan-bg: rgba(0, 229, 255, 0.12);
 
       --hot-red: #FF2A55;
-      --hot-red-bg: rgba(255, 42, 85, 0.1);
+      --hot-red-bg: rgba(255, 42, 85, 0.12);
 
       --purple: #A855F7;
-      --purple-bg: rgba(168, 85, 247, 0.1);
+      --purple-bg: rgba(168, 85, 247, 0.12);
       --neutral: #94A3B8;
 
       --text-primary: #F8FAFC;
@@ -50,6 +51,70 @@
       --text-tertiary: #64748B;
       --text-quaternary: #475569;
 
+      --topbar-bg: rgba(9, 14, 26, 0.85);
+      --sidebar-bg: #050811;
+      --ticker-bg: #101827;
+
+      --shadow-sm: 0 2px 6px rgba(0,0,0,0.4);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.5);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.7);
+      --shadow-glow: 0 0 30px rgba(0, 255, 135, 0.18);
+
+      --chart-grid: rgba(255, 255, 255, 0.06);
+      --chart-text: #94A3B8;
+      --card-overlay: linear-gradient(180deg, transparent 35%, rgba(9, 14, 26, 0.95) 100%);
+    }
+
+    [data-theme="light"] {
+      --bg-deepest: #EAEEF4;
+      --bg: #F4F7FB;
+      --bg-elevated: #FFFFFF;
+      --bg-surface: #F8FAFC;
+      --bg-surface-hover: #EDF2F7;
+
+      --border: rgba(15, 23, 42, 0.08);
+      --border-subtle: rgba(15, 23, 42, 0.04);
+      --border-hover: rgba(5, 150, 105, 0.45);
+      --border-accent: rgba(5, 150, 105, 0.3);
+
+      --pitch-green: #059669;
+      --pitch-green-dim: #047857;
+      --pitch-green-bg: rgba(5, 150, 105, 0.1);
+      --pitch-green-glow: rgba(5, 150, 105, 0.2);
+
+      --gold: #D97706;
+      --gold-bg: rgba(217, 119, 6, 0.1);
+
+      --cyan: #0284C7;
+      --cyan-bg: rgba(2, 132, 199, 0.1);
+
+      --hot-red: #E11D48;
+      --hot-red-bg: rgba(225, 29, 72, 0.1);
+
+      --purple: #7C3AED;
+      --purple-bg: rgba(124, 58, 237, 0.1);
+      --neutral: #64748B;
+
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-tertiary: #64748B;
+      --text-quaternary: #94A3B8;
+
+      --topbar-bg: rgba(255, 255, 255, 0.88);
+      --sidebar-bg: #FFFFFF;
+      --ticker-bg: #F1F5F9;
+
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.12);
+      --shadow-glow: 0 0 25px rgba(5, 150, 105, 0.18);
+
+      --chart-grid: rgba(15, 23, 42, 0.06);
+      --chart-text: #475569;
+      --card-overlay: linear-gradient(180deg, transparent 35%, rgba(255, 255, 255, 0.95) 100%);
+    }
+
+    :root {
       --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       --font-display: 'Syne', sans-serif;
@@ -58,11 +123,6 @@
       --radius-md: 12px;
       --radius-lg: 16px;
       --radius-xl: 24px;
-
-      --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
-      --shadow-md: 0 6px 18px rgba(0,0,0,0.5);
-      --shadow-lg: 0 12px 40px rgba(0,0,0,0.7);
-      --shadow-glow: 0 0 30px rgba(0, 255, 135, 0.15);
 
       --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -347,16 +407,18 @@
     /* ── Top Bar ── */
     .topbar {
       height: 64px;
-      background: rgba(7, 13, 22, 0.85);
+      background: var(--topbar-bg);
       backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       padding: 0 1.75rem;
-      gap: 1.5rem;
+      gap: 1.25rem;
       position: sticky;
       top: 0;
       z-index: 90;
+      transition: background var(--transition), border-color var(--transition);
     }
 
     .brand-wordmark {
@@ -382,9 +444,10 @@
       letter-spacing: 0.8px;
       color: var(--pitch-green);
       background: var(--pitch-green-bg);
-      border: 1px solid rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.25);
       padding: 0.28rem 0.65rem;
       border-radius: 999px;
+      box-shadow: 0 0 12px var(--pitch-green-glow);
     }
     .pulse-dot {
       width: 7px;
@@ -398,11 +461,45 @@
       50% { transform: scale(1.2); opacity: 0.8; box-shadow: 0 0 0 5px rgba(16, 185, 129, 0); }
     }
 
+    /* Theme Toggle Switcher Button */
+    .theme-toggle-btn {
+      height: 36px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      padding: 0 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 700;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .theme-toggle-btn:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+    }
+    .theme-icon-dark, .theme-icon-light {
+      font-size: 1rem;
+      line-height: 1;
+      display: inline-block;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    [data-theme="dark"] .theme-icon-light { display: none; }
+    [data-theme="dark"] .theme-icon-dark { display: inline-block; }
+    [data-theme="light"] .theme-icon-dark { display: none; }
+    [data-theme="light"] .theme-icon-light { display: inline-block; }
+
     /* Live Marquee Ticker */
     .ticker-strip {
       flex: 1;
-      height: 34px;
-      background: var(--bg-surface);
+      height: 36px;
+      background: var(--ticker-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       overflow: hidden;
@@ -417,7 +514,8 @@
       z-index: 2;
       pointer-events: none;
     }
-    .ticker-strip::before { left: 0; background: linear-gradient(90deg, var(--bg-surface), transparent); }
+    .ticker-strip::before { left: 0; background: linear-gradient(90deg, var(--ticker-bg), transparent); }
+    .ticker-strip::after { right: 0; background: linear-gradient(270deg, var(--ticker-bg), transparent); }
     .ticker-strip::after { right: 0; background: linear-gradient(270deg, var(--bg-surface), transparent); }
 
     .ticker-track {
@@ -1269,9 +1367,9 @@
     @keyframes pulse { to { transform: scale(1.3); opacity: 0.5; } }
     
     input, select {
-      background: #151D2D;
-      color: #F8FAFC;
-      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 0.6rem 1rem;
       font-family: var(--font-sans);
@@ -1279,8 +1377,8 @@
       transition: all 0.2s ease;
     }
     input:focus, select:focus {
-      border-color: #00FF87;
-      box-shadow: 0 0 0 2px rgba(0, 255, 135, 0.2);
+      border-color: var(--pitch-green);
+      box-shadow: 0 0 0 2px var(--pitch-green-glow);
     }
   </style>
 </head>
@@ -1336,6 +1434,10 @@
 
       <!-- Footer Actions -->
       <div class="sidebar-footer">
+        <button class="sidebar-icon-btn" id="sidebarThemeBtn" title="Changer de thème" onclick="toggleTheme()">
+          <span class="nav-emoji theme-sidebar-emoji">🌙</span>
+          <span class="nav-label theme-sidebar-label">Mode Sombre</span>
+        </button>
         <button class="sidebar-icon-btn" title="Swagger API Docs" onclick="window.open('/api/docs','_blank')">
           <span class="nav-emoji">📄</span>
           <span class="nav-label">API Docs</span>
@@ -1378,6 +1480,12 @@
             <div class="ticker-sym">📰 <b>WIRTZ</b> ➔ Real Madrid / Bayern <span class="t-cyan">Rumeur 130M€</span></div>
           </div>
         </div>
+
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Basculer Mode Clair / Sombre">
+          <span class="theme-icon-dark">🌙</span>
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-toggle-text" id="themeToggleText">Dark</span>
+        </button>
 
         <div class="clock" id="clock"></div>
       </header>
@@ -1943,7 +2051,35 @@
       }
     ];
 
+    /* ═══════ THEME MANAGEMENT (LIGHT & DARK MODE) ═══════ */
+    function initTheme() {
+      const saved = localStorage.getItem('mercatopulse_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      applyTheme(theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      localStorage.setItem('mercatopulse_theme', next);
+      renderCharts();
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const isDark = theme === 'dark';
+      const txt = document.getElementById('themeToggleText');
+      if (txt) txt.textContent = isDark ? 'Dark' : 'Light';
+      const sideEmoji = document.querySelector('.theme-sidebar-emoji');
+      if (sideEmoji) sideEmoji.textContent = isDark ? '🌙' : '☀️';
+      const sideLabel = document.querySelector('.theme-sidebar-label');
+      if (sideLabel) sideLabel.textContent = isDark ? 'Mode Sombre' : 'Mode Clair';
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
       tickClock();
       setInterval(tickClock, 1000);
       loadData();
@@ -2233,13 +2369,17 @@
         <div style="margin-top:0.6rem;font-size:0.88rem;font-weight:800;color:#FFFFFF;letter-spacing:0.5px;z-index:2;text-shadow:0 2px 8px rgba(0,0,0,0.8);font-family:'Syne',sans-serif;">${esc(a.player_name || '')}</div>
       `;
 
-      // Always show a visual — real image or rich Fabrizio Romano poster
-      const visual = (a.image_url && a.image_url.startsWith('http')) ? `
+      // Clean and sanitize image URL
+      const rawImg = (a.image_url || '').trim();
+      const cleanImg = (rawImg.includes('upload.wikimedia.org') && rawImg.includes('?')) ? rawImg.split('?')[0] : rawImg;
+
+      // Always show a visual — real image with no-referrer or rich Fabrizio Romano poster
+      const visual = (cleanImg && cleanImg.startsWith('http')) ? `
         <div class="card-visual" style="background:${fallbackGradient};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;height:180px;overflow:hidden;">
-          <img src="${escA(a.image_url)}" alt="${escA(a.player_name || a.title)}" loading="lazy"
+          <img src="${escA(cleanImg)}" referrerpolicy="no-referrer" alt="${escA(a.player_name || a.title)}" loading="lazy"
             onerror="this.style.display='none';"
             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;z-index:2;transition:transform 0.4s ease;">
-          <div class="card-visual-overlay" style="z-index:3;background:linear-gradient(to top, rgba(9, 12, 21, 0.95) 0%, rgba(9, 12, 21, 0.3) 60%, transparent 100%);"></div>
+          <div class="card-visual-overlay" style="z-index:3;background:var(--card-overlay);"></div>
           ${fallbackInner}
           <div class="card-status-badge ${statusClass}" style="z-index:4;">${esc(a.status)}</div>
         </div>`
@@ -2312,7 +2452,7 @@
             <div class="card-footer">
               <div style="display:flex;align-items:center;gap:0.5rem;flex:1;min-width:0;">
                 <div class="card-source">🌐 ${esc(a.source)}</div>
-                ${timeStr ? `<span style="font-size:0.67rem;color:${isNew ? '#ef4444' : 'rgba(148,163,184,0.7)'};white-space:nowrap;font-weight:${isNew ? '700' : '400'};">${timeStr}</span>` : ''}
+                ${timeStr ? `<span style="font-size:0.67rem;color:${isNew ? '#ef4444' : 'var(--text-tertiary)'};white-space:nowrap;font-weight:${isNew ? '700' : '400'};">${timeStr}</span>` : ''}
               </div>
               <a href="${escA(articleUrl)}" target="_blank" rel="noopener noreferrer"
                 onclick="event.stopPropagation()"
@@ -2351,9 +2491,19 @@
     }
 
     /* ═══════ ANALYTICS & CHARTS ═══════ */
+    function getChartTheme() {
+      const isDark = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark';
+      return {
+        textColor: isDark ? '#94A3B8' : '#475569',
+        yTextColor: isDark ? '#CBD5E1' : '#1E293B',
+        gridColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(15,23,42,0.06)',
+      };
+    }
+
     function renderCharts() {
+      const themeColors = getChartTheme();
+
       // 1. League Spending Bar Chart (Horizontal)
-      // Aggregate both fee spend AND deal count per league
       const leagueSpend = {};
       const leagueCount = {};
       filtered.forEach(a => {
@@ -2362,7 +2512,6 @@
         leagueCount[l] = (leagueCount[l] || 0) + 1;
       });
 
-      // Build combined score: if league has no fees at all, use count * 10 as a visual proxy
       const leagueScore = {};
       Object.keys(leagueSpend).forEach(l => {
         leagueScore[l] = leagueSpend[l] > 0 ? leagueSpend[l] : leagueCount[l] * 10;
@@ -2407,8 +2556,8 @@
             indexAxis: 'y',
             responsive: true,
             scales: {
-              x: { ticks: { color: '#8492A6', callback: v => v + ' M€' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-              y: { ticks: { color: '#CBD5E1', font: { weight: 'bold', size: 11 } }, grid: { display: false } }
+              x: { ticks: { color: themeColors.textColor, callback: v => v + ' M€' }, grid: { color: themeColors.gridColor } },
+              y: { ticks: { color: themeColors.yTextColor, font: { weight: 'bold', size: 11 } }, grid: { display: false } }
             },
             plugins: {
               legend: { display: false },
@@ -2423,7 +2572,6 @@
           }
         });
       }
-
 
       // 2. Status Breakdown Chart
       const statusCounts = {};
@@ -2447,7 +2595,7 @@
             responsive: true,
             cutout: '70%',
             plugins: {
-              legend: { position: 'bottom', labels: { color: '#8492A6', font: { family: 'Inter', size: 11 }, padding: 16 } }
+              legend: { position: 'bottom', labels: { color: themeColors.textColor, font: { family: 'Plus Jakarta Sans', size: 11 }, padding: 16 } }
             }
           }
         });
@@ -2473,15 +2621,15 @@
             labels: Object.keys(brackets),
             datasets: [{
               data: Object.values(brackets),
-              backgroundColor: ['#FFD700', '#3B82F6', '#10B981', '#3B82F6', '#8492A6'],
+              backgroundColor: ['#FFD700', '#3B82F6', '#10B981', '#00E5FF', '#8492A6'],
               borderRadius: 6
             }]
           },
           options: {
             responsive: true,
             scales: {
-              x: { ticks: { color: '#8492A6' }, grid: { display: false } },
-              y: { ticks: { color: '#8492A6' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+              x: { ticks: { color: themeColors.textColor }, grid: { display: false } },
+              y: { ticks: { color: themeColors.textColor }, grid: { color: themeColors.gridColor } }
             },
             plugins: { legend: { display: false } }
           }
@@ -2513,8 +2661,8 @@
           options: {
             responsive: true,
             scales: {
-              x: { ticks: { color: '#8492A6', font: { size: 10 } }, grid: { display: false } },
-              y: { ticks: { color: '#8492A6' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+              x: { ticks: { color: themeColors.textColor, font: { size: 10 } }, grid: { display: false } },
+              y: { ticks: { color: themeColors.textColor }, grid: { color: themeColors.gridColor } }
             },
             plugins: { legend: { display: false } }
           }
@@ -2577,6 +2725,7 @@
 
     /* ═══════ NATIONAL TEAMS HUB ═══════ */
     function renderNationalTeams() {
+      const themeColors = getChartTheme();
       // 1. Chart Comparison of National Teams Market Value
       const ctxNat = document.getElementById('chartNationalValues');
       if (ctxNat) {
@@ -2595,8 +2744,8 @@
           options: {
             responsive: true,
             scales: {
-              x: { ticks: { color: '#CBD5E1', font: { weight: 'bold', size: 12 } }, grid: { display: false } },
-              y: { ticks: { color: '#8492A6', callback: v => (v >= 1000 ? (v/1000).toFixed(1) + ' Mrd €' : v + ' M€') }, grid: { color: 'rgba(255,255,255,0.05)' } }
+              x: { ticks: { color: themeColors.yTextColor, font: { weight: 'bold', size: 12 } }, grid: { display: false } },
+              y: { ticks: { color: themeColors.textColor, callback: v => (v >= 1000 ? (v/1000).toFixed(1) + ' Mrd €' : v + ' M€') }, grid: { color: themeColors.gridColor } }
             },
             plugins: {
               legend: { display: false },

@@ -130,8 +130,9 @@ def clean_image_url(url: str) -> str:
     if any(bp in url_lower for bp in bad_patterns):
         return ""
     
-    # Améliorer la résolution des thumbnails Wikimedia
+    # Améliorer la résolution des thumbnails Wikimedia et supprimer les query parameters
     if "upload.wikimedia.org" in url:
+        url = url.split("?")[0]
         url = re.sub(r"/\d+px-", "/600px-", url)
     
     return url.strip()
