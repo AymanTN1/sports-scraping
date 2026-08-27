@@ -68,6 +68,3 @@ keywords = [
     "sports-analytics",
 ]
 
-[tool.vercel]
-entrypoint = "backend.main:app"
-

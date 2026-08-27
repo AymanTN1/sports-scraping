@@ -20,7 +20,12 @@ class Settings:
     api_prefix: str = "/api/v1"
     docs_url: str = "/api/docs"
     openapi_url: str = "/api/openapi.json"
-    default_database_path: Path = BASE_DIR / "data" / "mercatopulse.db"
+    is_serverless: bool = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+    default_database_path: Path = (
+        Path("/tmp/mercatopulse.db")
+        if is_serverless
+        else BASE_DIR / "data" / "mercatopulse.db"
+    )
     _raw_db_url: str = os.getenv(
         "DATABASE_URL",
         f"sqlite:///{default_database_path.as_posix()}",

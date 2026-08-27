@@ -68,14 +68,15 @@ async def lifespan(app: FastAPI):
             db.rollback()
             logger.warning("Database startup processing skipped: %s", exc)
 
-    try:
-        from src.scheduler import scheduler_instance
+    if not settings.is_serverless:
+        try:
+            from src.scheduler import scheduler_instance
 
-        scheduler_instance.start()
-    except ImportError as exc:
-        logger.warning("Scheduler not found: %s", exc)
-    except Exception as exc:  # pragma: no cover - defensive startup logging
-        logger.warning("Scheduler startup skipped: %s", exc)
+            scheduler_instance.start()
+        except ImportError as exc:
+            logger.warning("Scheduler not found: %s", exc)
+        except Exception as exc:  # pragma: no cover - defensive startup logging
+            logger.warning("Scheduler startup skipped: %s", exc)
 
     yield
 
