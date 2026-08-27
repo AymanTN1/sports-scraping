@@ -40,51 +40,38 @@ docs_reports = base_dir / "docs" / "reports"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     if not settings.is_serverless:
+        # ── 1. Initialisation de la base de données ──
         try:
             init_db()
+            logger.info("✅ Base de données initialisée.")
         except Exception as exc:
             logger.warning("init_db startup skipped: %s", exc)
 
+        # ── 2. Bootstrap CSV → DB si la base est vide ──
         try:
             with SessionLocal() as db:
                 try:
-                    from backend.models import Article
-                    from src.mercato_nlp import is_football_mercato_article
-
-                    # Purger immédiatement tous les anciens articles hors-sujet en base
-                    from src.mercato_nlp import BLOCKED_SOURCE_DOMAINS, clean_text_norm
-                    all_articles = db.query(Article).all()
-                    deleted_count = 0
-                    for art in all_articles:
-                        source_name = art.source.name if art.source and hasattr(art.source, "name") else (art.source if isinstance(art.source, str) else "")
-                        title = art.title or ""
-                        summary = art.summary or ""
-                        source_norm = clean_text_norm(source_name)
-                        source_blocked = any(blocked in source_norm for blocked in BLOCKED_SOURCE_DOMAINS) if source_norm else False
-                        if source_blocked or not is_football_mercato_article(title, summary, source=source_name):
-                            db.delete(art)
-                            deleted_count += 1
-                    if deleted_count > 0:
-                        db.commit()
-                        logger.info("Purged %d non-football articles from database on startup", deleted_count)
-
                     result = CsvIngestionService(db).bootstrap_if_needed()
                     if result:
                         logger.info("Database bootstrapped from %s", result.source_file)
                 except Exception as exc:
                     db.rollback()
-                    logger.warning("Database startup processing skipped: %s", exc)
+                    logger.warning("Database bootstrap skipped: %s", exc)
         except Exception as exc:
             logger.warning("Database session startup skipped: %s", exc)
 
+        # ── 3. Démarrage du scheduler automatique ──
         try:
             from src.scheduler import scheduler_instance
 
             scheduler_instance.start()
+            logger.info("✅ Scheduler automatique démarré avec succès.")
         except ImportError as exc:
             logger.warning("Scheduler not found: %s", exc)
         except Exception as exc:
-            logger.warning("Scheduler startup skipped: %s", exc)
+            logger.warning("⚠️ Scheduler startup skipped: %s", exc)
+    else:
+        logger.info("Mode serverless détecté — scheduler désactivé.")
 
     yield
 
