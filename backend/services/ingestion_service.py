@@ -49,75 +49,85 @@ class CsvIngestionService:
             raise FileNotFoundError(path)
 
         df = pd.read_csv(path)
-        normalized = self._normalize_dataframe(df)
+        df = df.where(pd.notnull(df), None)
 
         from backend.models import Article, Source
 
+        # 1. Bulk ensure sources exist
         existing_sources = {s.name: s for s in self.db.query(Source).all() if s.name}
+        unique_sources = set(df["source"].dropna().unique())
+        new_sources = []
+        for src_name in unique_sources:
+            if src_name not in existing_sources:
+                src_obj = Source(name=src_name, credibility_score=4.0)
+                new_sources.append(src_obj)
+                existing_sources[src_name] = src_obj
+        if new_sources:
+            self.db.add_all(new_sources)
+            self.db.flush()
+
+        source_id_map = {s.name: s.id for s in self.db.query(Source).all() if s.name}
+
+        # 2. Existing articles external keys
         existing_articles = {a.external_key: a for a in self.db.query(Article).all() if a.external_key}
 
         inserted = 0
         updated = 0
-        batch_to_add = []
+        to_insert = []
 
-        for row in normalized:
-            s_name = row["source"]
-            source = existing_sources.get(s_name)
-            if not source:
-                source = Source(
-                    name=s_name,
-                    language=row["language"],
-                    credibility_score=row["credibility"],
-                )
-                self.db.add(source)
-                self.db.flush()
-                existing_sources[s_name] = source
-            else:
-                if row["language"] and not source.language:
-                    source.language = row["language"]
-                if row["credibility"] and row["credibility"] > float(source.credibility_score or 0):
-                    source.credibility_score = row["credibility"]
+        for _, row in df.iterrows():
+            title = str(row.get("title") or "").strip()
+            url = str(row.get("url") or "").strip() or None
+            src_name = str(row.get("source") or "Source inconnue").strip()
+            raw_date = str(row.get("raw_date") or "").strip() or None
 
-            article = existing_articles.get(row["external_key"])
-            if not article:
-                article = Article(external_key=row["external_key"], source_id=source.id)
-                batch_to_add.append(article)
-                existing_articles[row["external_key"]] = article
+            if not title:
+                continue
+
+            ext_key = self._build_external_key(source=src_name, title=title, raw_date=raw_date or "", url=url or "")
+            src_id = source_id_map.get(src_name)
+
+            art = existing_articles.get(ext_key)
+            if not art:
+                art = Article(external_key=ext_key, source_id=src_id)
+                to_insert.append(art)
+                existing_articles[ext_key] = art
                 inserted += 1
             else:
                 updated += 1
 
-            article.title = row["title"]
-            article.url = row["url"]
-            article.raw_date = row["raw_date"]
-            article.published_at = row["published_at"]
-            article.language = row["language"]
-            article.category = row["category"]
-            article.sentiment = row["sentiment"]
-            article.player_name = row.get("player_name")
-            article.from_club = row.get("from_club")
-            article.to_club = row.get("to_club")
-            article.league = row.get("league") or row.get("category")
-            article.transfer_fee = row.get("transfer_fee")
-            article.status = row.get("status") or "RUMEUR 📰"
-            article.summary = row["summary"]
+            art.title = title
+            art.url = url
+            art.raw_date = raw_date
+            art.published_at = self._parse_date(raw_date)
+            art.language = str(row.get("language") or "fr")
+            art.category = str(row.get("league") or row.get("category") or "Général 🌍")
+            art.sentiment = str(row.get("sentiment") or "Neutre")
+            art.player_name = str(row.get("player_name") or "") or None
+            art.from_club = str(row.get("from_club") or "") or None
+            art.to_club = str(row.get("to_club") or "") or None
+            art.league = str(row.get("league") or row.get("category") or "Général 🌍")
+            art.transfer_fee = str(row.get("transfer_fee") or "Non communiqué") or None
+            art.status = str(row.get("status") or "RUMEUR 📰")
+            art.summary = str(row.get("summary") or title)
+
             img_url = str(row.get("image_url") or "").strip()
             if not img_url or img_url == "nan" or not img_url.startswith("http"):
-                img_url = ""
-            article.image_url = img_url or None
-            article.image_caption = row.get("image_caption")
-            article.credibility_score = row["credibility"]
-            fee_num = row.get("fee_numeric")
-            try:
-                article.fee_numeric = float(fee_num) if fee_num and str(fee_num) != "nan" else 0
-            except (ValueError, TypeError):
-                article.fee_numeric = 0
-            sem_hash = str(row.get("semantic_hash") or "").strip()
-            article.semantic_hash = sem_hash if sem_hash and sem_hash != "nan" else None
-            article.source_id = source.id
+                img_url = None
+            art.image_url = img_url
 
-        if batch_to_add:
-            self.db.add_all(batch_to_add)
+            try:
+                art.fee_numeric = float(row.get("fee_numeric")) if row.get("fee_numeric") is not None else 0.0
+            except Exception:
+                art.fee_numeric = 0.0
+
+            sem_hash = str(row.get("semantic_hash") or "").strip()
+            art.semantic_hash = sem_hash if sem_hash and sem_hash != "nan" else None
+            art.credibility_score = float(row.get("credibility") or 4.0)
+            art.source_id = src_id
+
+        if to_insert:
+            self.db.add_all(to_insert)
 
         self.db.commit()
         return CsvImportResponse(
