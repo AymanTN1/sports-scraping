@@ -26,3 +26,7 @@ docs/reports/
 # OS
 Thumbs.db
 .DS_Store
+
+# Nested workspace folders
+darshare/
+
