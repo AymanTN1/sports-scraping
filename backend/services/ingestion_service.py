@@ -51,26 +51,38 @@ class CsvIngestionService:
         df = pd.read_csv(path)
         normalized = self._normalize_dataframe(df)
 
+        from backend.models import Article, Source
+
+        existing_sources = {s.name: s for s in self.db.query(Source).all() if s.name}
+        existing_articles = {a.external_key: a for a in self.db.query(Article).all() if a.external_key}
+
         inserted = 0
         updated = 0
+        batch_to_add = []
+
         for row in normalized:
-            source = self.source_repository.get_by_name(row["source"])
+            s_name = row["source"]
+            source = existing_sources.get(s_name)
             if not source:
-                source = self.source_repository.create(
-                    name=row["source"],
+                source = Source(
+                    name=s_name,
                     language=row["language"],
                     credibility_score=row["credibility"],
                 )
+                self.db.add(source)
+                self.db.flush()
+                existing_sources[s_name] = source
             else:
                 if row["language"] and not source.language:
                     source.language = row["language"]
                 if row["credibility"] and row["credibility"] > float(source.credibility_score or 0):
                     source.credibility_score = row["credibility"]
 
-            article = self.article_repository.get_by_external_key(row["external_key"])
+            article = existing_articles.get(row["external_key"])
             if not article:
                 article = Article(external_key=row["external_key"], source_id=source.id)
-                self.db.add(article)
+                batch_to_add.append(article)
+                existing_articles[row["external_key"]] = article
                 inserted += 1
             else:
                 updated += 1
@@ -95,7 +107,6 @@ class CsvIngestionService:
             article.image_url = img_url or None
             article.image_caption = row.get("image_caption")
             article.credibility_score = row["credibility"]
-            # V2: Import fee_numeric and semantic_hash
             fee_num = row.get("fee_numeric")
             try:
                 article.fee_numeric = float(fee_num) if fee_num and str(fee_num) != "nan" else 0
@@ -104,6 +115,9 @@ class CsvIngestionService:
             sem_hash = str(row.get("semantic_hash") or "").strip()
             article.semantic_hash = sem_hash if sem_hash and sem_hash != "nan" else None
             article.source_id = source.id
+
+        if batch_to_add:
+            self.db.add_all(batch_to_add)
 
         self.db.commit()
         return CsvImportResponse(

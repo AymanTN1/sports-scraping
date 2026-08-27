@@ -47,10 +47,12 @@ async def lifespan(app: FastAPI):
         except Exception as exc:
             logger.warning("init_db startup skipped: %s", exc)
 
-        # ── 2. Synchronisation CSV → Base de données (3400+ articles) ──
-        try:
-            with SessionLocal() as db:
-                try:
+        # ── 2. Synchronisation CSV → Base de données (3400+ articles) en tâche de fond ──
+        async def _async_sync_db():
+            import asyncio
+            await asyncio.sleep(0.5)
+            try:
+                with SessionLocal() as db:
                     csv_service = CsvIngestionService(db)
                     csv_path = csv_service.get_default_csv_path()
                     if csv_path:
@@ -59,11 +61,11 @@ async def lifespan(app: FastAPI):
                         total_in_db = csv_service.article_repository.count()
                         logger.info("✅ Database sync complete: %d insérés, %d mis à jour (Total DB: %d)",
                                     result.inserted_count, result.updated_count, total_in_db)
-                except Exception as exc:
-                    db.rollback()
-                    logger.warning("Database sync error: %s", exc)
-        except Exception as exc:
-            logger.warning("Database session startup skipped: %s", exc)
+            except Exception as exc:
+                logger.warning("Database sync error: %s", exc)
+
+        import asyncio
+        asyncio.create_task(_async_sync_db())
 
         # ── 3. Démarrage du scheduler automatique ──
         try:
