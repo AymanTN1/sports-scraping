@@ -3,8 +3,13 @@
 from __future__ import annotations
 
 import logging
+import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
+
+base_dir = Path(__file__).resolve().parent.parent
+if str(base_dir) not in sys.path:
+    sys.path.insert(0, str(base_dir))
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,6 +20,7 @@ from backend.core import settings
 from backend.db import SessionLocal, init_db
 from backend.routers import articles_router, system_router
 from backend.services import CsvIngestionService
+
 
 try:
     from sse_starlette.sse import EventSourceResponse  # type: ignore
