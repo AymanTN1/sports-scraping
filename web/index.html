@@ -2905,17 +2905,27 @@
     async function triggerLiveScrape() {
       const btn = document.getElementById('btnScrapeNow');
       btn.disabled = true;
-      btn.textContent = '⏳ Synchronisation & Scraping...';
+      btn.textContent = '⏳ Scraping en direct...';
       try {
-        // 1. Sync DB with latest verified articles immediately
-        await fetch(`${API_BASE}/api/v1/admin/sync-db`, { method: 'POST' }).catch(() => {});
-        // 2. Trigger live scrape in background
-        await fetch(`${API_BASE}/api/v1/scrape/run`, { method: 'POST' }).catch(() => {});
-        // 3. Reload data immediately
+        // 1. Instant scrape: fetches live sources, enriches, and inserts into DB synchronously
+        const scrapeRes = await fetch(`${API_BASE}/api/v1/scrape/instant`, { method: 'POST' });
+        const scrapeData = await scrapeRes.json().catch(() => ({}));
+        const newCount = scrapeData.new_inserted || 0;
+        const totalDb = scrapeData.total_in_db || 0;
+        // 2. Reload data from DB
         await loadData();
-        btn.disabled = false;
-        btn.textContent = '🔄 Actualiser les flux Mercato';
+        // 3. Show result
+        if (newCount > 0) {
+          btn.textContent = `✅ ${newCount} nouveaux transferts ajoutés ! (${totalDb} total)`;
+        } else {
+          btn.textContent = `✅ Base à jour (${totalDb} transferts)`;
+        }
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = '🔄 Actualiser les flux Mercato';
+        }, 4000);
       } catch (err) {
+        console.warn('Scrape error:', err);
         await loadData();
         btn.disabled = false;
         btn.textContent = '🔄 Actualiser les flux Mercato';

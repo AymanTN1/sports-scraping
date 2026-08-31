@@ -1,0 +1,552 @@
+"""
+live_scraper.py — MercatoPulse Lightweight Live Scraper
+Scrapes 20 essential RSS sources, extracts entities via local NLP,
+and inserts directly into the database. Designed to run in < 10 seconds.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import logging
+import re
+import urllib.parse
+import urllib.request
+import xml.etree.ElementTree as ET
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
+from typing import Optional
+
+from sqlalchemy.orm import Session
+
+logger = logging.getLogger(__name__)
+
+# ─────────────────────────────────────────────────────────
+# 20 Essential Sources — Fast, Reliable, Multilingual
+# ─────────────────────────────────────────────────────────
+LIVE_SOURCES = [
+    # FR — Mercato général
+    {
+        "name": "Google News Mercato FR",
+        "url": "https://news.google.com/rss/search?q=mercato+OR+transfert+football+when:3d&hl=fr&gl=FR&ceid=FR:fr",
+        "lang": "fr",
+        "category_default": "Ligue 1 🇫🇷",
+    },
+    # FR — FootMercato direct
+    {
+        "name": "Foot Mercato",
+        "url": "https://news.google.com/rss/search?q=footmercato+OR+foot+mercato+when:3d&hl=fr&gl=FR&ceid=FR:fr",
+        "lang": "fr",
+        "category_default": "Ligue 1 🇫🇷",
+    },
+    # EN — Premier League transfers
+    {
+        "name": "Google News PL Transfer",
+        "url": "https://news.google.com/rss/search?q=Premier+League+transfer+OR+signing+when:3d&hl=en-GB&gl=GB&ceid=GB:en",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    # EN — Fabrizio Romano
+    {
+        "name": "Fabrizio Romano",
+        "url": "https://news.google.com/rss/search?q=Fabrizio+Romano+here+we+go+OR+transfer+when:3d&hl=en&gl=US&ceid=US:en",
+        "lang": "en",
+        "category_default": "Champions League 🇪🇺",
+    },
+    # EN — Sky Sports
+    {
+        "name": "Sky Sports Transfer Centre",
+        "url": "https://www.skysports.com/rss/12040",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    # EN — BBC Sport
+    {
+        "name": "BBC Sport Football",
+        "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    # ES — La Liga fichajes
+    {
+        "name": "Marca Fichajes",
+        "url": "https://news.google.com/rss/search?q=fichajes+futbol+when:3d&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es",
+        "category_default": "La Liga 🇪🇸",
+    },
+    # ES — Barcelona specific
+    {
+        "name": "Barcelona Mercato",
+        "url": "https://news.google.com/rss/search?q=Barcelona+fichaje+OR+transfer+when:3d&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es",
+        "category_default": "La Liga 🇪🇸",
+    },
+    # ES — Real Madrid specific
+    {
+        "name": "Real Madrid Mercato",
+        "url": "https://news.google.com/rss/search?q=Real+Madrid+fichaje+OR+transfer+when:3d&hl=es&gl=ES&ceid=ES:es",
+        "lang": "es",
+        "category_default": "La Liga 🇪🇸",
+    },
+    # IT — Calciomercato
+    {
+        "name": "Calciomercato IT",
+        "url": "https://news.google.com/rss/search?q=calciomercato+when:3d&hl=it&gl=IT&ceid=IT:it",
+        "lang": "it",
+        "category_default": "Serie A 🇮🇹",
+    },
+    # DE — Bundesliga
+    {
+        "name": "Bundesliga Transfers",
+        "url": "https://news.google.com/rss/search?q=Bundesliga+transfer+when:3d&hl=de&gl=DE&ceid=DE:de",
+        "lang": "de",
+        "category_default": "Bundesliga 🇩🇪",
+    },
+    # EN — Global transfer news
+    {
+        "name": "Google News Transfer EN",
+        "url": "https://news.google.com/rss/search?q=football+transfer+signed+OR+signing+when:3d&hl=en-GB&gl=GB&ceid=GB:en",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    # EN — Arsenal transfers
+    {
+        "name": "Arsenal Transfers",
+        "url": "https://news.google.com/rss/search?q=Arsenal+transfer+OR+signing+when:3d&hl=en-GB&gl=GB&ceid=GB:en",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    # EN — Chelsea / Man United / Liverpool
+    {
+        "name": "Big 6 Transfers",
+        "url": "https://news.google.com/rss/search?q=(Chelsea+OR+Manchester+United+OR+Liverpool)+transfer+when:3d&hl=en-GB&gl=GB&ceid=GB:en",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    # FR — Ligue 1 Mercato
+    {
+        "name": "Ligue 1 Mercato",
+        "url": "https://news.google.com/rss/search?q=Ligue+1+mercato+OR+transfert+when:3d&hl=fr&gl=FR&ceid=FR:fr",
+        "lang": "fr",
+        "category_default": "Ligue 1 🇫🇷",
+    },
+    # EN — Saudi Pro League
+    {
+        "name": "Saudi Pro League",
+        "url": "https://news.google.com/rss/search?q=Saudi+Pro+League+transfer+OR+signing+when:3d&hl=en&gl=US&ceid=US:en",
+        "lang": "en",
+        "category_default": "Saudi Pro League 🇸🇦",
+    },
+    # FR — PSG Mercato
+    {
+        "name": "PSG Mercato",
+        "url": "https://news.google.com/rss/search?q=PSG+mercato+OR+transfert+when:3d&hl=fr&gl=FR&ceid=FR:fr",
+        "lang": "fr",
+        "category_default": "Ligue 1 🇫🇷",
+    },
+    # EN — CaughtOffside (Fabrizio Romano)
+    {
+        "name": "CaughtOffside",
+        "url": "https://www.caughtoffside.com/feed/",
+        "lang": "en",
+        "category_default": "Champions League 🇪🇺",
+    },
+    # FR — RMC Sport
+    {
+        "name": "RMC Sport Mercato",
+        "url": "https://rmcsport.bfmtv.com/rss/football/transferts/",
+        "lang": "fr",
+        "category_default": "Ligue 1 🇫🇷",
+    },
+    # PT — Liga Portugal
+    {
+        "name": "Liga Portugal Transfers",
+        "url": "https://news.google.com/rss/search?q=Benfica+OR+Porto+OR+Sporting+transfer+when:3d&hl=pt-PT&gl=PT&ceid=PT:pt-150",
+        "lang": "pt",
+        "category_default": "Liga Portugal 🇵🇹",
+    },
+]
+
+# ─────────────────────────────────────────────────────────
+# League Classification Keywords
+# ─────────────────────────────────────────────────────────
+LEAGUE_KEYWORDS = {
+    "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿": [
+        "premier league", "manchester city", "man city", "arsenal", "liverpool",
+        "manchester united", "man utd", "chelsea", "tottenham", "spurs",
+        "newcastle", "aston villa", "west ham", "brighton", "everton",
+    ],
+    "La Liga 🇪🇸": [
+        "la liga", "real madrid", "barcelona", "barça", "fc barcelone",
+        "atletico", "atlético", "sevilla", "villarreal", "athletic bilbao",
+        "real sociedad",
+    ],
+    "Ligue 1 🇫🇷": [
+        "ligue 1", "psg", "paris saint-germain", "olympique de marseille",
+        "om", "lyon", "monaco", "lille", "rennes", "nice", "lens",
+        "marseille",
+    ],
+    "Serie A 🇮🇹": [
+        "serie a", "inter milan", "inter", "ac milan", "juventus", "juve",
+        "napoli", "roma", "lazio", "atalanta", "fiorentina",
+    ],
+    "Bundesliga 🇩🇪": [
+        "bundesliga", "bayern munich", "bayern", "borussia dortmund",
+        "dortmund", "bayer leverkusen", "leverkusen", "rb leipzig",
+    ],
+    "Saudi Pro League 🇸🇦": [
+        "saudi", "al nassr", "al-nassr", "al hilal", "al-hilal",
+        "al ittihad", "al-ittihad", "al ahli", "al-ahli",
+    ],
+    "Champions League 🇪🇺": [
+        "champions league", "ligue des champions", "europa league",
+    ],
+}
+
+_USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/130.0.0.0 Safari/537.36"
+)
+
+
+def _clean_html(text: str) -> str:
+    """Strip HTML tags from text."""
+    if not text:
+        return ""
+    return re.sub(r"<[^>]+>", "", text).strip()
+
+
+def _classify_league(title: str, summary: str, default: str) -> str:
+    """Classify article into a league based on keywords."""
+    text = f"{title} {summary}".lower()
+    for league, keywords in LEAGUE_KEYWORDS.items():
+        for kw in keywords:
+            if kw in text:
+                return league
+    return default
+
+
+def _detect_status(title: str) -> str:
+    """Detect transfer status from title."""
+    t = title.lower()
+    if any(k in t for k in ["officiel", "official", "signe", "signé", "prolonge", "confirmé", "signs for", "joins"]):
+        return "OFFICIEL ✅"
+    if any(k in t for k in ["here we go", "accord total", "deal done", "visite médicale", "agree"]):
+        return "HERE WE GO 🔥"
+    if any(k in t for k in ["négociation", "pourparlers", "offre", "discussions", "proche", "talks", "bid", "close to"]):
+        return "NEGOCIATION 💬"
+    return "RUMEUR 📰"
+
+
+def _extract_fee(title: str, summary: str) -> tuple[str, float]:
+    """Extract transfer fee from text."""
+    text = f"{title} {summary}"
+    # Match patterns like 85M€, €85m, 85 million, £8.6m
+    m = re.search(r'(\d+(?:[.,]\d+)?)\s*[Mm](?:illion)?[s]?\s*[€£$]|[€£$]\s*(\d+(?:[.,]\d+)?)\s*[Mm]|(\d+(?:[.,]\d+)?)\s*M€', text)
+    if m:
+        val_str = m.group(1) or m.group(2) or m.group(3)
+        try:
+            val = float(val_str.replace(",", "."))
+            return f"{val:.0f}M€", val
+        except (ValueError, TypeError):
+            pass
+    # Match "X million"
+    m2 = re.search(r'(\d+(?:[.,]\d+)?)\s*million', text, re.IGNORECASE)
+    if m2:
+        try:
+            val = float(m2.group(1).replace(",", "."))
+            return f"{val:.0f}M€", val
+        except (ValueError, TypeError):
+            pass
+    return "Non communiqué", 0.0
+
+
+def _build_external_key(source: str, title: str, url: str) -> str:
+    """Build a dedup key for the article."""
+    payload = f"{source}|{title}|{url}"
+    return hashlib.sha1(payload.encode("utf-8", errors="ignore")).hexdigest()
+
+
+def _fetch_rss_source(source: dict) -> list[dict]:
+    """Fetch and parse a single RSS source. Returns list of article dicts."""
+    url = source["url"]
+    name = source["name"]
+    lang = source.get("lang", "fr")
+    cat_default = source.get("category_default", "Champions League 🇪🇺")
+
+    articles = []
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            data = resp.read()
+
+        root = ET.fromstring(data)
+        for item in root.findall(".//item")[:30]:
+            title_el = item.find("title")
+            link_el = item.find("link")
+            desc_el = item.find("description")
+            pub_el = item.find("pubDate")
+
+            title = _clean_html(title_el.text) if title_el is not None and title_el.text else ""
+            link = link_el.text.strip() if link_el is not None and link_el.text else ""
+            raw_desc = desc_el.text if desc_el is not None and desc_el.text else ""
+            pub_date = pub_el.text.strip() if pub_el is not None and pub_el.text else ""
+
+            if not title or not link:
+                continue
+
+            # Extract image from RSS item
+            img_url = ""
+            enc = item.find("enclosure")
+            if enc is not None and enc.get("url"):
+                img_url = enc.get("url", "")
+            if not img_url:
+                for child in item:
+                    tag = child.tag.lower()
+                    if "content" in tag or "thumbnail" in tag:
+                        u = child.get("url", "")
+                        if u and u.startswith("http"):
+                            img_url = u
+                            break
+            if not img_url and raw_desc:
+                img_match = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', raw_desc)
+                if img_match:
+                    img_url = img_match.group(1)
+
+            summary = _clean_html(raw_desc)[:400] if raw_desc else title
+
+            articles.append({
+                "title": title,
+                "url": link,
+                "raw_date": pub_date,
+                "language": lang,
+                "summary": summary,
+                "image_url": img_url if img_url.startswith("http") else "",
+                "category_default": cat_default,
+                "source_name": name,
+            })
+    except Exception as e:
+        logger.warning("Live scrape %s failed: %s", name, e)
+
+    return articles
+
+
+def _parse_rss_date(raw_date: str) -> Optional[datetime]:
+    """Parse RSS date string into datetime."""
+    if not raw_date:
+        return None
+    # Try RFC 2822 format (RSS standard)
+    for fmt in (
+        "%a, %d %b %Y %H:%M:%S %Z",
+        "%a, %d %b %Y %H:%M:%S %z",
+        "%Y-%m-%dT%H:%M:%SZ",
+        "%Y-%m-%dT%H:%M:%S%z",
+        "%Y-%m-%d",
+    ):
+        try:
+            return datetime.strptime(raw_date.strip(), fmt)
+        except ValueError:
+            continue
+    # Try partial parse
+    try:
+        # Handle "Mon, 30 Aug 2026 19:32:08 GMT"
+        clean = raw_date.replace("GMT", "+0000").replace("UTC", "+0000")
+        return datetime.strptime(clean.strip(), "%a, %d %b %Y %H:%M:%S %z")
+    except ValueError:
+        pass
+    return None
+
+
+def run_live_scrape(db: Session) -> dict:
+    """
+    Execute a lightweight live scrape of 20 essential sources,
+    extract entities via local NLP, and insert directly into the database.
+
+    Returns a summary dict with counts.
+    """
+    from backend.models import Article, Source
+
+    logger.info("🚀 Live scrape: fetching %d sources in parallel...", len(LIVE_SOURCES))
+
+    # 1. Fetch all sources in parallel
+    all_raw = []
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future_map = {executor.submit(_fetch_rss_source, src): src for src in LIVE_SOURCES}
+        for future in as_completed(future_map, timeout=30):
+            src = future_map[future]
+            try:
+                result = future.result(timeout=10)
+                all_raw.extend(result)
+                if result:
+                    logger.info("  ✅ %s → %d articles", src["name"], len(result))
+            except Exception as e:
+                logger.warning("  ❌ %s → %s", src["name"], e)
+
+    logger.info("📊 Total raw articles fetched: %d", len(all_raw))
+
+    if not all_raw:
+        return {"status": "ok", "fetched": 0, "new_inserted": 0, "total_in_db": 0}
+
+    # 2. Deduplicate by title (normalized)
+    seen = set()
+    unique_articles = []
+    for art in all_raw:
+        key = re.sub(r"\W+", "", art["title"].lower())[:60]
+        if key not in seen:
+            seen.add(key)
+            unique_articles.append(art)
+    logger.info("📊 After dedup: %d unique articles", len(unique_articles))
+
+    # 3. Load NLP extractor
+    try:
+        from src.mercato_nlp import parse_article_full, is_football_mercato_article
+        has_nlp = True
+    except ImportError:
+        try:
+            from mercato_nlp import parse_article_full, is_football_mercato_article
+            has_nlp = True
+        except ImportError:
+            has_nlp = False
+            logger.warning("NLP module not available, using basic extraction")
+
+    # 4. Get existing external keys to avoid duplicates
+    existing_keys = {
+        row[0] for row in db.query(Article.external_key).all() if row[0]
+    }
+
+    # 5. Ensure sources exist
+    existing_sources = {s.name: s for s in db.query(Source).all()}
+    now = datetime.utcnow()
+
+    # 6. Process each article
+    to_insert = []
+    skipped_nlp = 0
+    skipped_dup = 0
+
+    for art in unique_articles:
+        title = art["title"]
+        summary = art["summary"]
+        source_name = art["source_name"]
+
+        # Football filter
+        if has_nlp:
+            if not is_football_mercato_article(title, summary, source=source_name):
+                skipped_nlp += 1
+                continue
+
+        # Build external key
+        ext_key = _build_external_key(source_name, title, art["url"])
+        if ext_key in existing_keys:
+            skipped_dup += 1
+            continue
+
+        # Ensure source exists
+        if source_name not in existing_sources:
+            src_obj = Source(
+                name=source_name,
+                credibility_score=4.0,
+                active=True,
+                created_at=now,
+                updated_at=now,
+            )
+            db.add(src_obj)
+            db.flush()
+            existing_sources[source_name] = src_obj
+
+        source_id = existing_sources[source_name].id
+
+        # NLP extraction
+        if has_nlp:
+            entities = parse_article_full(title, summary)
+            player_name = entities.get("player_name", "")
+            from_club = entities.get("from_club", "")
+            to_club = entities.get("to_club", "")
+            status = entities.get("status", _detect_status(title))
+            national_team = entities.get("national_team", "")
+        else:
+            player_name = ""
+            from_club = ""
+            to_club = ""
+            status = _detect_status(title)
+            national_team = ""
+
+        # League classification
+        league = _classify_league(title, summary, art["category_default"])
+
+        # Fee extraction
+        fee_str, fee_num = _extract_fee(title, summary)
+
+        # Sentiment
+        if "OFFICIEL" in status or "HERE WE GO" in status:
+            sentiment = "Positif"
+        else:
+            sentiment = "Neutre"
+
+        # Published date
+        published_at = _parse_rss_date(art["raw_date"]) or now
+
+        # Image URL
+        img_url = art.get("image_url") or None
+        if img_url and not img_url.startswith("http"):
+            img_url = None
+
+        # Semantic hash for further dedup
+        sem_parts = [
+            re.sub(r"\W+", "_", (player_name or "").lower()),
+            re.sub(r"\W+", "_", (from_club or "").lower()),
+            re.sub(r"\W+", "_", (to_club or "").lower()),
+        ]
+        semantic_hash = "__".join(p for p in sem_parts if p)
+
+        to_insert.append({
+            "external_key": ext_key,
+            "title": title,
+            "url": art["url"],
+            "raw_date": art["raw_date"][:128] if art["raw_date"] else None,
+            "published_at": published_at,
+            "language": art["language"],
+            "category": league,
+            "sentiment": sentiment,
+            "player_name": player_name or None,
+            "from_club": from_club or None,
+            "to_club": to_club or None,
+            "league": league,
+            "transfer_fee": fee_str,
+            "status": status,
+            "summary": summary,
+            "image_url": img_url,
+            "image_caption": None,
+            "credibility_score": 4.0,
+            "fee_numeric": fee_num,
+            "semantic_hash": semantic_hash or None,
+            "source_id": source_id,
+            "created_at": now,
+            "updated_at": now,
+        })
+        existing_keys.add(ext_key)
+
+    # 7. Bulk insert
+    new_count = len(to_insert)
+    if to_insert:
+        chunk_size = 200
+        for i in range(0, len(to_insert), chunk_size):
+            chunk = to_insert[i:i + chunk_size]
+            db.bulk_insert_mappings(Article, chunk)
+        db.commit()
+
+    total = db.query(Article).count()
+
+    logger.info(
+        "✅ Live scrape complete: %d new inserted, %d skipped (dup), %d filtered (NLP), %d total in DB",
+        new_count, skipped_dup, skipped_nlp, total,
+    )
+
+    return {
+        "status": "ok",
+        "fetched": len(all_raw),
+        "unique": len(unique_articles),
+        "new_inserted": new_count,
+        "skipped_duplicate": skipped_dup,
+        "skipped_not_football": skipped_nlp,
+        "total_in_db": total,
+    }

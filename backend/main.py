@@ -233,6 +233,23 @@ def sync_database_endpoint():
         logger.exception("Error during sync_database_endpoint")
         return {"status": "error", "error": str(e), "traceback": traceback.format_exc()}
 
+@app.api_route("/api/v1/scrape/instant", methods=["GET", "POST"])
+def scrape_instant():
+    """
+    Lightweight live scrape: fetches 20 essential RSS sources,
+    extracts entities via local NLP, inserts directly into DB.
+    Returns results synchronously in < 10 seconds.
+    """
+    import traceback
+    try:
+        from backend.services.live_scraper import run_live_scrape
+        with SessionLocal() as db:
+            result = run_live_scrape(db)
+        return result
+    except Exception as e:
+        logger.exception("Error during scrape_instant")
+        return {"status": "error", "error": str(e), "traceback": traceback.format_exc()}
+
 
 @app.post("/api/v1/scrape/run")
 async def run_pipeline(background_tasks: BackgroundTasks):
@@ -240,6 +257,7 @@ async def run_pipeline(background_tasks: BackgroundTasks):
 
     background_tasks.add_task(scheduler_instance.run_pipeline)
     return {"status": "started"}
+
 
 
 @app.get("/api/v1/scrape/status")
