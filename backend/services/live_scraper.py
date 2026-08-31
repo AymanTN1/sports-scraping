@@ -24,145 +24,138 @@ logger = logging.getLogger(__name__)
 # 20 Essential Sources — Fast, Reliable, Multilingual
 # ─────────────────────────────────────────────────────────
 LIVE_SOURCES = [
-    # FR — Mercato général
-    {
-        "name": "Google News Mercato FR",
-        "url": "https://news.google.com/rss/search?q=mercato+OR+transfert+football+when:3d&hl=fr&gl=FR&ceid=FR:fr",
-        "lang": "fr",
-        "category_default": "Ligue 1 🇫🇷",
-    },
-    # FR — FootMercato direct
+    # ── FR — Sources directes mercato ──
     {
         "name": "Foot Mercato",
-        "url": "https://news.google.com/rss/search?q=footmercato+OR+foot+mercato+when:3d&hl=fr&gl=FR&ceid=FR:fr",
+        "url": "https://www.footmercato.net/feed",
         "lang": "fr",
         "category_default": "Ligue 1 🇫🇷",
     },
-    # EN — Premier League transfers
     {
-        "name": "Google News PL Transfer",
-        "url": "https://news.google.com/rss/search?q=Premier+League+transfer+OR+signing+when:3d&hl=en-GB&gl=GB&ceid=GB:en",
-        "lang": "en",
-        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    },
-    # EN — Fabrizio Romano
-    {
-        "name": "Fabrizio Romano",
-        "url": "https://news.google.com/rss/search?q=Fabrizio+Romano+here+we+go+OR+transfer+when:3d&hl=en&gl=US&ceid=US:en",
-        "lang": "en",
-        "category_default": "Champions League 🇪🇺",
-    },
-    # EN — Sky Sports
-    {
-        "name": "Sky Sports Transfer Centre",
-        "url": "https://www.skysports.com/rss/12040",
-        "lang": "en",
-        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    },
-    # EN — BBC Sport
-    {
-        "name": "BBC Sport Football",
-        "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
-        "lang": "en",
-        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    },
-    # ES — La Liga fichajes
-    {
-        "name": "Marca Fichajes",
-        "url": "https://news.google.com/rss/search?q=fichajes+futbol+when:3d&hl=es&gl=ES&ceid=ES:es",
-        "lang": "es",
-        "category_default": "La Liga 🇪🇸",
-    },
-    # ES — Barcelona specific
-    {
-        "name": "Barcelona Mercato",
-        "url": "https://news.google.com/rss/search?q=Barcelona+fichaje+OR+transfer+when:3d&hl=es&gl=ES&ceid=ES:es",
-        "lang": "es",
-        "category_default": "La Liga 🇪🇸",
-    },
-    # ES — Real Madrid specific
-    {
-        "name": "Real Madrid Mercato",
-        "url": "https://news.google.com/rss/search?q=Real+Madrid+fichaje+OR+transfer+when:3d&hl=es&gl=ES&ceid=ES:es",
-        "lang": "es",
-        "category_default": "La Liga 🇪🇸",
-    },
-    # IT — Calciomercato
-    {
-        "name": "Calciomercato IT",
-        "url": "https://news.google.com/rss/search?q=calciomercato+when:3d&hl=it&gl=IT&ceid=IT:it",
-        "lang": "it",
-        "category_default": "Serie A 🇮🇹",
-    },
-    # DE — Bundesliga
-    {
-        "name": "Bundesliga Transfers",
-        "url": "https://news.google.com/rss/search?q=Bundesliga+transfer+when:3d&hl=de&gl=DE&ceid=DE:de",
-        "lang": "de",
-        "category_default": "Bundesliga 🇩🇪",
-    },
-    # EN — Global transfer news
-    {
-        "name": "Google News Transfer EN",
-        "url": "https://news.google.com/rss/search?q=football+transfer+signed+OR+signing+when:3d&hl=en-GB&gl=GB&ceid=GB:en",
-        "lang": "en",
-        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    },
-    # EN — Arsenal transfers
-    {
-        "name": "Arsenal Transfers",
-        "url": "https://news.google.com/rss/search?q=Arsenal+transfer+OR+signing+when:3d&hl=en-GB&gl=GB&ceid=GB:en",
-        "lang": "en",
-        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    },
-    # EN — Chelsea / Man United / Liverpool
-    {
-        "name": "Big 6 Transfers",
-        "url": "https://news.google.com/rss/search?q=(Chelsea+OR+Manchester+United+OR+Liverpool)+transfer+when:3d&hl=en-GB&gl=GB&ceid=GB:en",
-        "lang": "en",
-        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    },
-    # FR — Ligue 1 Mercato
-    {
-        "name": "Ligue 1 Mercato",
-        "url": "https://news.google.com/rss/search?q=Ligue+1+mercato+OR+transfert+when:3d&hl=fr&gl=FR&ceid=FR:fr",
+        "name": "L'Équipe Mercato",
+        "url": "https://www.lequipe.fr/rss/actu_rss_Football.xml",
         "lang": "fr",
         "category_default": "Ligue 1 🇫🇷",
     },
-    # EN — Saudi Pro League
-    {
-        "name": "Saudi Pro League",
-        "url": "https://news.google.com/rss/search?q=Saudi+Pro+League+transfer+OR+signing+when:3d&hl=en&gl=US&ceid=US:en",
-        "lang": "en",
-        "category_default": "Saudi Pro League 🇸🇦",
-    },
-    # FR — PSG Mercato
-    {
-        "name": "PSG Mercato",
-        "url": "https://news.google.com/rss/search?q=PSG+mercato+OR+transfert+when:3d&hl=fr&gl=FR&ceid=FR:fr",
-        "lang": "fr",
-        "category_default": "Ligue 1 🇫🇷",
-    },
-    # EN — CaughtOffside (Fabrizio Romano)
-    {
-        "name": "CaughtOffside",
-        "url": "https://www.caughtoffside.com/feed/",
-        "lang": "en",
-        "category_default": "Champions League 🇪🇺",
-    },
-    # FR — RMC Sport
     {
         "name": "RMC Sport Mercato",
         "url": "https://rmcsport.bfmtv.com/rss/football/transferts/",
         "lang": "fr",
         "category_default": "Ligue 1 🇫🇷",
     },
-    # PT — Liga Portugal
     {
-        "name": "Liga Portugal Transfers",
-        "url": "https://news.google.com/rss/search?q=Benfica+OR+Porto+OR+Sporting+transfer+when:3d&hl=pt-PT&gl=PT&ceid=PT:pt-150",
+        "name": "Maxifoot Transferts",
+        "url": "https://www.maxifoot.fr/rss/football.xml",
+        "lang": "fr",
+        "category_default": "Ligue 1 🇫🇷",
+    },
+    {
+        "name": "Le10Sport",
+        "url": "https://le10sport.com/feed",
+        "lang": "fr",
+        "category_default": "Ligue 1 🇫🇷",
+    },
+    # ── EN — Premier League & Global ──
+    {
+        "name": "Sky Sports Transfer Centre",
+        "url": "https://www.skysports.com/rss/12040",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    {
+        "name": "BBC Sport Football",
+        "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    {
+        "name": "CaughtOffside",
+        "url": "https://www.caughtoffside.com/feed/",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    {
+        "name": "Football365",
+        "url": "https://www.football365.com/feed",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    {
+        "name": "TeamTalk",
+        "url": "https://www.teamtalk.com/feed",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    {
+        "name": "Football Insider",
+        "url": "https://www.footballinsider247.com/feed/",
+        "lang": "en",
+        "category_default": "Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    },
+    {
+        "name": "The Athletic Football",
+        "url": "https://theathletic.com/feed/rss/football/",
+        "lang": "en",
+        "category_default": "Champions League 🇪🇺",
+    },
+    # ── ES — La Liga ──
+    {
+        "name": "Marca Fútbol",
+        "url": "https://e00-marca.uecdn.es/rss/futbol/futbol-internacional.xml",
+        "lang": "es",
+        "category_default": "La Liga 🇪🇸",
+    },
+    {
+        "name": "AS Fichajes",
+        "url": "https://feeds.feedburner.com/as/futbol",
+        "lang": "es",
+        "category_default": "La Liga 🇪🇸",
+    },
+    {
+        "name": "Sport.es",
+        "url": "https://www.sport.es/es/rss/futbol/index.xml",
+        "lang": "es",
+        "category_default": "La Liga 🇪🇸",
+    },
+    # ── IT — Serie A ──
+    {
+        "name": "Calciomercato.com",
+        "url": "https://www.calciomercato.com/feed",
+        "lang": "it",
+        "category_default": "Serie A 🇮🇹",
+    },
+    {
+        "name": "Tuttosport",
+        "url": "https://www.tuttosport.com/rss/calcio.xml",
+        "lang": "it",
+        "category_default": "Serie A 🇮🇹",
+    },
+    # ── DE — Bundesliga ──
+    {
+        "name": "Kicker Transfers",
+        "url": "https://rss.kicker.de/news/aktuell",
+        "lang": "de",
+        "category_default": "Bundesliga 🇩🇪",
+    },
+    # ── PT — Liga Portugal ──
+    {
+        "name": "A Bola",
+        "url": "https://www.abola.pt/rss/index.aspx",
         "lang": "pt",
         "category_default": "Liga Portugal 🇵🇹",
+    },
+    # ── Global — Transfer specialists ──
+    {
+        "name": "Transfermarkt News",
+        "url": "https://www.transfermarkt.com/rss/news",
+        "lang": "en",
+        "category_default": "Champions League 🇪🇺",
+    },
+    {
+        "name": "90min Football",
+        "url": "https://www.90min.com/posts.rss",
+        "lang": "en",
+        "category_default": "Champions League 🇪🇺",
     },
 ]
 
