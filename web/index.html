@@ -2114,8 +2114,9 @@
     
     async function loadData(retryCount = 0, isInitial = false) {
       const loader = document.getElementById('global-loader');
-      // Show full-screen loader ONLY on the first load when data is empty
-      if (loader && allArticles.length === 0) {
+      // Show full-screen loader ONLY if no data has EVER been loaded
+      if (loader && allArticles.length === 0 && isInitial) {
+        loader.style.display = 'flex';
         loader.style.opacity = '1';
         loader.style.visibility = 'visible';
       }
@@ -2145,14 +2146,17 @@
         applyFilters();
       } catch (e) {
         console.warn('API fetch warning:', e);
-        if (retryCount < 4) {
+        if (retryCount < 4 && allArticles.length === 0) {
           setTimeout(() => loadData(retryCount + 1, isInitial), 3000);
           return;
         }
       } finally {
-        if (loader) {
+        if (loader && (allArticles.length > 0 || retryCount >= 4)) {
           loader.style.opacity = '0';
-          setTimeout(() => { loader.style.visibility = 'hidden'; }, 400);
+          setTimeout(() => {
+            loader.style.visibility = 'hidden';
+            loader.style.display = 'none';
+          }, 400);
         }
       }
     }
