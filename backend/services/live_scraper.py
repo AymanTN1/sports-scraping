@@ -372,15 +372,18 @@ def run_live_scrape(db: Session) -> dict:
     all_raw = []
     with ThreadPoolExecutor(max_workers=10) as executor:
         future_map = {executor.submit(_fetch_rss_source, src): src for src in LIVE_SOURCES}
-        for future in as_completed(future_map, timeout=30):
-            src = future_map[future]
-            try:
-                result = future.result(timeout=10)
-                all_raw.extend(result)
-                if result:
-                    logger.info("  ✅ %s → %d articles", src["name"], len(result))
-            except Exception as e:
-                logger.warning("  ❌ %s → %s", src["name"], e)
+        try:
+            for future in as_completed(future_map, timeout=25):
+                src = future_map[future]
+                try:
+                    result = future.result(timeout=5)
+                    all_raw.extend(result)
+                    if result:
+                        logger.info("  ✅ %s → %d articles", src["name"], len(result))
+                except Exception as e:
+                    logger.warning("  ❌ %s → %s", src["name"], e)
+        except TimeoutError:
+            logger.warning("⚠️ Some sources timed out, continuing with %d articles collected so far", len(all_raw))
 
     logger.info("📊 Total raw articles fetched: %d", len(all_raw))
 
@@ -487,6 +490,28 @@ def run_live_scrape(db: Session) -> dict:
 
         # Image URL
         img_url = art.get("image_url") or None
+        if not img_url or not img_url.startswith("http"):
+            try:
+                from src.photo_enricher import resolve_photo_for_article
+                img_url = resolve_photo_for_article(
+                    article_url=art.get("url", ""),
+                    player_name=player_name or "",
+                    to_club=to_club or "",
+                    from_club=from_club or "",
+                    current_image=""
+                )
+            except Exception:
+                try:
+                    from photo_enricher import resolve_photo_for_article
+                    img_url = resolve_photo_for_article(
+                        article_url=art.get("url", ""),
+                        player_name=player_name or "",
+                        to_club=to_club or "",
+                        from_club=from_club or "",
+                        current_image=""
+                    )
+                except Exception:
+                    img_url = None
         if img_url and not img_url.startswith("http"):
             img_url = None
 
