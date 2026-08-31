@@ -254,28 +254,31 @@ def _run_scrape_in_background(job_id: str):
 
 
 @app.api_route("/api/v1/scrape/instant", methods=["GET", "POST"])
-def scrape_instant(background_tasks: BackgroundTasks):
+async def scrape_instant():
     """
     Lightweight live scrape: fetches 20 essential RSS sources,
     extracts entities via local NLP, inserts directly into DB.
-    Runs asynchronously to avoid gateway timeouts. Poll /api/v1/scrape/instant/{job_id} for result.
+    Runs in a background thread - returns job_id immediately for polling.
     """
-    import uuid, time
+    import uuid, time, threading
     job_id = str(uuid.uuid4())[:8]
     with _scrape_lock:
         _scrape_jobs[job_id] = {"status": "running", "started_at": time.time()}
-    background_tasks.add_task(_run_scrape_in_background, job_id)
+    # Launch in completely independent thread (not FastAPI thread pool)
+    t = threading.Thread(target=_run_scrape_in_background, args=(job_id,), daemon=True)
+    t.start()
     return {"status": "started", "job_id": job_id, "poll_url": f"/api/v1/scrape/instant/{job_id}"}
 
 
 @app.get("/api/v1/scrape/instant/{job_id}")
-def scrape_instant_result(job_id: str):
+async def scrape_instant_result(job_id: str):
     """Poll the result of a live scrape job."""
     with _scrape_lock:
         result = _scrape_jobs.get(job_id)
     if result is None:
         return {"status": "not_found", "job_id": job_id}
     return result
+
 
 
 
