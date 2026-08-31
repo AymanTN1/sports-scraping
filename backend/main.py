@@ -233,22 +233,51 @@ def sync_database_endpoint():
         logger.exception("Error during sync_database_endpoint")
         return {"status": "error", "error": str(e), "traceback": traceback.format_exc()}
 
-@app.api_route("/api/v1/scrape/instant", methods=["GET", "POST"])
-def scrape_instant():
-    """
-    Lightweight live scrape: fetches 20 essential RSS sources,
-    extracts entities via local NLP, inserts directly into DB.
-    Returns results synchronously in < 10 seconds.
-    """
-    import traceback
+
+# In-memory job results store for scrape/instant
+_scrape_jobs: dict = {}
+_scrape_lock = __import__("threading").Lock()
+
+
+def _run_scrape_in_background(job_id: str):
+    """Background thread: run live scrape and store result."""
+    import traceback as tb
     try:
         from backend.services.live_scraper import run_live_scrape
         with SessionLocal() as db:
             result = run_live_scrape(db)
-        return result
+        with _scrape_lock:
+            _scrape_jobs[job_id] = {"status": "done", **result}
     except Exception as e:
-        logger.exception("Error during scrape_instant")
-        return {"status": "error", "error": str(e), "traceback": traceback.format_exc()}
+        with _scrape_lock:
+            _scrape_jobs[job_id] = {"status": "error", "error": str(e), "traceback": tb.format_exc()}
+
+
+@app.api_route("/api/v1/scrape/instant", methods=["GET", "POST"])
+def scrape_instant(background_tasks: BackgroundTasks):
+    """
+    Lightweight live scrape: fetches 20 essential RSS sources,
+    extracts entities via local NLP, inserts directly into DB.
+    Runs asynchronously to avoid gateway timeouts. Poll /api/v1/scrape/instant/{job_id} for result.
+    """
+    import uuid, time
+    job_id = str(uuid.uuid4())[:8]
+    with _scrape_lock:
+        _scrape_jobs[job_id] = {"status": "running", "started_at": time.time()}
+    background_tasks.add_task(_run_scrape_in_background, job_id)
+    return {"status": "started", "job_id": job_id, "poll_url": f"/api/v1/scrape/instant/{job_id}"}
+
+
+@app.get("/api/v1/scrape/instant/{job_id}")
+def scrape_instant_result(job_id: str):
+    """Poll the result of a live scrape job."""
+    with _scrape_lock:
+        result = _scrape_jobs.get(job_id)
+    if result is None:
+        return {"status": "not_found", "job_id": job_id}
+    return result
+
+
 
 
 @app.post("/api/v1/scrape/run")

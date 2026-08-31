@@ -2907,23 +2907,62 @@
       btn.disabled = true;
       btn.textContent = '⏳ Scraping en direct...';
       try {
-        // 1. Instant scrape: fetches live sources, enriches, and inserts into DB synchronously
-        const scrapeRes = await fetch(`${API_BASE}/api/v1/scrape/instant`, { method: 'POST' });
-        const scrapeData = await scrapeRes.json().catch(() => ({}));
-        const newCount = scrapeData.new_inserted || 0;
-        const totalDb = scrapeData.total_in_db || 0;
-        // 2. Reload data from DB
-        await loadData();
-        // 3. Show result
-        if (newCount > 0) {
-          btn.textContent = `✅ ${newCount} nouveaux transferts ajoutés ! (${totalDb} total)`;
-        } else {
-          btn.textContent = `✅ Base à jour (${totalDb} transferts)`;
+        // 1. Trigger background scrape (returns instantly with job_id)
+        const startRes = await fetch(`${API_BASE}/api/v1/scrape/instant`, { method: 'POST' });
+        const startData = await startRes.json().catch(() => ({}));
+        const jobId = startData.job_id;
+
+        if (!jobId) {
+          // Old synchronous behavior fallback
+          await loadData();
+          btn.disabled = false;
+          btn.textContent = '🔄 Actualiser les flux Mercato';
+          return;
         }
+
+        // 2. Poll every 3s up to 60s for result
+        let elapsed = 0;
+        const maxWait = 60000;
+        const interval = 3000;
+        let scrapeData = null;
+
+        while (elapsed < maxWait) {
+          await new Promise(r => setTimeout(r, interval));
+          elapsed += interval;
+          const dots = '.'.repeat(Math.ceil(elapsed / interval) % 4);
+          btn.textContent = `⏳ Scraping${dots} (${Math.round(elapsed/1000)}s)`;
+
+          try {
+            const pollRes = await fetch(`${API_BASE}/api/v1/scrape/instant/${jobId}`);
+            const pollData = await pollRes.json().catch(() => ({}));
+            if (pollData.status === 'done' || pollData.status === 'error') {
+              scrapeData = pollData;
+              break;
+            }
+          } catch (e) { /* keep polling */ }
+        }
+
+        // 3. Reload data from DB
+        await loadData();
+
+        // 4. Show result
+        if (scrapeData && scrapeData.status === 'done') {
+          const newCount = scrapeData.new_inserted || 0;
+          const totalDb = scrapeData.total_in_db || 0;
+          if (newCount > 0) {
+            btn.textContent = `✅ ${newCount} nouveaux transferts ajoutés ! (${totalDb} total)`;
+          } else {
+            btn.textContent = `✅ Base à jour (${totalDb} transferts)`;
+          }
+        } else {
+          btn.textContent = `✅ Synchronisation terminée`;
+        }
+
         setTimeout(() => {
           btn.disabled = false;
           btn.textContent = '🔄 Actualiser les flux Mercato';
-        }, 4000);
+        }, 5000);
+
       } catch (err) {
         console.warn('Scrape error:', err);
         await loadData();
