@@ -576,13 +576,31 @@ def run_live_scrape(db: Session) -> dict:
         })
         existing_keys.add(ext_key)
 
-    # 7. Bulk insert
-    new_count = len(to_insert)
+    # 7. Bulk insert with ON CONFLICT DO NOTHING (handles race conditions with scheduler)
+    new_count = 0
     if to_insert:
+        from sqlalchemy.dialects.postgresql import insert as pg_insert
+        from sqlalchemy import inspect as sa_inspect
         chunk_size = 200
         for i in range(0, len(to_insert), chunk_size):
             chunk = to_insert[i:i + chunk_size]
-            db.bulk_insert_mappings(Article, chunk)
+            try:
+                stmt = pg_insert(Article.__table__).values(chunk)
+                stmt = stmt.on_conflict_do_nothing(index_elements=["external_key"])
+                result = db.execute(stmt)
+                new_count += result.rowcount
+            except Exception as e:
+                logger.warning("Chunk insert error (falling back to individual): %s", e)
+                db.rollback()
+                # Fallback: insert one-by-one, skip duplicates
+                for row in chunk:
+                    try:
+                        stmt = pg_insert(Article.__table__).values(row)
+                        stmt = stmt.on_conflict_do_nothing(index_elements=["external_key"])
+                        result = db.execute(stmt)
+                        new_count += result.rowcount
+                    except Exception:
+                        db.rollback()
         db.commit()
 
     total = db.query(Article).count()
