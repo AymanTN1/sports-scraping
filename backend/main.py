@@ -136,7 +136,7 @@ _TRANSPARENT_GIF = b"GIF89a\x01\x00\x01\x00\x80\x00\x00\xff\xff\xff\x00\x00\x00!
 
 
 @app.get("/api/v1/image-proxy")
-async def image_proxy(url: str = Query(..., description="URL of the image to proxy")):
+def image_proxy(url: str = Query(..., description="URL of the image to proxy")):
     """Proxy image endpoint that fetches external photos securely with thumbnail fallback."""
     import requests as _requests
 
@@ -174,7 +174,7 @@ async def image_proxy(url: str = Query(..., description="URL of the image to pro
 
     for u in urls_to_try:
         try:
-            r = _requests.get(u, headers=_IMG_PROXY_HEADERS, timeout=6, stream=True)
+            r = _requests.get(u, headers=_IMG_PROXY_HEADERS, timeout=4, stream=False)
             if r.ok:
                 content_type = r.headers.get("Content-Type", "image/jpeg")
                 if not content_type.startswith("image/"):
@@ -211,7 +211,7 @@ async def image_proxy(url: str = Query(..., description="URL of the image to pro
 
 
 @app.api_route("/api/v1/admin/sync-db", methods=["GET", "POST"])
-async def sync_database_endpoint():
+def sync_database_endpoint():
     """Force re-synchronisation de la base de données depuis verified_articles.csv."""
     import traceback
     try:
