@@ -47,22 +47,22 @@ async def lifespan(app: FastAPI):
         except Exception as exc:
             logger.warning("init_db startup skipped: %s", exc)
 
-        # ── 2. Synchronisation CSV → DB en thread séparé (Non bloquant) ──
+        # ── 2. Bootstrap initial si la base est vide ──
         def _thread_sync_worker():
-            import time
-            time.sleep(1.0)
             try:
                 with SessionLocal() as db:
                     csv_service = CsvIngestionService(db)
-                    csv_path = csv_service.get_default_csv_path()
-                    if csv_path:
-                        logger.info("🔄 Background sync started from %s...", csv_path.name)
-                        result = csv_service.import_csv(csv_path)
-                        total_in_db = csv_service.article_repository.count()
-                        logger.info("✅ Database sync complete: %d insérés, %d mis à jour (Total: %d)",
-                                    result.inserted_count, result.updated_count, total_in_db)
+                    total_in_db = csv_service.article_repository.count()
+                    if total_in_db == 0:
+                        csv_path = csv_service.get_default_csv_path()
+                        if csv_path:
+                            logger.info("🔄 Bootstrap DB started from %s...", csv_path.name)
+                            result = csv_service.import_csv(csv_path)
+                            logger.info("✅ Bootstrap complete: %d articles", result.inserted_count)
+                    else:
+                        logger.info("✅ Database already populated with %d articles.", total_in_db)
             except Exception as exc:
-                logger.warning("Background sync error: %s", exc)
+                logger.warning("DB bootstrap check error: %s", exc)
 
         import threading
         threading.Thread(target=_thread_sync_worker, daemon=True).start()
