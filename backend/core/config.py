@@ -41,7 +41,10 @@ class Settings:
     scheduler_minute: int = int(os.getenv("SCHEDULER_MINUTE", "0"))
     cors_origins: list[str] = [
         origin.strip()
-        for origin in os.getenv("CORS_ORIGINS", "http://127.0.0.1:8000,http://localhost:8000").split(",")
+        for origin in os.getenv(
+            "CORS_ORIGINS",
+            "*,http://127.0.0.1:8000,http://localhost:8000,https://mercato-pulse-web-sigma.vercel.app"
+        ).split(",")
         if origin.strip()
     ]
     bootstrap_from_csv: bool = os.getenv("BOOTSTRAP_FROM_CSV", "true").lower() == "true"
