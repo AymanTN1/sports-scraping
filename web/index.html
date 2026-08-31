@@ -2086,8 +2086,6 @@
       tickClock();
       setInterval(tickClock, 1000);
       loadData(0, true);
-      // Background silent sync every 5 minutes (does not block or flash screen)
-      setInterval(() => loadData(0, false), 300000);
       renderNationalTeams();
     });
 
