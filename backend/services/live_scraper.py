@@ -202,6 +202,47 @@ LEAGUE_KEYWORDS = {
     ],
 }
 
+# ── In-Memory Club Badges (0ms Instant Lookup) ──
+CLUB_BADGES = {
+    "Manchester City": "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/500px-Manchester_City_FC_badge.svg.png",
+    "Barcelona": "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/500px-FC_Barcelona_%28crest%29.svg.png",
+    "FC Barcelone": "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/500px-FC_Barcelona_%28crest%29.svg.png",
+    "Real Madrid": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/500px-Real_Madrid_CF.svg.png",
+    "Liverpool": "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/500px-Liverpool_FC.svg.png",
+    "Arsenal": "https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/500px-Arsenal_FC.svg.png",
+    "Chelsea": "https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Chelsea_FC.svg/500px-Chelsea_FC.svg.png",
+    "Manchester United": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/500px-Manchester_United_FC_crest.svg.png",
+    "Paris Saint-Germain": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Paris_Saint-Germain_F.C..svg/500px-Paris_Saint-Germain_F.C..svg.png",
+    "PSG": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Paris_Saint-Germain_F.C..svg/500px-Paris_Saint-Germain_F.C..svg.png",
+    "Bayern Munich": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg/500px-FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg.png",
+    "Juventus": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Juventus_FC_2017_icon_%28black%29.svg/500px-Juventus_FC_2017_icon_%28black%29.svg.png",
+    "Inter Milan": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/FC_Internazionale_Milano_2021.svg/500px-FC_Internazionale_Milano_2021.svg.png",
+    "AC Milan": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_of_AC_Milan.svg/500px-Logo_of_AC_Milan.svg.png",
+    "Atletico Madrid": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Atletico_Madrid_2017_logo.svg/500px-Atletico_Madrid_2017_logo.svg.png",
+    "Atlético de Madrid": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Atletico_Madrid_2017_logo.svg/500px-Atletico_Madrid_2017_logo.svg.png",
+    "Tottenham": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b4/Tottenham_Hotspur.svg/500px-Tottenham_Hotspur.svg.png",
+    "Newcastle": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Newcastle_United_Logo.svg/500px-Newcastle_United_Logo.svg.png",
+    "Aston Villa": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/Aston_Villa_logo.svg/500px-Aston_Villa_logo.svg.png",
+    "Sporting CP": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e1/Sporting_Clube_de_Portugal_%28Logo%29.svg/500px-Sporting_Clube_de_Portugal_%28Logo%29.svg.png",
+    "Benfica": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/SL_Benfica_logo.svg/500px-SL_Benfica_logo.svg.png",
+    "Porto": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/FC_Porto.svg/500px-FC_Porto.svg.png",
+    "Al-Hilal": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Al_Hilal_SFC_Logo.svg/500px-Al_Hilal_SFC_Logo.svg.png",
+    "Al-Nassr": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Al_Nassr_FC_logo.svg/500px-Al_Nassr_FC_logo.svg.png",
+    "Al-Ittihad": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/Al-Ittihad_Club_%28Jeddah%29_logo.svg/500px-Al-Ittihad_Club_%28Jeddah%29_logo.svg.png",
+    "Al-Ahli": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b5/Al-Ahli_Saudi_FC_Logo.svg/500px-Al-Ahli_Saudi_FC_Logo.svg.png",
+    "OM": "https://upload.wikimedia.org/wikipedia/fr/thumb/4/43/Logo_Olympique_de_Marseille.svg/500px-Logo_Olympique_de_Marseille.svg.png",
+    "Lens": "https://upload.wikimedia.org/wikipedia/fr/thumb/7/74/Racing_Club_de_Lens_logo.svg/500px-Racing_Club_de_Lens_logo.svg.png",
+    "RC Lens": "https://upload.wikimedia.org/wikipedia/fr/thumb/7/74/Racing_Club_de_Lens_logo.svg/500px-Racing_Club_de_Lens_logo.svg.png",
+    "Nice": "https://upload.wikimedia.org/wikipedia/fr/thumb/b/b1/Logo_OGC_Nice_2013.svg/500px-Logo_OGC_Nice_2013.svg.png",
+    "OGC Nice": "https://upload.wikimedia.org/wikipedia/fr/thumb/b/b1/Logo_OGC_Nice_2013.svg/500px-Logo_OGC_Nice_2013.svg.png",
+    "Rennes": "https://upload.wikimedia.org/wikipedia/fr/thumb/e/e9/Logo_Stade_Rennais_FC.svg/500px-Logo_Stade_Rennais_FC.svg.png",
+    "Stade Rennais": "https://upload.wikimedia.org/wikipedia/fr/thumb/e/e9/Logo_Stade_Rennais_FC.svg/500px-Logo_Stade_Rennais_FC.svg.png",
+    "Monaco": "https://upload.wikimedia.org/wikipedia/fr/thumb/b/ba/AS_Monaco_FC_%28logo%29.svg/500px-AS_Monaco_FC_%28logo%29.svg.png",
+    "AS Monaco": "https://upload.wikimedia.org/wikipedia/fr/thumb/b/ba/AS_Monaco_FC_%28logo%29.svg/500px-AS_Monaco_FC_%28logo%29.svg.png",
+    "Lyon": "https://upload.wikimedia.org/wikipedia/fr/thumb/e/e2/Olympique_lyonnais_%28logo%29.svg/500px-Olympique_lyonnais_%28logo%29.svg.png",
+    "OL": "https://upload.wikimedia.org/wikipedia/fr/thumb/e/e2/Olympique_lyonnais_%28logo%29.svg/500px-Olympique_lyonnais_%28logo%29.svg.png",
+}
+
 _USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -488,30 +529,15 @@ def run_live_scrape(db: Session) -> dict:
         # Published date
         published_at = _parse_rss_date(art["raw_date"]) or now
 
-        # Image URL
+        # Image URL (RSS first, then in-memory club badge fallback, 0ms)
         img_url = art.get("image_url") or None
         if not img_url or not img_url.startswith("http"):
-            try:
-                from src.photo_enricher import resolve_photo_for_article
-                img_url = resolve_photo_for_article(
-                    article_url=art.get("url", ""),
-                    player_name=player_name or "",
-                    to_club=to_club or "",
-                    from_club=from_club or "",
-                    current_image=""
-                )
-            except Exception:
-                try:
-                    from photo_enricher import resolve_photo_for_article
-                    img_url = resolve_photo_for_article(
-                        article_url=art.get("url", ""),
-                        player_name=player_name or "",
-                        to_club=to_club or "",
-                        from_club=from_club or "",
-                        current_image=""
-                    )
-                except Exception:
-                    img_url = None
+            if to_club and to_club in CLUB_BADGES:
+                img_url = CLUB_BADGES[to_club]
+            elif from_club and from_club in CLUB_BADGES:
+                img_url = CLUB_BADGES[from_club]
+            else:
+                img_url = None
         if img_url and not img_url.startswith("http"):
             img_url = None
 
