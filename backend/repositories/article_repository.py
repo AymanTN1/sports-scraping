@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from sqlalchemy import func, or_, select
+from datetime import datetime, timedelta
+
+from sqlalchemy import delete, func, or_, select
 from sqlalchemy.orm import Session, contains_eager, joinedload
 
 from backend.models import Article, Source
@@ -58,7 +60,7 @@ class ArticleRepository:
             select(Article)
             .outerjoin(Source, Article.source_id == Source.id)
             .options(contains_eager(Article.source))
-            .order_by(Article.id.desc())
+            .order_by(Article.published_at.desc().nullslast(), Article.id.desc())
             .offset((page - 1) * page_size)
             .limit(page_size)
         )
@@ -106,3 +108,11 @@ class ArticleRepository:
     def average_credibility(self) -> float:
         value = self.db.execute(select(func.avg(Article.credibility_score))).scalar_one()
         return round(float(value or 0), 2)
+
+    def purge_old(self, days: int = 90) -> int:
+        """Delete articles older than `days` days. Returns count of deleted articles."""
+        cutoff = datetime.utcnow() - timedelta(days=days)
+        stmt = delete(Article).where(Article.published_at < cutoff)
+        result = self.db.execute(stmt)
+        self.db.commit()
+        return result.rowcount

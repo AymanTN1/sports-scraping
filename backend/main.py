@@ -288,7 +288,6 @@ async def scrape_instant_result(job_id: str):
 
 
 
-
 @app.post("/api/v1/scrape/run")
 async def run_pipeline(background_tasks: BackgroundTasks):
     from src.scheduler import scheduler_instance
@@ -296,6 +295,16 @@ async def run_pipeline(background_tasks: BackgroundTasks):
     background_tasks.add_task(scheduler_instance.run_pipeline)
     return {"status": "started"}
 
+
+@app.post("/api/v1/articles/purge-old")
+async def purge_old_articles(days: int = 90):
+    """Delete articles older than N days (default: 90)."""
+    from backend.repositories import ArticleRepository
+    with SessionLocal() as db:
+        repo = ArticleRepository(db)
+        deleted = repo.purge_old(days=days)
+        remaining = repo.count()
+    return {"deleted": deleted, "remaining": remaining, "cutoff_days": days}
 
 
 @app.get("/api/v1/scrape/status")

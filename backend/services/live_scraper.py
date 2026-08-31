@@ -603,11 +603,23 @@ def run_live_scrape(db: Session) -> dict:
                         db.rollback()
         db.commit()
 
+    # 8. Auto-purge articles older than 90 days
+    purged = 0
+    try:
+        from datetime import timedelta
+        cutoff = datetime.utcnow() - timedelta(days=90)
+        purged = db.query(Article).filter(Article.published_at < cutoff).delete()
+        if purged > 0:
+            db.commit()
+            logger.info("🗑️ Purged %d old articles (>90 days)", purged)
+    except Exception as e:
+        logger.warning("Purge error: %s", e)
+
     total = db.query(Article).count()
 
     logger.info(
-        "✅ Live scrape complete: %d new inserted, %d skipped (dup), %d filtered (NLP), %d total in DB",
-        new_count, skipped_dup, skipped_nlp, total,
+        "✅ Live scrape complete: %d new inserted, %d skipped (dup), %d filtered (NLP), %d purged old, %d total in DB",
+        new_count, skipped_dup, skipped_nlp, purged, total,
     )
 
     return {
@@ -617,5 +629,6 @@ def run_live_scrape(db: Session) -> dict:
         "new_inserted": new_count,
         "skipped_duplicate": skipped_dup,
         "skipped_not_football": skipped_nlp,
+        "purged_old": purged,
         "total_in_db": total,
     }
