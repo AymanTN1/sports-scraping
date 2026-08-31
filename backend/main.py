@@ -247,7 +247,13 @@ def _run_scrape_in_background(job_id: str):
         with SessionLocal() as db:
             result = run_live_scrape(db)
         with _scrape_lock:
-            _scrape_jobs[job_id] = {"status": "done", **result}
+            _scrape_jobs[job_id] = {
+                "status": "done",
+                "new_inserted": result.get("new_inserted", 0),
+                "total_in_db": result.get("total_in_db", 0),
+                "fetched": result.get("fetched", 0),
+                "skipped_duplicate": result.get("skipped_duplicate", 0),
+            }
     except Exception as e:
         with _scrape_lock:
             _scrape_jobs[job_id] = {"status": "error", "error": str(e), "traceback": tb.format_exc()}

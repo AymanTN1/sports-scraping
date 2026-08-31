@@ -2935,7 +2935,7 @@
           try {
             const pollRes = await fetch(`${API_BASE}/api/v1/scrape/instant/${jobId}`);
             const pollData = await pollRes.json().catch(() => ({}));
-            if (pollData.status === 'done' || pollData.status === 'error') {
+            if (pollData.status === 'done' || pollData.status === 'ok' || pollData.status === 'error') {
               scrapeData = pollData;
               break;
             }
@@ -2946,7 +2946,7 @@
         await loadData();
 
         // 4. Show result
-        if (scrapeData && scrapeData.status === 'done') {
+        if (scrapeData && (scrapeData.status === 'done' || scrapeData.status === 'ok')) {
           const newCount = scrapeData.new_inserted || 0;
           const totalDb = scrapeData.total_in_db || 0;
           if (newCount > 0) {
