@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from sqlalchemy import func, or_, select
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, contains_eager, joinedload
 
 from backend.models import Article, Source
 
@@ -57,7 +57,7 @@ class ArticleRepository:
         items_stmt = (
             select(Article)
             .outerjoin(Source, Article.source_id == Source.id)
-            .options(joinedload(Article.source))
+            .options(contains_eager(Article.source))
             .order_by(Article.published_at.desc().nullslast(), Article.created_at.desc())
             .offset((page - 1) * page_size)
             .limit(page_size)

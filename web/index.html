@@ -2111,11 +2111,12 @@
     }
 
     
-    async function loadData() {
+    async function loadData(retryCount = 0) {
       const loader = document.getElementById('global-loader');
       if(loader) { loader.style.opacity = '1'; loader.style.visibility = 'visible'; }
       try {
         const res = await fetch(API);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         allArticles = (data.items || []).map(a => ({
           ...a,
@@ -2137,10 +2138,15 @@
         buildFilters();
         applyFilters();
       } catch (e) {
-        console.error('API Error:', e);
+        console.warn('API fetch warning:', e);
+        if (retryCount < 4) {
+          setTimeout(() => loadData(retryCount + 1), 3000);
+          return;
+        }
       } finally {
-        const loader = document.getElementById('global-loader');
-        if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.visibility = 'hidden', 500); }
+        if (allArticles.length > 0 || retryCount >= 4) {
+          if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.visibility = 'hidden', 500); }
+        }
       }
     }
 

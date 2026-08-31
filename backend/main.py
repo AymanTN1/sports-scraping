@@ -40,32 +40,32 @@ docs_reports = base_dir / "docs" / "reports"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     if not settings.is_serverless:
-        # ── 1. Initialisation de la base de données ──
+        # ── 1. Initialisation rapide des tables ──
         try:
             init_db()
             logger.info("✅ Base de données initialisée.")
         except Exception as exc:
             logger.warning("init_db startup skipped: %s", exc)
 
-        # ── 2. Synchronisation CSV → Base de données (3400+ articles) en tâche de fond ──
-        async def _async_sync_db():
-            import asyncio
-            await asyncio.sleep(0.5)
+        # ── 2. Synchronisation CSV → DB en thread séparé (Non bloquant) ──
+        def _thread_sync_worker():
+            import time
+            time.sleep(1.0)
             try:
                 with SessionLocal() as db:
                     csv_service = CsvIngestionService(db)
                     csv_path = csv_service.get_default_csv_path()
                     if csv_path:
-                        logger.info("🔄 Synchronisation DB depuis %s...", csv_path.name)
+                        logger.info("🔄 Background sync started from %s...", csv_path.name)
                         result = csv_service.import_csv(csv_path)
                         total_in_db = csv_service.article_repository.count()
-                        logger.info("✅ Database sync complete: %d insérés, %d mis à jour (Total DB: %d)",
+                        logger.info("✅ Database sync complete: %d insérés, %d mis à jour (Total: %d)",
                                     result.inserted_count, result.updated_count, total_in_db)
             except Exception as exc:
-                logger.warning("Database sync error: %s", exc)
+                logger.warning("Background sync error: %s", exc)
 
-        import asyncio
-        asyncio.create_task(_async_sync_db())
+        import threading
+        threading.Thread(target=_thread_sync_worker, daemon=True).start()
 
         # ── 3. Démarrage du scheduler automatique ──
         try:
@@ -73,6 +73,8 @@ async def lifespan(app: FastAPI):
 
             scheduler_instance.start()
             logger.info("✅ Scheduler automatique démarré avec succès.")
+        except Exception as exc:
+            logger.warning("Scheduler startup failed: %s", exc)
         except ImportError as exc:
             logger.warning("Scheduler not found: %s", exc)
         except Exception as exc:
