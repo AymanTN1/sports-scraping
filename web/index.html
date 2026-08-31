@@ -2085,8 +2085,9 @@
       initTheme();
       tickClock();
       setInterval(tickClock, 1000);
-      loadData();
-      setInterval(loadData, 60000);
+      loadData(0, true);
+      // Background silent sync every 5 minutes (does not block or flash screen)
+      setInterval(() => loadData(0, false), 300000);
       renderNationalTeams();
     });
 
@@ -2111,9 +2112,13 @@
     }
 
     
-    async function loadData(retryCount = 0) {
+    async function loadData(retryCount = 0, isInitial = false) {
       const loader = document.getElementById('global-loader');
-      if(loader) { loader.style.opacity = '1'; loader.style.visibility = 'visible'; }
+      // Show full-screen loader ONLY on the first load when data is empty
+      if (loader && allArticles.length === 0) {
+        loader.style.opacity = '1';
+        loader.style.visibility = 'visible';
+      }
       try {
         const res = await fetch(API);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -2134,18 +2139,20 @@
           credibility: a.credibility || 4.5
         }));
 
-        document.getElementById('sysDbTotal').textContent = `${allArticles.length} Transferts`;
+        const totalEl = document.getElementById('sysDbTotal');
+        if (totalEl) totalEl.textContent = `${allArticles.length} Transferts`;
         buildFilters();
         applyFilters();
       } catch (e) {
         console.warn('API fetch warning:', e);
         if (retryCount < 4) {
-          setTimeout(() => loadData(retryCount + 1), 3000);
+          setTimeout(() => loadData(retryCount + 1, isInitial), 3000);
           return;
         }
       } finally {
-        if (allArticles.length > 0 || retryCount >= 4) {
-          if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.visibility = 'hidden', 500); }
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => { loader.style.visibility = 'hidden'; }, 400);
         }
       }
     }
